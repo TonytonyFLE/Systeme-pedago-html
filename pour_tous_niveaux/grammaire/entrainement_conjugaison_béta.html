@@ -1,0 +1,921 @@
+<!--
+PROMPT IA - Charte graphique à respecter pour toute adaptation :
+- Palette pastel bleu pour activités de grammaire (#b3d8f7 header, #eaf4fb fond, #4a90e2 primaire)
+- Police Lexend (Google Fonts) pour accessibilité dyslexie
+- Structure : Header avec titre + boutons (ℹ️ info, ☀️ monochrome) / Main / Footer sombre
+- Pop-up d'accueil avec boutons d'accès aux modes (Révision, Exercices, Versus)
+- Footer dynamique chargé depuis meta_activite.json : {"auteur":"Nom","annee":"2024"}
+- Scoreboard uniquement pour mode compétitif (Versus)
+- Données externalisées : conjugaisons_fr.json
+- Accessibilité : ARIA, navigation clavier, contraste, impression optimisée
+- Arrondis 18px, ombres douces, transitions 0.2s
+-->
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Entraînement de la conjugaison : Présent et passé composé</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Police Lexend pour accessibilité dyslexie -->
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --main-bg: #eaf4fb;
+      --header-bg: #b3d8f7;
+      --footer-bg: #2d3a4a;
+      --card-bg: #fff;
+      --primary: #4a90e2;
+      --accent: #6ec1e4;
+      --success: #27ae60;
+      --warning: #f39c12;
+      --error: #e74c3c;
+      --text: #222;
+      --footer-text: #fff;
+      --shadow: 0 2px 8px rgba(74,144,226,0.08);
+      --shadow-strong: 0 4px 24px rgba(44,62,80,0.13);
+      --border-radius: 18px;
+      --transition: 0.2s;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--main-bg);
+      font-family: 'Lexend', Arial, sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      background: var(--header-bg);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 0 0 var(--border-radius) var(--border-radius);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-title {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: var(--primary);
+      transition: color var(--transition), transform var(--transition);
+      border-radius: 50%;
+      padding: 8px;
+      min-width: 40px;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-btn:hover, .icon-btn:focus {
+      color: var(--accent);
+      transform: scale(1.1);
+      outline: 2px solid var(--accent);
+    }
+
+    /* Main content */
+    main {
+      max-width: 900px;
+      margin: 32px auto 80px auto;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 32px 24px;
+      min-height: 500px;
+    }
+
+    /* Mode selection */
+    .mode-selection {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .mode-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .mode-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: var(--shadow);
+      min-width: 140px;
+    }
+
+    .mode-btn:hover, .mode-btn:focus {
+      background: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-strong);
+    }
+
+    .mode-btn.active {
+      background: var(--success);
+    }
+
+    /* Verb selection */
+    .verb-selection {
+      background: #f8fbff;
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      border: 1px solid #e1f0ff;
+    }
+
+    .verb-selection h3 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 1.3rem;
+    }
+
+    .verb-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .verb-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .verb-checkbox:hover {
+      border-color: var(--primary);
+      background: #f0f8ff;
+    }
+
+    .verb-checkbox input[type="checkbox"] {
+      margin: 0;
+    }
+
+    /* Game area */
+    .game-area {
+      display: none;
+      margin-top: 24px;
+    }
+
+    .game-area.active {
+      display: block;
+    }
+
+    /* Scoreboard */
+    .scoreboard {
+      background: linear-gradient(135deg, #e3f1fa, #d2e7fa);
+      border-radius: 12px;
+      padding: 16px 24px;
+      margin: 24px 0;
+      text-align: center;
+      box-shadow: var(--shadow);
+      display: none;
+    }
+
+    .scoreboard.active {
+      display: block;
+    }
+
+    .score-display {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .player-score {
+      background: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* Conjugation table */
+    .conjugation-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .conjugation-table th,
+    .conjugation-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #f0f8ff;
+    }
+
+    .conjugation-table th {
+      background: var(--header-bg);
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .conjugation-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .conjugation-table tr:hover {
+      background: #f8fbff;
+    }
+
+    /* Exercise area */
+    .exercise-container {
+      background: #f8fbff;
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      border: 1px solid #e1f0ff;
+    }
+
+    .exercise-question {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--primary);
+    }
+
+    .exercise-input {
+      width: 100%;
+      max-width: 300px;
+      padding: 12px 16px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-family: inherit;
+      transition: border-color var(--transition);
+    }
+
+    .exercise-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .exercise-feedback {
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      display: none;
+    }
+
+    .exercise-feedback.correct {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .exercise-feedback.incorrect {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* Pop-up d'accueil */
+    .popup-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(44, 62, 80, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      backdrop-filter: blur(2px);
+    }
+
+    .popup {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-strong);
+      padding: 32px 28px;
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+      font-size: 1.1rem;
+      position: relative;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .popup h2 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .popup .close-btn {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #888;
+      cursor: pointer;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+    }
+
+    .popup .close-btn:hover, .popup .close-btn:focus {
+      background: #f0f8ff;
+      color: var(--primary);
+    }
+
+    .popup-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .popup-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: inherit;
+    }
+
+    .popup-btn:hover, .popup-btn:focus {
+      background: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .popup-btn.secondary {
+      background: #6c757d;
+    }
+
+    .popup-btn.secondary:hover {
+      background: #5a6268;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--footer-bg);
+      color: var(--footer-text);
+      text-align: center;
+      padding: 18px 8px 12px 8px;
+      border-radius: var(--border-radius) var(--border-radius) 0 0;
+      font-size: 1rem;
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 10;
+      letter-spacing: 0.5px;
+    }
+
+    /* Mode monochrome */
+    .monochrome, .monochrome * {
+      filter: grayscale(1) contrast(1.1) !important;
+      background: white !important;
+      color: #111 !important;
+      box-shadow: none !important;
+      border-color: #bbb !important;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-title {
+        font-size: 1.5rem;
+      }
+
+      main {
+        margin: 16px;
+        padding: 24px 16px;
+      }
+
+      .mode-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .verb-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Impression */
+    @media print {
+      header, .header-actions, .popup-bg, .monochrome-btn, .mode-buttons { 
+        display: none !important; 
+      }
+      main { 
+        box-shadow: none !important; 
+        background: white !important; 
+        margin: 0 !important;
+        max-width: none !important;
+      }
+      footer { 
+        color: #111 !important; 
+        background: white !important; 
+        border: none !important; 
+        position: static !important;
+      }
+      .scoreboard, .exercise-container { 
+        background: white !important; 
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="header-title">📚 Entraînement de la conjugaison : Présent et passé composé</span>
+    <div class="header-actions">
+      <button class="icon-btn" id="infoBtn" title="Informations" aria-label="Ouvrir les informations">ℹ️</button>
+      <button class="icon-btn monochrome-btn" id="monochromeBtn" title="Mode impression" aria-label="Activer le mode impression">☀️</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Sélection du mode -->
+    <div class="mode-selection" id="modeSelection">
+      <h2>Choisissez votre mode d'entraînement</h2>
+      <div class="mode-buttons">
+        <button class="mode-btn" data-mode="revision">📖 Révision</button>
+        <button class="mode-btn" data-mode="exercises">✏️ Exercices</button>
+        <button class="mode-btn" data-mode="versus">⚔️ Versus</button>
+      </div>
+    </div>
+
+    <!-- Sélection des verbes -->
+    <div class="verb-selection" id="verbSelection" style="display:none;">
+      <h3>Sélectionnez vos verbes (1 à 5)</h3>
+      <div class="verb-grid" id="verbGrid">
+        <!-- Généré dynamiquement depuis conjugaisons_fr.json -->
+      </div>
+      <div style="margin-top: 16px; text-align: center;">
+        <button class="mode-btn" id="startActivityBtn" disabled>Commencer l'activité</button>
+      </div>
+    </div>
+
+    <!-- Scoreboard (affiché uniquement en mode Versus) -->
+    <div class="scoreboard" id="scoreboard">
+      <h3>🏆 Tableau des scores</h3>
+      <div class="score-display" id="scoreDisplay">
+        <div class="player-score">Joueur 1: <span id="score1">0</span></div>
+        <div class="player-score">Joueur 2: <span id="score2">0</span></div>
+      </div>
+    </div>
+
+    <!-- Zone de jeu principale -->
+    <div class="game-area" id="gameArea">
+      <!-- Mode Révision -->
+      <div id="revisionMode" class="mode-content">
+        <h3>📖 Mode Révision</h3>
+        <div id="conjugationTables">
+          <!-- Tables de conjugaison générées dynamiquement -->
+        </div>
+      </div>
+
+      <!-- Mode Exercices -->
+      <div id="exercisesMode" class="mode-content">
+        <h3>✏️ Mode Exercices</h3>
+        <div class="exercise-container">
+          <div class="exercise-question" id="exerciseQuestion">
+            <!-- Question générée dynamiquement -->
+          </div>
+          <input type="text" class="exercise-input" id="exerciseInput" placeholder="Tapez votre réponse...">
+          <div class="exercise-feedback" id="exerciseFeedback"></div>
+          <div style="margin-top: 16px; text-align: center;">
+            <button class="mode-btn" id="checkAnswerBtn">Vérifier</button>
+            <button class="mode-btn secondary" id="nextQuestionBtn" style="display:none;">Question suivante</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mode Versus -->
+      <div id="versusMode" class="mode-content">
+        <h3>⚔️ Mode Versus</h3>
+        <div class="exercise-container">
+          <div id="currentPlayer" style="text-align: center; font-size: 1.2rem; font-weight: 600; margin-bottom: 16px;">
+            Tour du Joueur 1
+          </div>
+          <div class="exercise-question" id="versusQuestion">
+            <!-- Question générée dynamiquement -->
+          </div>
+          <input type="text" class="exercise-input" id="versusInput" placeholder="Tapez votre réponse...">
+          <div class="exercise-feedback" id="versusFeedback"></div>
+          <div style="margin-top: 16px; text-align: center;">
+            <button class="mode-btn" id="versusCheckBtn">Vérifier</button>
+            <button class="mode-btn secondary" id="versusNextBtn" style="display:none;">Tour suivant</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Pop-up d'accueil -->
+  <div class="popup-bg" id="welcomePopup" style="display:flex;">
+    <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+      <button class="close-btn" id="closePopupBtn" title="Fermer" aria-label="Fermer la fenêtre">&times;</button>
+      <h2 id="popupTitle">Entraînement de la conjugaison : Présent et passé composé</h2>
+      <p>
+        Bonjour cher apprenant ! Cette activité te permet de réviser la conjugaison des verbes français.<br><br>
+        Choisis un mode d'entraînement, sélectionne tes verbes, puis commence ton apprentissage.<br><br>
+        Bonne révision ! 📚
+      </p>
+      <div class="popup-buttons">
+        <button class="popup-btn" data-mode="revision">📖 Mode Révision</button>
+        <button class="popup-btn" data-mode="exercises">✏️ Mode Exercices</button>
+        <button class="popup-btn" data-mode="versus">⚔️ Mode Versus</button>
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer">
+    <!-- Chargé dynamiquement depuis meta_activite.json -->
+    <span id="footerText">Créé par ...</span>
+  </footer>
+
+  <script>
+    // --- Variables globales ---
+  let verbesData = {};
+let selectedVerbs = [];
+let currentMode = '';
+let currentExercise = 0;
+let scores = { player1: 0, player2: 0 };
+let currentPlayer = 1;
+
+    // --- Chargement dynamique du footer ---
+    fetch('meta_activite.json')
+      .then(r => r.json())
+      .then(meta => {
+        document.getElementById('footerText').textContent =
+          `Créé par ${meta.auteur} © ${meta.annee}`;
+      })
+      .catch(() => {
+        document.getElementById('footerText').textContent =
+          'Créé par ...';
+      });
+
+// --- Chargement des verbes depuis le nouveau JSON ---
+fetch('verbes_complets.json')
+  .then(r => r.json())
+  .then(data => {
+    verbesData = data;
+    conjugateur.chargerVerbes(verbesData);
+    populateVerbGrid();
+  })
+  .catch(err => {
+    console.error('Erreur chargement verbes:', err);
+    document.getElementById('verbGrid').innerHTML = 
+      '<p style="color: var(--error);">Erreur de chargement des données de conjugaison.</p>';
+  });
+
+    // --- Pop-up d'accueil ---
+    const welcomePopup = document.getElementById('welcomePopup');
+
+    document.getElementById('closePopupBtn').onclick = () => {
+      welcomePopup.style.display = 'none';
+    };
+
+    document.getElementById('infoBtn').onclick = () => {
+      welcomePopup.style.display = 'flex';
+    };
+
+    // Boutons du pop-up pour sélectionner le mode
+    document.querySelectorAll('.popup-btn[data-mode]').forEach(btn => {
+      btn.onclick = () => {
+        selectMode(btn.dataset.mode);
+        welcomePopup.style.display = 'none';
+      };
+    });
+
+    // --- Mode monochrome ---
+    const monochromeBtn = document.getElementById('monochromeBtn');
+    let monochrome = false;
+    monochromeBtn.onclick = () => {
+      monochrome = !monochrome;
+      document.body.classList.toggle('monochrome', monochrome);
+    };
+
+    // --- Sélection du mode ---
+    document.querySelectorAll('.mode-btn[data-mode]').forEach(btn => {
+      btn.onclick = () => selectMode(btn.dataset.mode);
+    });
+
+    function selectMode(mode) {
+      currentMode = mode;
+
+      // Mise à jour visuelle des boutons
+      document.querySelectorAll('.mode-btn[data-mode]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+      });
+
+      // Affichage de la sélection des verbes
+      document.getElementById('verbSelection').style.display = 'block';
+
+      // Affichage du scoreboard uniquement pour le mode Versus
+      const scoreboard = document.getElementById('scoreboard');
+      if (mode === 'versus') {
+        scoreboard.classList.add('active');
+      } else {
+        scoreboard.classList.remove('active');
+      }
+    }
+
+    // --- Population de la grille des verbes ---
+    function populateVerbGrid() {
+      const verbGrid = document.getElementById('verbGrid');
+      verbGrid.innerHTML = '';
+
+      Object.keys(verbesData).sort().forEach(verb => {
+        const label = document.createElement('label');
+        label.className = 'verb-checkbox';
+        label.innerHTML = `
+          <input type="checkbox" value="${verb}" onchange="updateVerbSelection()">
+          <span>${verb.charAt(0).toUpperCase() + verb.slice(1)}</span>
+        `;
+        verbGrid.appendChild(label);
+      });
+    }
+
+    // --- Gestion de la sélection des verbes ---
+    function updateVerbSelection() {
+      const checkboxes = document.querySelectorAll('.verb-checkbox input[type="checkbox"]');
+      selectedVerbs = Array.from(checkboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+
+      const startBtn = document.getElementById('startActivityBtn');
+      startBtn.disabled = selectedVerbs.length === 0 || selectedVerbs.length > 5;
+
+      // Limiter à 5 verbes maximum
+      if (selectedVerbs.length >= 5) {
+        checkboxes.forEach(cb => {
+          if (!cb.checked) cb.disabled = true;
+        });
+      } else {
+        checkboxes.forEach(cb => cb.disabled = false);
+      }
+    }
+
+    // --- Démarrage de l'activité ---
+    document.getElementById('startActivityBtn').onclick = () => {
+      if (selectedVerbs.length === 0) return;
+
+      document.getElementById('modeSelection').style.display = 'none';
+      document.getElementById('verbSelection').style.display = 'none';
+      document.getElementById('gameArea').classList.add('active');
+
+      // Masquer tous les modes
+      document.querySelectorAll('.mode-content').forEach(mode => {
+        mode.style.display = 'none';
+      });
+
+      // Afficher le mode sélectionné
+      document.getElementById(currentMode + 'Mode').style.display = 'block';
+
+      // Initialiser le mode
+      switch(currentMode) {
+        case 'revision':
+          initRevisionMode();
+          break;
+        case 'exercises':
+          initExercisesMode();
+          break;
+        case 'versus':
+          initVersusMode();
+          break;
+      }
+    };
+
+    // --- Initialisation des modes ---
+function initRevisionMode() {
+  const container = document.getElementById('conjugationTables');
+  container.innerHTML = '';
+
+  selectedVerbs.forEach(verb => {
+    if (!verbesData[verb]) return;
+
+    const verbSection = document.createElement('div');
+    const sujets = ['Je', 'Tu', 'Il', 'Elle', 'On', 'Nous', 'Vous', 'Ils', 'Elles'];
+    
+    verbSection.innerHTML = `
+      <h4 style="color: var(--primary); margin-top: 32px;">${verb.charAt(0).toUpperCase() + verb.slice(1)}</h4>
+      <div>
+        <h5>Passé composé</h5>
+        <table class="conjugation-table">
+          <thead>
+            <tr><th>Pronom</th><th>Conjugaison</th></tr>
+          </thead>
+          <tbody>
+            ${sujets.map(sujet => {
+              try {
+                const conjugaison = conjugateur.conjuguerAuto(verb, sujet);
+                return `<tr><td>${sujet}</td><td>${conjugaison}</td></tr>`;
+              } catch (e) {
+                return `<tr><td>${sujet}</td><td>Erreur</td></tr>`;
+              }
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+    container.appendChild(verbSection);
+  });
+}
+
+    function initExercisesMode() {
+      // TODO: Implémenter la logique des exercices
+      generateExercise();
+    }
+
+    function initVersusMode() {
+      // TODO: Implémenter la logique du mode versus
+      resetScores();
+      generateVersusQuestion();
+    }
+
+    // --- Fonctions utilitaires ---
+    function getTenseName(tense) {
+      const names = {
+        'present': 'Présent',
+        'past_compound': 'Passé composé',
+        'imparfait': 'Imparfait',
+        'futur_proche': 'Futur proche',
+        'futur_simple': 'Futur simple',
+        'conditionnel': 'Conditionnel',
+        'subjonctif': 'Subjonctif'
+      };
+      return names[tense] || tense;
+    }
+
+function generateExercise() {
+  if (selectedVerbs.length === 0) return;
+  
+  const verbe = selectedVerbs[Math.floor(Math.random() * selectedVerbs.length)];
+  const sujets = ['Je', 'Tu', 'Il', 'Elle', 'On', 'Nous', 'Vous', 'Ils', 'Elles'];
+  const sujet = sujets[Math.floor(Math.random() * sujets.length)];
+  
+  document.getElementById('exerciseQuestion').textContent = 
+    `Conjuguez "${verbe}" au passé composé avec "${sujet}" :`;
+  
+  // Stocker la réponse attendue
+  window.currentExerciseAnswer = {
+    verb: verbe,
+    subject: sujet,
+    answer: conjugateur.conjuguerAuto(verbe, sujet)
+  };
+}
+
+function generateVersusQuestion() {
+  if (selectedVerbs.length === 0) return;
+  
+  const verbe = selectedVerbs[Math.floor(Math.random() * selectedVerbs.length)];
+  const sujets = ['Je', 'Tu', 'Il', 'Elle', 'On', 'Nous', 'Vous', 'Ils', 'Elles'];
+  const sujet = sujets[Math.floor(Math.random() * sujets.length)];
+  
+  document.getElementById('versusQuestion').textContent = 
+    `Conjuguez "${verbe}" au passé composé avec "${sujet}" :`;
+  
+  // Stocker la réponse attendue
+  window.currentVersusAnswer = {
+    verb: verbe,
+    subject: sujet,
+    answer: conjugateur.conjuguerAuto(verbe, sujet)
+  };
+}
+
+    function resetScores() {
+      scores = { player1: 0, player2: 0 };
+      document.getElementById('score1').textContent = '0';
+      document.getElementById('score2').textContent = '0';
+      currentPlayer = 1;
+      updateCurrentPlayer();
+    }
+
+    function updateCurrentPlayer() {
+      document.getElementById('currentPlayer').textContent = 
+        `Tour du Joueur ${currentPlayer}`;
+    }
+
+    // --- Accessibilité clavier ---
+    document.addEventListener('keydown', function(e) {
+      if (welcomePopup.style.display === 'flex' && (e.key === 'Escape' || e.key === 'Enter')) {
+        welcomePopup.style.display = 'none';
+      }
+    });
+
+    // --- Gestion des exercices (hooks pour développement futur) ---
+document.getElementById('checkAnswerBtn').onclick = () => {
+  const userAnswer = document.getElementById('exerciseInput').value.trim().toLowerCase();
+  const correctAnswer = window.currentExerciseAnswer.answer.toLowerCase();
+  const feedback = document.getElementById('exerciseFeedback');
+  
+  if (userAnswer === correctAnswer) {
+    feedback.className = 'exercise-feedback correct';
+    feedback.textContent = '✅ Correct ! Bravo !';
+    feedback.style.display = 'block';
+  } else {
+    feedback.className = 'exercise-feedback incorrect';
+    feedback.textContent = `❌ Incorrect. La bonne réponse est : ${window.currentExerciseAnswer.answer}`;
+    feedback.style.display = 'block';
+  }
+  
+  document.getElementById('nextQuestionBtn').style.display = 'inline-block';
+};
+
+document.getElementById('versusCheckBtn').onclick = () => {
+  const userAnswer = document.getElementById('versusInput').value.trim().toLowerCase();
+  const correctAnswer = window.currentVersusAnswer.answer.toLowerCase();
+  const feedback = document.getElementById('versusFeedback');
+  
+  if (userAnswer === correctAnswer) {
+    feedback.className = 'exercise-feedback correct';
+    feedback.textContent = '✅ Correct ! Point gagné !';
+    feedback.style.display = 'block';
+    
+    // Ajouter un point au joueur actuel
+    scores[`player${currentPlayer}`]++;
+    document.getElementById(`score${currentPlayer}`).textContent = scores[`player${currentPlayer}`];
+  } else {
+    feedback.className = 'exercise-feedback incorrect';
+    feedback.textContent = `❌ Incorrect. La bonne réponse est : ${window.currentVersusAnswer.answer}`;
+    feedback.style.display = 'block';
+  }
+  
+  document.getElementById('versusNextBtn').style.display = 'inline-block';
+};
+
+document.getElementById('nextQuestionBtn').onclick = () => {
+  document.getElementById('exerciseInput').value = '';
+  document.getElementById('exerciseFeedback').style.display = 'none';
+  document.getElementById('nextQuestionBtn').style.display = 'none';
+  generateExercise();
+};
+
+document.getElementById('versusNextBtn').onclick = () => {
+  document.getElementById('versusInput').value = '';
+  document.getElementById('versusFeedback').style.display = 'none';
+  document.getElementById('versusNextBtn').style.display = 'none';
+  
+  // Changer de joueur
+  currentPlayer = currentPlayer === 1 ? 2 : 1;
+  updateCurrentPlayer();
+  generateVersusQuestion();
+};
+
+  </script>
+<script src="conjugateur_complet.js">
+</script>
+</body>
+</html>

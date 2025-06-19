@@ -1,0 +1,372 @@
+{
+  "être": {
+    "groupe": "auxiliaire",
+    "auxiliaire": "avoir",
+    "participe_passe": "été",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "être"
+  },
+  "avoir": {
+    "groupe": "auxiliaire",
+    "auxiliaire": "avoir",
+    "participe_passe": "eu",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "avoir"
+  },
+  "sauter": {
+    "groupe": 1,
+    "auxiliaire": "avoir",
+    "participe_passe": "sauté",
+    "pronominal": false,
+    "irregulier": false,
+    "modele": "parler"
+  },
+  "habiter": {
+    "groupe": 1,
+    "auxiliaire": "avoir",
+    "participe_passe": "habité",
+    "pronominal": false,
+    "irregulier": false,
+    "modele": "parler"
+  },
+  "commencer": {
+    "groupe": 1,
+    "auxiliaire": "avoir",
+    "participe_passe": "commencé",
+    "pronominal": false,
+    "irregulier": false,
+    "modele": "commencer",
+    "particularite": "ç devant a,o"
+  },
+  "ranger": {
+    "groupe": 1,
+    "auxiliaire": "avoir",
+    "participe_passe": "rangé",
+    "pronominal": false,
+    "irregulier": false,
+    "modele": "manger",
+    "particularite": "e devant a,o"
+  },
+  "appeler": {
+    "groupe": 1,
+    "auxiliaire": "avoir",
+    "participe_passe": "appelé",
+    "pronominal": false,
+    "irregulier": false,
+    "modele": "appeler",
+    "particularite": "doublement l"
+  },
+  "acheter": {
+    "groupe": 1,
+    "auxiliaire": "avoir",
+    "participe_passe": "acheté",
+    "pronominal": false,
+    "irregulier": false,
+    "modele": "acheter",
+    "particularite": "è devant syllabe muette"
+  },
+  "préférer": {
+    "groupe": 1,
+    "auxiliaire": "avoir",
+    "participe_passe": "préféré",
+    "pronominal": false,
+    "irregulier": false,
+    "modele": "préférer",
+    "particularite": "é/è alternance"
+  },
+  "payer": {
+    "groupe": 1,
+    "auxiliaire": "avoir",
+    "participe_passe": "payé",
+    "pronominal": false,
+    "irregulier": false,
+    "modele": "payer",
+    "particularite": "y/i alternance"
+  },
+  "envoyer": {
+    "groupe": 1,
+    "auxiliaire": "avoir",
+    "participe_passe": "envoyé",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "envoyer",
+    "particularite": "futur irrégulier"
+  },
+  "finir": {
+    "groupe": 2,
+    "auxiliaire": "avoir",
+    "participe_passe": "fini",
+    "pronominal": false,
+    "irregulier": false,
+    "modele": "finir"
+  },
+  "aller": {
+    "groupe": 3,
+    "auxiliaire": "être",
+    "participe_passe": "allé",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "aller"
+  },
+  "faire": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "fait",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "faire"
+  },
+  "mettre": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "mis",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "mettre"
+  },
+  "prendre": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "pris",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "prendre"
+  },
+  "vendre": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "vendu",
+    "pronominal": false,
+    "irregulier": false,
+    "modele": "vendre"
+  },
+  "venir": {
+    "groupe": 3,
+    "auxiliaire": "être",
+    "participe_passe": "venu",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "venir"
+  },
+  "lire": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "lu",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "lire"
+  },
+  "servir": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "servi",
+    "pronominal": false,
+    "irregulier": false,
+    "modele": "servir"
+  },
+  "voir": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "vu",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "voir"
+  },
+  "dire": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "dit",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "dire"
+  },
+  "dormir": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "dormi",
+    "pronominal": false,
+    "irregulier": false,
+    "modele": "dormir"
+  },
+  "courir": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "couru",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "courir"
+  },
+  "écrire": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "écrit",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "écrire"
+  },
+  "boire": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "bu",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "boire"
+  },
+  "rire": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "ri",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "rire"
+  },
+  "battre": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "battu",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "battre"
+  },
+  "se laver": {
+    "groupe": 1,
+    "auxiliaire": "être",
+    "participe_passe": "lavé",
+    "pronominal": true,
+    "irregulier": false,
+    "modele": "parler",
+    "infinitif_base": "laver"
+  },
+  "se lever": {
+    "groupe": 1,
+    "auxiliaire": "être",
+    "participe_passe": "levé",
+    "pronominal": true,
+    "irregulier": false,
+    "modele": "acheter",
+    "infinitif_base": "lever",
+    "particularite": "è devant syllabe muette"
+  },
+  "partir": {
+    "groupe": 3,
+    "auxiliaire": "être",
+    "participe_passe": "parti",
+    "pronominal": false,
+    "irregulier": false,
+    "modele": "partir"
+  },
+  "comprendre": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "compris",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "prendre"
+  },
+  "vouloir": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "voulu",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "vouloir"
+  },
+  "pouvoir": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "pu",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "pouvoir"
+  },
+  "devoir": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "dû",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "devoir"
+  },
+  "savoir": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "su",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "savoir"
+  },
+  "conduire": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "conduit",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "conduire"
+  },
+  "peindre": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "peint",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "peindre"
+  },
+  "connaître": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "connu",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "connaître"
+  },
+  "tenir": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "tenu",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "tenir"
+  },
+  "cueillir": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "cueilli",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "cueillir"
+  },
+  "ouvrir": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "ouvert",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "ouvrir"
+  },
+  "couvrir": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "couvert",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "ouvrir"
+  },
+  "offrir": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "offert",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "ouvrir"
+  },
+  "souffrir": {
+    "groupe": 3,
+    "auxiliaire": "avoir",
+    "participe_passe": "souffert",
+    "pronominal": false,
+    "irregulier": true,
+    "modele": "ouvrir"
+  }
+}
