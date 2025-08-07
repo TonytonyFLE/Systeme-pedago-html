@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phrases utiles en classe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 900px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .menu-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .phrase-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .phrase-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .phrase-text {
+            flex: 1;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .translation {
+            color: #666;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .play-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .play-btn:hover {
+            background: #218838;
+            transform: scale(1.1);
+        }
+
+        .association-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .association-card {
+            background: #f8f9fa;
+            border: 3px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .association-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .association-card.selected {
+            border-color: #007bff;
+            background: #e7f3ff;
+        }
+
+        .association-card.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .association-card.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .emoji {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .battle-setup {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .player-input {
+            margin: 20px 0;
+        }
+
+        .player-input input {
+            padding: 15px;
+            font-size: 1.2em;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            width: 200px;
+            text-align: center;
+        }
+
+        .battle-game {
+            text-align: center;
+        }
+
+        .current-player {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .timer {
+            font-size: 2em;
+            color: #ff6b6b;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .challenge-display {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 3px solid #667eea;
+        }
+
+        .challenge-emoji {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .solution {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .solution.show {
+            display: block;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .scoreboard {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #667eea;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .score-item:last-child {
+            border-bottom: none;
+        }
+
+        .progress-indicator {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px solid #667eea;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 20px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #28a745, #20c997);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .set-indicator {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .completed-set {
+            background: #28a745;
+        }
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .category-title {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .menu {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .menu-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇫🇷 Phrases utiles en classe</h1>
+        
+        <div class="menu">
+            <button class="menu-btn" onclick="showSection('vocabulary')">📚 Réviser le vocabulaire</button>
+            <button class="menu-btn" onclick="showSection('association')">🎯 Exercice d'association</button>
+            <button class="menu-btn" onclick="showSection('battle')">⚔️ Battle de phrases</button>
+        </div>
+
+        <!-- Section Vocabulaire -->
+        <div id="vocabulary" class="section">
+            <div class="category-title">🙋 Demander la permission</div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Est-ce que je peux aller aux toilettes ?
+                    <div class="translation">Darf ich auf die Toilette gehen?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Est-ce que je peux aller aux toilettes ?')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Est-ce que je peux ouvrir la fenêtre ?
+                    <div class="translation">Darf ich das Fenster öffnen?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Est-ce que je peux ouvrir la fenêtre ?')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Est-ce que je peux fermer la porte ?
+                    <div class="translation">Darf ich die Tür schließen?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Est-ce que je peux fermer la porte ?')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Est-ce que je peux aller remplir ma bouteille d'eau ?
+                    <div class="translation">Darf ich meine Wasserflasche auffüllen gehen?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Est-ce que je peux aller remplir ma bouteille d\'eau ?')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Est-ce que je peux sortir mon téléphone pour... ?
+                    <div class="translation">Darf ich mein Handy herausnehmen für...?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Est-ce que je peux sortir mon téléphone pour ?')">🔊</button>
+            </div>
+
+            <div class="category-title">🆘 Demander de l'aide</div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Est-ce que vous pouvez m'aider ?
+                    <div class="translation">Können Sie mir helfen?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Est-ce que vous pouvez m\'aider ?')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Est-ce que vous pouvez répéter ?
+                    <div class="translation">Können Sie das wiederholen?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Est-ce que vous pouvez répéter ?')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Est-ce que vous pouvez parler plus lentement ?
+                    <div class="translation">Können Sie langsamer sprechen?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Est-ce que vous pouvez parler plus lentement ?')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Est-ce que vous pouvez vérifier mes exercices ?
+                    <div class="translation">Können Sie meine Übungen überprüfen?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Est-ce que vous pouvez vérifier mes exercices ?')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Je ne comprends pas, pouvez-vous expliquer ?
+                    <div class="translation">Ich verstehe nicht, können Sie es erklären?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Je ne comprends pas, pouvez-vous expliquer ?')">🔊</button>
+            </div>
+
+            <div class="category-title">⚠️ Exprimer un problème</div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Je n'ai pas mon livre.
+                    <div class="translation">Ich habe mein Buch nicht.</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Je n\'ai pas mon livre.')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Je n'ai pas fait mes devoirs.
+                    <div class="translation">Ich habe meine Hausaufgaben nicht gemacht.</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Je n\'ai pas fait mes devoirs.')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Je suis malade.
+                    <div class="translation">Ich bin krank.</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Je suis malade.')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Je peux aller chercher ... dans mon casier
+                    <div class="translation">Ich kann ... aus meinem Schließfach holen</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Je peux aller chercher dans mon casier')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Mon ordinateur ne marche pas.
+                    <div class="translation">Mein Computer funktioniert nicht.</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Mon ordinateur ne marche pas.')">🔊</button>
+            </div>
+
+            <div class="category-title">🤝 Politesse et excuses</div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Excusez-moi, je suis en retard.
+                    <div class="translation">Entschuldigung, ich bin zu spät.</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Excusez-moi, je suis en retard.')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    J'ai fait une erreur.
+                    <div class="translation">Ich habe einen Fehler gemacht.</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('J\'ai fait une erreur.')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Merci beaucoup !
+                    <div class="translation">Vielen Dank!</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Merci beaucoup !')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    De rien, avec plaisir.
+                    <div class="translation">Gern geschehen.</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('De rien, avec plaisir.')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Bonne journée !
+                    <div class="translation">Einen schönen Tag!</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Bonne journée !')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Bonjour
+                    <div class="translation">Guten Tag</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Bonjour')">🔊</button>
+            </div>
+
+            <div class="category-title">🎯 Participation en classe</div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    J'ai une question.
+                    <div class="translation">Ich habe eine Frage.</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('J\'ai une question.')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    J'ai fini mon exercice.
+                    <div class="translation">Ich habe meine Übung beendet.</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('J\'ai fini mon exercice.')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Je ne sais pas la réponse.
+                    <div class="translation">Ich weiß die Antwort nicht.</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Je ne sais pas la réponse.')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Pouvez-vous corriger au tableau ?
+                    <div class="translation">Können Sie an der Tafel korrigieren?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Pouvez-vous corriger au tableau ?')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Comment dit-on... en français ?
+                    <div class="translation">Wie sagt man... auf Französisch?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Comment dit-on en français ?')">🔊</button>
+            </div>
+
+            <div class="category-title">📋 Situations pratiques</div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Pour quand sont les devoirs ?
+                    <div class="translation">Für wann sind die Hausaufgaben?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Pour quand sont les devoirs ?')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Est-ce qu'il y a un contrôle la semaine prochaine ?
+                    <div class="translation">Gibt es nächste Woche eine Klassenarbeit?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Est-ce qu\'il y a un contrôle la semaine prochaine ?')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Où sont les feuilles ?
+                    <div class="translation">Wo sind die Blätter?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Où sont les feuilles ?')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Où est la perforatrice ?
+                    <div class="translation">Wo ist der Locher?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Où est la perforatrice ?')">🔊</button>
+            </div>
+            <div class="phrase-card">
+                <div class="phrase-text">
+                    Pouvez-vous écrire au tableau ?
+                    <div class="translation">Können Sie an die Tafel schreiben?</div>
+                </div>
+                <button class="play-btn" onclick="playAudio('Pouvez-vous écrire au tableau ?')">🔊</button>
+            </div>
+        </div>
+
+        <!-- Section Association -->
+        <div id="association" class="section">
+            <h2>🎯 Associe les emojis aux phrases correctes</h2>
+            <p>Clique sur un emoji puis sur la phrase qui correspond !</p>
+            <div class="progress-indicator">
+                <span id="progressText">Phrases trouvées : 0/30</span>
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+            </div>
+            <div id="associationGame"></div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="nextSet()">➡️ Phrases suivantes</button>
+                <button class="btn btn-warning" onclick="shuffleCurrentSet()">🔀 Mélanger</button>
+                <button class="btn btn-danger" onclick="resetAssociation()">🔄 Recommencer</button>
+            </div>
+        </div>
+
+        <!-- Section Battle -->
+        <div id="battle" class="section">
+            <div id="battleSetup" class="battle-setup">
+                <h2>⚔️ Battle de phrases</h2>
+                <div class="player-input">
+                    <label for="playerCount">Nombre de joueurs (2-6) :</label>
+                    <input type="number" id="playerCount" min="2" max="6" value="2">
+                </div>
+                <div id="playerNames"></div>
+                <button class="btn btn-primary" onclick="startBattle()">🎮 Commencer la battle</button>
+            </div>
+
+            <div id="battleGame" class="battle-game" style="display: none;">
+                <div class="current-player">Joueur : <span id="currentPlayerName"></span></div>
+                <div class="timer">⏰ <span id="timer">30</span>s</div>
+                
+                <div class="challenge-display">
+                    <div class="challenge-emoji" id="challengeEmoji"></div>
+                    <div id="challengeDescription"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-warning" onclick="showSolution()">💡 Voir la solution</button>
+                </div>
+
+                <div class="solution" id="solution">
+                    <h3>Solution :</h3>
+                    <div id="solutionText"></div>
+                    <div class="action-buttons">
+                        <button class="btn btn-success" onclick="markSuccess()">✅ Réussi</button>
+                        <button class="btn btn-danger" onclick="markFail()">❌ Échoué</button>
+                    </div>
+                </div>
+
+                <div class="scoreboard">
+                    <h3>🏆 Score</h3>
+                    <div id="scoreDisplay"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Données des phrases avec emojis
+        const phrases = {
+            "🚽": "Est-ce que je peux aller aux toilettes ?",
+            "🪟": "Est-ce que je peux ouvrir la fenêtre ?",
+            "🚪": "Est-ce que je peux fermer la porte ?",
+            "💧": "Est-ce que je peux aller remplir ma bouteille d'eau ?",
+            "📱": "Est-ce que je peux sortir mon téléphone pour... ?",
+            "🆘": "Est-ce que vous pouvez m'aider ?",
+            "🔄": "Est-ce que vous pouvez répéter ?",
+            "🐌": "Est-ce que vous pouvez parler plus lentement ?",
+            "✅": "Est-ce que vous pouvez vérifier mes exercices ?",
+            "❓": "Je ne comprends pas, pouvez-vous expliquer ?",
+            "📚": "Je n'ai pas mon livre.",
+            "📝": "Je n'ai pas fait mes devoirs.",
+            "🤒": "Je suis malade.",
+            "🗄️": "Je peux aller chercher ... dans mon casier",
+            "💻": "Mon ordinateur ne marche pas.",
+            "⏰": "Excusez-moi, je suis en retard.",
+            "🚫": "J'ai fait une erreur.",
+            "🙏": "Merci beaucoup !",
+            "😊": "De rien, avec plaisir.",
+            "🌞": "Bonne journée !",
+            "👋": "Bonjour",
+            "🙋": "J'ai une question.",
+            "🏁": "J'ai fini mon exercice.",
+            "🤷": "Je ne sais pas la réponse.",
+            "📋": "Pouvez-vous corriger au tableau ?",
+            "🇫🇷": "Comment dit-on... en français ?",
+            "📅": "Pour quand sont les devoirs ?",
+            "📊": "Est-ce qu'il y a un contrôle la semaine prochaine ?",
+            "📄": "Où sont les feuilles ?",
+            "🕳️": "Où est la perforatrice ?",
+            "✏️": "Pouvez-vous écrire au tableau ?"
+        };
+
+        // Variables globales
+        let currentSection = 'vocabulary';
+        let selectedEmoji = null;
+        let selectedPhrase = null;
+        let correctPairs = 0;
+        let totalFoundPhrases = 0;
+        let currentSet = 0;
+        let completedSets = [];
+        let currentSetPhrases = [];
+        let players = [];
+        let currentPlayer = 0;
+        let scores = {};
+        let currentChallenge = null;
+        let timer = null;
+        let timeLeft = 30;
+
+        // Diviser les phrases en sets de 5
+        const allPhrases = Object.entries(phrases);
+        const phraseSets = [];
+        for (let i = 0; i < allPhrases.length; i += 5) {
+            phraseSets.push(allPhrases.slice(i, i + 5));
+        }
+
+        // Fonction pour changer de section
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(section).classList.add('active');
+            currentSection = section;
+            
+            if (section === 'association') {
+                initAssociation();
+            } else if (section === 'battle') {
+                setupBattle();
+            }
+        }
+
+        // Fonction pour jouer l'audio
+        function playAudio(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'fr-FR';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('Votre navigateur ne supporte pas la synthèse vocale.');
+            }
+        }
+
+        // Initialisation du jeu d'association
+        function initAssociation() {
+            currentSet = 0;
+            totalFoundPhrases = 0;
+            completedSets = [];
+            correctPairs = 0;
+            updateProgressIndicator();
+            loadCurrentSet();
+        }
+
+        function loadCurrentSet() {
+            const gameContainer = document.getElementById('associationGame');
+            gameContainer.innerHTML = '';
+            
+            if (currentSet >= phraseSets.length) {
+                gameContainer.innerHTML = '<div class="set-indicator completed-set">🎉 Toutes les phrases ont été trouvées ! Félicitations !</div>';
+                return;
+            }
+            
+            currentSetPhrases = phraseSets[currentSet];
+            const emojis = currentSetPhrases.map(([emoji, phrase]) => emoji);
+            const phrasesArray = currentSetPhrases.map(([emoji, phrase]) => phrase);
+            
+            // Indicateur de set
+            const setIndicator = document.createElement('div');
+            setIndicator.className = 'set-indicator';
+            setIndicator.textContent = `Set ${currentSet + 1}/${phraseSets.length} (${currentSetPhrases.length} phrases)`;
+            gameContainer.appendChild(setIndicator);
+            
+            // Mélanger SÉPARÉMENT les emojis et les phrases
+            const shuffledEmojis = [...emojis].sort(() => Math.random() - 0.5);
+            const shuffledPhrases = [...phrasesArray].sort(() => Math.random() - 0.5);
+            
+            // Créer les cartes emojis
+            const emojiContainer = document.createElement('div');
+            emojiContainer.innerHTML = '<h3>Emojis :</h3>';
+            const emojiGrid = document.createElement('div');
+            emojiGrid.className = 'association-grid';
+            
+            shuffledEmojis.forEach(emoji => {
+                const card = document.createElement('div');
+                card.className = 'association-card';
+                card.innerHTML = `<div class="emoji">${emoji}</div>`;
+                card.onclick = () => selectEmoji(emoji, card);
+                emojiGrid.appendChild(card);
+            });
+            
+            emojiContainer.appendChild(emojiGrid);
+            gameContainer.appendChild(emojiContainer);
+            
+            // Créer les cartes phrases
+            const phraseContainer = document.createElement('div');
+            phraseContainer.innerHTML = '<h3>Phrases :</h3>';
+            const phraseGrid = document.createElement('div');
+            phraseGrid.className = 'association-grid';
+            
+            shuffledPhrases.forEach(phrase => {
+                const card = document.createElement('div');
+                card.className = 'association-card';
+                card.innerHTML = `<div class="phrase-text">${phrase}</div>`;
+                card.onclick = () => selectPhrase(phrase, card);
+                phraseGrid.appendChild(card);
+            });
+            
+            phraseContainer.appendChild(phraseGrid);
+            gameContainer.appendChild(phraseContainer);
+            
+            correctPairs = 0;
+            selectedEmoji = null;
+            selectedPhrase = null;
+        }
+
+        function updateProgressIndicator() {
+            document.getElementById('progressText').textContent = `Phrases trouvées : ${totalFoundPhrases}/30`;
+            const progressPercentage = (totalFoundPhrases / 30) * 100;
+            document.getElementById('progressFill').style.width = `${progressPercentage}%`;
+        }
+
+        function selectEmoji(emoji, card) {
+    // Désélectionner tous les autres emojis
+    document.querySelectorAll('.association-card').forEach(c => {
+        if (c.innerHTML.includes('class="emoji"')) {
+            c.classList.remove('selected');
+        }
+    });
+    
+    selectedEmoji = emoji;
+    card.classList.add('selected');
+    
+    checkMatch();
+}
+
+function selectPhrase(phrase, card) {
+    // Désélectionner toutes les autres phrases
+    document.querySelectorAll('.association-card').forEach(c => {
+        if (c.innerHTML.includes('class="phrase-text"')) {
+            c.classList.remove('selected');
+        }
+    });
+    
+    selectedPhrase = phrase;
+    card.classList.add('selected');
+    
+    checkMatch();
+}
+
+        function checkMatch() {
+    if (selectedEmoji && selectedPhrase) {
+        const isCorrect = phrases[selectedEmoji] === selectedPhrase;
+        
+        // Trouver les cartes sélectionnées plus précisément
+        const allCards = document.querySelectorAll('.association-card');
+        let emojiCard = null;
+        let phraseCard = null;
+        
+        allCards.forEach(card => {
+            if (card.classList.contains('selected')) {
+                if (card.innerHTML.includes('class="emoji"')) {
+                    emojiCard = card;
+                } else if (card.innerHTML.includes('class="phrase-text"')) {
+                    phraseCard = card;
+                }
+            }
+        });
+        
+        if (emojiCard && phraseCard) {
+            if (isCorrect) {
+                emojiCard.classList.add('correct');
+                phraseCard.classList.add('correct');
+                emojiCard.onclick = null;
+                phraseCard.onclick = null;
+                correctPairs++;
+                totalFoundPhrases++;
+                updateProgressIndicator();
+                
+                // Vérifier si le set actuel est terminé
+                if (correctPairs === currentSetPhrases.length) {
+                    completedSets.push(currentSet);
+                    setTimeout(() => {
+                        if (currentSet < phraseSets.length - 1) {
+                            alert(`🎉 Set ${currentSet + 1} terminé ! Passons aux phrases suivantes.`);
+                            nextSet();
+                        } else {
+                            alert('🎊 Félicitations ! Vous avez associé toutes les phrases !');
+                        }
+                    }, 500);
+                }
+            } else {
+                emojiCard.classList.add('incorrect');
+                phraseCard.classList.add('incorrect');
+                
+                setTimeout(() => {
+                    emojiCard.classList.remove('incorrect', 'selected');
+                    phraseCard.classList.remove('incorrect', 'selected');
+                }, 1000);
+            }
+        }
+        
+        selectedEmoji = null;
+        selectedPhrase = null;
+    }
+}
+
+        function nextSet() {
+            if (currentSet < phraseSets.length - 1) {
+                currentSet++;
+                loadCurrentSet();
+            }
+        }
+
+        function shuffleCurrentSet() {
+            loadCurrentSet();
+        }
+
+        function resetAssociation() {
+            selectedEmoji = null;
+            selectedPhrase = null;
+            correctPairs = 0;
+            totalFoundPhrases = 0;
+            currentSet = 0;
+            completedSets = [];
+            updateProgressIndicator();
+            loadCurrentSet();
+        }
+
+        // Setup Battle
+        function setupBattle() {
+            document.getElementById('battleSetup').style.display = 'block';
+            document.getElementById('battleGame').style.display = 'none';
+            
+            // Créer les inputs pour les noms des joueurs
+            const playerNamesDiv = document.getElementById('playerNames');
+            playerNamesDiv.innerHTML = '';
+            
+            document.getElementById('playerCount').addEventListener('change', function() {
+                const count = parseInt(this.value);
+                playerNamesDiv.innerHTML = '';
+                
+                for (let i = 1; i <= count; i++) {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.placeholder = `Nom du joueur ${i}`;
+                    input.id = `player${i}`;
+                    input.style.margin = '5px';
+                    input.style.padding = '10px';
+                    input.style.borderRadius = '5px';
+                    input.style.border = '2px solid #ddd';
+                    playerNamesDiv.appendChild(input);
+                }
+            });
+            
+            // Déclencher l'événement pour créer les inputs initiaux
+            document.getElementById('playerCount').dispatchEvent(new Event('change'));
+        }
+
+        function startBattle() {
+            const playerCount = parseInt(document.getElementById('playerCount').value);
+            players = [];
+            scores = {};
+            
+            // Récupérer les noms des joueurs
+            for (let i = 1; i <= playerCount; i++) {
+                const name = document.getElementById(`player${i}`).value.trim() || `Joueur ${i}`;
+                players.push(name);
+                scores[name] = 0;
+            }
+            
+            currentPlayer = 0;
+            document.getElementById('battleSetup').style.display = 'none';
+            document.getElementById('battleGame').style.display = 'block';
+            
+            nextRound();
+        }
+
+        function nextRound() {
+            // Réinitialiser l'interface
+            document.getElementById('solution').classList.remove('show');
+            
+            // Afficher le joueur actuel
+            document.getElementById('currentPlayerName').textContent = players[currentPlayer];
+            
+            // Choisir un défi aléatoire
+            const emojis = Object.keys(phrases);
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+            currentChallenge = {
+                emoji: randomEmoji,
+                phrase: phrases[randomEmoji]
+            };
+            
+            document.getElementById('challengeEmoji').textContent = randomEmoji;
+            document.getElementById('challengeDescription').textContent = 'Dis la phrase qui correspond à cet emoji !';
+            document.getElementById('solutionText').textContent = currentChallenge.phrase;
+            
+            // Démarrer le timer
+            startTimer();
+            
+            // Mettre à jour l'affichage des scores
+            updateScoreDisplay();
+        }
+
+        function startTimer() {
+            timeLeft = 30;
+            document.getElementById('timer').textContent = timeLeft;
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    showSolution();
+                }
+            }, 1000);
+        }
+
+        function showSolution() {
+            clearInterval(timer);
+            document.getElementById('solution').classList.add('show');
+            playAudio(currentChallenge.phrase);
+        }
+
+        function markSuccess() {
+            scores[players[currentPlayer]]++;
+            nextPlayer();
+        }
+
+        function markFail() {
+            // Pas de changement de score pour un échec
+            nextPlayer();
+        }
+
+        function nextPlayer() {
+            currentPlayer = (currentPlayer + 1) % players.length;
+            
+            // Vérifier si on a fait assez de tours (optionnel)
+            setTimeout(() => {
+                nextRound();
+            }, 1000);
+        }
+
+        function updateScoreDisplay() {
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            scoreDisplay.innerHTML = '';
+            
+            // Trier les joueurs par score
+            const sortedPlayers = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            
+            sortedPlayers.forEach(([player, score], index) => {
+                const scoreItem = document.createElement('div');
+                scoreItem.className = 'score-item';
+                
+                let medal = '';
+                if (index === 0) medal = '🥇';
+                else if (index === 1) medal = '🥈';
+                else if (index === 2) medal = '🥉';
+                
+                scoreItem.innerHTML = `
+                    <span>${medal} ${player}</span>
+                    <span><strong>${score} points</strong></span>
+                `;
+                
+                scoreDisplay.appendChild(scoreItem);
+            });
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('vocabulary');
+        });
+    </script>
+</body>
+</html>
