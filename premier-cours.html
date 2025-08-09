@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Découvrir le Français - Cours 01</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-buttons {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .nav-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 0 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .presentation-grid {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .icon {
+            font-size: 40px;
+            text-align: center;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .input-field {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .input-field:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .exercise {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .question {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .alphabet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .alphabet-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .alphabet-item:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .check-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 10px 5px;
+        }
+
+        .check-btn:hover {
+            background: #218838;
+        }
+
+        .result {
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .verb-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .verb-conjugation {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .progress {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: #667eea;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        select {
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .audio-btn {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .audio-btn:hover {
+            background: #138496;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇫🇷 Découvrir le Français</h1>
+            <p>Cours 01 - Je parle de moi</p>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="showSection(0)">Présentation</button>
+            <button class="nav-btn" onclick="showSection(1)">Alphabet</button>
+            <button class="nav-btn" onclick="showSection(2)">Verbes</button>
+            <button class="nav-btn" onclick="showSection(3)">Exercices</button>
+            <button class="nav-btn" onclick="showSection(4)">Questions</button>
+            <button class="nav-btn" onclick="showSection(5)">Mon profil</button>
+        </div>
+
+        <!-- Section 1: Présentation -->
+        <div class="section active" id="section0">
+            <h2>1. Je parle de moi</h2>
+            <div class="presentation-grid">
+                <div class="icon">🏷️</div>
+                <input type="text" class="input-field" placeholder="Je m'appelle...">
+                
+                <div class="icon">🎂</div>
+                <input type="number" class="input-field" placeholder="J'ai ... ans">
+                
+                <div class="icon">🌍</div>
+                <input type="text" class="input-field" placeholder="J'habite à...">
+                
+                <div class="icon">📖</div>
+                <select class="input-field">
+                    <option>Je parle...</option>
+                    <option>français</option>
+                    <option>anglais</option>
+                    <option>allemand</option>
+                    <option>espagnol</option>
+                    <option>italien</option>
+                </select>
+                
+                <div class="icon">📚</div>
+                <select class="input-field">
+                    <option>Je ne parle pas...</option>
+                    <option>chinois</option>
+                    <option>japonais</option>
+                    <option>russe</option>
+                    <option>arabe</option>
+                </select>
+                
+                <div class="icon">💼</div>
+                <input type="text" class="input-field" placeholder="Je suis... (profession)">
+                
+                <div class="icon">👨‍👩‍👧‍👦</div>
+                <input type="text" class="input-field" placeholder="J'ai... (famille)">
+                
+                <div class="icon">❌</div>
+                <input type="text" class="input-field" placeholder="Je n'ai pas...">
+                
+                <div class="icon">🐾</div>
+                <input type="text" class="input-field" placeholder="J'ai... (animaux)">
+                
+                <div class="icon">🗣️</div>
+                <input type="text" class="input-field" placeholder="Je parle... (langues)">
+            </div>
+
+            <div class="exercise">
+                <h3>Exemple de présentation :</h3>
+                <p><em>"Je m'appelle Antoine. J'ai 32 ans. J'habite à Berne en Suisse. Je suis français. Je ne suis pas suisse. Je suis professeur de français. J'ai un petit frère. Je n'ai pas de sœurs. J'ai trois lapins. Je parle français, anglais et un peu allemand."</em></p>
+            </div>
+        </div>
+
+        <!-- Section 2: Alphabet -->
+        <div class="section" id="section1">
+            <h2>2. L'alphabet français</h2>
+            <p>Cliquez sur les lettres pour entendre la pronunciation :</p>
+            <div class="alphabet-grid">
+                <div class="alphabet-item" onclick="playLetter('A')">A <span style="color: #666;">comme Annie</span></div>
+                <div class="alphabet-item" onclick="playLetter('B')">B <span style="color: #666;">comme Béatrice</span></div>
+                <div class="alphabet-item" onclick="playLetter('C')">C <span style="color: #666;">comme Catherine</span></div>
+                <div class="alphabet-item" onclick="playLetter('D')">D <span style="color: #666;">comme Daniel</span></div>
+                <div class="alphabet-item" onclick="playLetter('E')">E <span style="color: #666;">comme Eugénie</span></div>
+                <div class="alphabet-item" onclick="playLetter('F')">F <span style="color: #666;">comme Fabien</span></div>
+                <div class="alphabet-item" onclick="playLetter('G')">G <span style="color: #666;">comme Gérard</span></div>
+                <div class="alphabet-item" onclick="playLetter('H')">H <span style="color: #666;">comme Hugo</span></div>
+                <div class="alphabet-item" onclick="playLetter('I')">I <span style="color: #666;">comme Igor</span></div>
+                <div class="alphabet-item" onclick="playLetter('J')">J <span style="color: #666;">comme Julie</span></div>
+                <div class="alphabet-item" onclick="playLetter('K')">K <span style="color: #666;">comme Karine</span></div>
+                <div class="alphabet-item" onclick="playLetter('L')">L <span style="color: #666;">comme Laure</span></div>
+                <div class="alphabet-item" onclick="playLetter('M')">M <span style="color: #666;">comme Monique</span></div>
+                <div class="alphabet-item" onclick="playLetter('N')">N <span style="color: #666;">comme Noémie</span></div>
+                <div class="alphabet-item" onclick="playLetter('O')">O <span style="color: #666;">comme Ophélie</span></div>
+                <div class="alphabet-item" onclick="playLetter('P')">P <span style="color: #666;">comme Paul</span></div>
+                <div class="alphabet-item" onclick="playLetter('Q')">Q <span style="color: #666;">comme Quentin</span></div>
+                <div class="alphabet-item" onclick="playLetter('R')">R <span style="color: #666;">comme Renaud</span></div>
+                <div class="alphabet-item" onclick="playLetter('S')">S <span style="color: #666;">comme Simone</span></div>
+                <div class="alphabet-item" onclick="playLetter('T')">T <span style="color: #666;">comme Thibaut</span></div>
+                <div class="alphabet-item" onclick="playLetter('U')">U <span style="color: #666;">comme Ulysse</span></div>
+                <div class="alphabet-item" onclick="playLetter('V')">V <span style="color: #666;">comme Véronique</span></div>
+                <div class="alphabet-item" onclick="playLetter('W')">W <span style="color: #666;">comme William</span></div>
+                <div class="alphabet-item" onclick="playLetter('X')">X <span style="color: #666;">comme Xavier</span></div>
+                <div class="alphabet-item" onclick="playLetter('Y')">Y <span style="color: #666;">comme Yves</span></div>
+                <div class="alphabet-item" onclick="playLetter('Z')">Z <span style="color: #666;">comme Zoé</span></div>
+            </div>
+            
+            <div class="exercise">
+                <h3>Exercice: Épeler votre prénom</h3>
+                <input type="text" id="nameSpelling" placeholder="Tapez votre prénom" class="input-field">
+                <button class="check-btn" onclick="spellName()">Épeler</button>
+                <div id="spellingResult"></div>
+            </div>
+        </div>
+
+        <!-- Section 3: Verbes -->
+        <div class="section" id="section2">
+            <h2>3. Premiers verbes</h2>
+            <div class="verb-grid">
+                <div class="verb-conjugation">
+                    <h3>S'appeler</h3>
+                    <p>je m'appelle</p>
+                    <p>tu t'appelles</p>
+                    <p>il/elle s'appelle</p>
+                    <p>nous nous appelons</p>
+                    <p>vous vous appelez</p>
+                    <p>ils/elles s'appellent</p>
+                </div>
+                
+                <div class="verb-conjugation">
+                    <h3>Être</h3>
+                    <p>je suis</p>
+                    <p>tu es</p>
+                    <p>il/elle est</p>
+                    <p>nous sommes</p>
+                    <p>vous êtes</p>
+                    <p>ils/elles sont</p>
+                </div>
+                
+                <div class="verb-conjugation">
+                    <h3>Avoir</h3>
+                    <p>j'ai</p>
+                    <p>tu as</p>
+                    <p>il/elle a</p>
+                    <p>nous avons</p>
+                    <p>vous avez</p>
+                    <p>ils/elles ont</p>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Exercice: Complétez avec être ou avoir</h3>
+                <div class="question">
+                    1. Je <select id="q1"><option value="">...</option><option value="suis">suis</option><option value="ai">ai</option></select> très content !
+                    <button class="audio-btn" onclick="playAudio('Je suis très content')">🔊</button>
+                </div>
+                <div class="question">
+                    2. Tu <select id="q2"><option value="">...</option><option value="as">as</option><option value="es">es</option></select> quel âge ?
+                </div>
+                <div class="question">
+                    3. Il <select id="q3"><option value="">...</option><option value="a">a</option><option value="est">est</option></select> professeur.
+                </div>
+                <div class="question">
+                    4. Nous <select id="q4"><option value="">...</option><option value="avons">avons</option><option value="sommes">sommes</option></select> français.
+                </div>
+                <div class="question">
+                    5. Vous <select id="q5"><option value="">...</option><option value="avez">avez</option><option value="êtes">êtes</option></select> des enfants ?
+                </div>
+                <button class="check-btn" onclick="checkVerbs()">Vérifier</button>
+                <div id="verbResult"></div>
+            </div>
+        </div>
+
+        <!-- Section 4: Exercices -->
+<div class="section" id="section3">
+    <h2>4. Exercices pratiques</h2>
+    
+    <div class="exercise">
+        <h3>Exercice 1: Complétez avec "être" ou "avoir"</h3>
+        <div class="question">
+            1. Marie <select id="ex1_1"><option value="">...</option><option value="est">est</option><option value="a">a</option></select> française et elle <select id="ex1_2"><option value="">...</option><option value="est">est</option><option value="a">a</option></select> 25 ans.
+        </div>
+        <div class="question">
+            2. Nous <select id="ex1_3"><option value="">...</option><option value="sommes">sommes</option><option value="avons">avons</option></select> étudiants et nous <select id="ex1_4"><option value="">...</option><option value="sommes">sommes</option><option value="avons">avons</option></select> des cours le matin.
+        </div>
+        <div class="question">
+            3. Tu <select id="ex1_5"><option value="">...</option><option value="es">es</option><option value="as">as</option></select> professeur ? Oui, et j' <select id="ex1_6"><option value="">...</option><option value="suis">suis</option><option value="ai">ai</option></select> une classe de français.
+        </div>
+        <div class="question">
+            4. Ils <select id="ex1_7"><option value="">...</option><option value="sont">sont</option><option value="ont">ont</option></select> suisses mais ils n' <select id="ex1_8"><option value="">...</option><option value="sont">sont</option><option value="ont">ont</option></select> pas d'accent.
+        </div>
+        <button class="check-btn" onclick="checkExercise1()">Vérifier</button>
+        <div id="ex1Result"></div>
+    </div>
+
+    <div class="exercise">
+        <h3>Exercice 2: Conjuguez le verbe "s'appeler"</h3>
+        <div class="question">
+            1. Comment tu <input type="text" id="ex2_1" style="width: 120px;"> ? (s'appeler)
+        </div>
+        <div class="question">
+            2. Je <input type="text" id="ex2_2" style="width: 120px;"> Pierre. (s'appeler)
+        </div>
+        <div class="question">
+            3. Elle <input type="text" id="ex2_3" style="width: 120px;"> comment ? (s'appeler)
+        </div>
+        <div class="question">
+            4. Nous <input type="text" id="ex2_4" style="width: 150px;"> Dupont. (s'appeler)
+        </div>
+        <div class="question">
+            5. Vous <input type="text" id="ex2_5" style="width: 150px;"> comment ? (s'appeler)
+        </div>
+        <div class="question">
+            6. Comment ils <input type="text" id="ex2_6" style="width: 150px;"> ? (s'appeler)
+        </div>
+        <div class="question">
+            7. Mon chien <input type="text" id="ex2_7" style="width: 120px;"> Rex. (s'appeler)
+        </div>
+        <div class="question">
+            8. Cette ville <input type="text" id="ex2_8" style="width: 120px;"> Berne. (s'appeler)
+        </div>
+        <button class="check-btn" onclick="checkExercise2()">Vérifier</button>
+        <div id="ex2Result"></div>
+    </div>
+
+<div class="exercise">
+    <h3>Exercice 3: Phrases négatives</h3>
+    <div class="question">
+        1. Je suis français → Je <input type="text" id="ex3_1" style="width: 60px;"> <input type="text" id="ex3_2" style="width: 60px;"> <input type="text" id="ex3_3" style="width: 60px;"> français.
+    </div>
+    <div class="question">
+        2. Elle a des enfants → Elle <input type="text" id="ex3_4" style="width: 60px;"> <input type="text" id="ex3_5" style="width: 60px;"> <input type="text" id="ex3_6" style="width: 60px;"> d'enfants.
+    </div>
+    <div class="question">
+        3. Nous sommes professeurs → Nous <input type="text" id="ex3_7" style="width: 60px;"> <input type="text" id="ex3_8" style="width: 60px;"> <input type="text" id="ex3_9" style="width: 60px;"> professeurs.
+    </div>
+    <div class="question">
+        4. Tu parles allemand → Tu <input type="text" id="ex3_10" style="width: 60px;"> <input type="text" id="ex3_11" style="width: 60px;"> <input type="text" id="ex3_12" style="width: 60px;"> allemand.
+    </div>
+    <div class="question">
+        5. J'ai un chat → Je <input type="text" id="ex3_13" style="width: 60px;"> <input type="text" id="ex3_14" style="width: 60px;"> <input type="text" id="ex3_15" style="width: 60px;"> de chat.
+    </div>
+    <div class="question">
+        6. Ils sont mariés → Ils <input type="text" id="ex3_16" style="width: 60px;"> <input type="text" id="ex3_17" style="width: 60px;"> <input type="text" id="ex3_18" style="width: 60px;"> mariés.
+    </div>
+    <div class="question">
+        7. Vous avez des frères → Vous <input type="text" id="ex3_19" style="width: 60px;"> <input type="text" id="ex3_20" style="width: 60px;"> <input type="text" id="ex3_21" style="width: 60px;"> de frères.
+    </div>
+    <div class="question">
+        8. Elle est célibataire → Elle <input type="text" id="ex3_22" style="width: 60px;"> <input type="text" id="ex3_23" style="width: 60px;"> <input type="text" id="ex3_24" style="width: 60px;"> célibataire.
+    </div>
+    <button class="check-btn" onclick="checkExercise3()">Vérifier</button>
+    <div id="ex3Result"></div>
+</div>
+</div>
+
+        <!-- Section 5: Questions avec quel/quelle -->
+<div class="section" id="section4">
+    <h2>5. Questions avec quel/quelle/quels/quelles</h2>
+    
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr style="background: #28a745; color: white;">
+                <th style="padding: 10px; border: 1px solid #ddd;"></th>
+                <th style="padding: 10px; border: 1px solid #ddd;">MASCULIN</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">FÉMININ</th>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; background: #28a745; color: white;"><strong>SINGULIER</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><strong>Quel</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><strong>Quelle</strong></td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; background: #28a745; color: white;"><strong>PLURIEL</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><strong>Quels</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><strong>Quelles</strong></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="exercise">
+        <h3>Exercice: Choisissez la bonne forme de "quel"</h3>
+        <div class="question">
+            1. <select id="quel1"><option value="">...</option><option value="Quel">Quel</option><option value="Quelle">Quelle</option><option value="Quels">Quels</option><option value="Quelles">Quelles</option></select> est votre nom de famille ?
+        </div>
+        <div class="question">
+            2. <select id="quel2"><option value="">...</option><option value="Quel">Quel</option><option value="Quelle">Quelle</option><option value="Quels">Quels</option><option value="Quelles">Quelles</option></select> est votre adresse ?
+        </div>
+        <div class="question">
+            3. <select id="quel3"><option value="">...</option><option value="Quel">Quel</option><option value="Quelle">Quelle</option><option value="Quels">Quels</option><option value="Quelles">Quelles</option></select> âge avez-vous ?
+        </div>
+        <div class="question">
+            4. <select id="quel4"><option value="">...</option><option value="Quel">Quel</option><option value="Quelle">Quelle</option><option value="Quels">Quels</option><option value="Quelles">Quelles</option></select> sont vos loisirs préférés ?
+        </div>
+        <div class="question">
+            5. <select id="quel5"><option value="">...</option><option value="Quel">Quel</option><option value="Quelle">Quelle</option><option value="Quels">Quels</option><option value="Quelles">Quelles</option></select> langues parlez-vous ?
+        </div>
+        <div class="question">
+            6. <select id="quel6"><option value="">...</option><option value="Quel">Quel</option><option value="Quelle">Quelle</option><option value="Quels">Quels</option><option value="Quelles">Quelles</option></select> est votre profession ?
+        </div>
+        <div class="question">
+            7. <select id="quel7"><option value="">...</option><option value="Quel">Quel</option><option value="Quelle">Quelle</option><option value="Quels">Quels</option><option value="Quelles">Quelles</option></select> sont vos animaux de compagnie ?
+        </div>
+        <div class="question">
+            8. <select id="quel8"><option value="">...</option><option value="Quel">Quel</option><option value="Quelle">Quelle</option><option value="Quels">Quels</option><option value="Quelles">Quelles</option></select> est votre nationalité ?
+        </div>
+        <button class="check-btn" onclick="checkQuelExercise()">Vérifier</button>
+        <div id="quelResult"></div>
+    </div>
+
+    <div class="exercise">
+        <h3>Questions personnelles - Répondez en français :</h3>
+        <div class="question">
+            <strong>Quel est votre prénom ?</strong><br>
+            <input type="text" id="personal1" placeholder="Mon prénom est..." class="input-field">
+        </div>
+        <div class="question">
+            <strong>Quelle est votre ville ?</strong><br>
+            <input type="text" id="personal2" placeholder="Ma ville est..." class="input-field">
+        </div>
+        <div class="question">
+            <strong>Quels sont vos sports préférés ?</strong><br>
+            <input type="text" id="personal3" placeholder="Mes sports préférés sont..." class="input-field">
+        </div>
+        <div class="question">
+            <strong>Quelle est votre couleur préférée ?</strong><br>
+            <input type="text" id="personal4" placeholder="Ma couleur préférée est..." class="input-field">
+        </div>
+    </div>
+</div>
+
+        <!-- Section 6: Mon profil -->
+<div class="section" id="section5">
+    <h2>6. Créez votre profil complet</h2>
+    
+    <div class="exercise">
+        <h3>Remplissez votre fiche d'identité complète :</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+                <label><strong>NOM :</strong></label><br>
+                <input type="text" id="profil_nom" class="input-field" style="margin-top: 5px;">
+            </div>
+            <div>
+                <label><strong>Prénom :</strong></label><br>
+                <input type="text" id="profil_prenom" class="input-field" style="margin-top: 5px;">
+            </div>
+            <div>
+                <label><strong>Âge :</strong></label><br>
+                <input type="number" id="profil_age" class="input-field" style="margin-top: 5px;">
+            </div>
+            <div>
+                <label><strong>Nationalité :</strong></label><br>
+<input type="text" id="profil_nationalite" class="input-field" placeholder="français, suisse, américain, américaine... (attention au masculin/féminin)" style="margin-top: 5px;">
+            </div>
+            <div>
+                <label><strong>Ville :</strong></label><br>
+                <input type="text" id="profil_ville" class="input-field" style="margin-top: 5px;">
+            </div>
+            <div>
+                <label><strong>Adresse :</strong></label><br>
+                <input type="text" id="profil_adresse" class="input-field" style="margin-top: 5px;">
+            </div>
+            <div>
+                <label><strong>Numéro de téléphone :</strong></label><br>
+                <input type="tel" id="profil_telephone" class="input-field" style="margin-top: 5px;">
+            </div>
+            <div>
+                <label><strong>Langues :</strong></label><br>
+                <input type="text" id="profil_langues" placeholder="français, anglais..." class="input-field" style="margin-top: 5px;">
+            </div>
+            <div>
+                <label><strong>Animaux de compagnie :</strong></label><br>
+                <input type="text" id="profil_animaux" placeholder="un chat, deux chiens..." class="input-field" style="margin-top: 5px;">
+            </div>
+            <div>
+                <label><strong>Sport/Loisir 1 :</strong></label><br>
+                <input type="text" id="profil_sport1" placeholder="le football, la lecture, écouter des podcasts..." class="input-field" style="margin-top: 5px;">
+            </div>
+            <div>
+                <label><strong>Sport/Loisir 2 :</strong></label><br>
+                <input type="text" id="profil_sport2" placeholder="la natation, la musique, regarder Netflix..." class="input-field" style="margin-top: 5px;">
+            </div>
+            <div>
+                <label><strong>Film préféré :</strong></label><br>
+                <input type="text" id="profil_film" class="input-field" style="margin-top: 5px;">
+            </div>
+            <div>
+                <label><strong>Chanson préférée :</strong></label><br>
+                <input type="text" id="profil_chanson" class="input-field" style="margin-top: 5px;">
+            </div>
+            <div>
+                <label><strong>Profession :</strong></label><br>
+                <input type="text" id="profil_profession" placeholder="étudiant, professeur..." class="input-field" style="margin-top: 5px;">
+            </div>
+        </div>
+        
+        <button class="check-btn" style="margin-top: 20px; padding: 15px 30px; font-size: 16px;" onclick="generateFullPresentation()">
+            Générer ma présentation complète
+        </button>
+        
+        <div id="generated_presentation" style="margin-top: 20px; padding: 20px; background: #e8f5e8; border-radius: 10px; display: none;">
+            <h4>Votre présentation complète en français :</h4>
+            <p id="presentation_text" style="font-style: italic; font-size: 16px; line-height: 1.6;"></p>
+            <button class="audio-btn" onclick="readPresentation()">🔊 Écouter</button>
+        </div>
+    </div>
+</div>
+
+    <script>
+        let currentSection = 0;
+        const totalSections = 6;
+
+        function showSection(index) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(`section${index}`).classList.add('active');
+            currentSection = index;
+            
+            // Update progress
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = ((currentSection + 1) / totalSections) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function playLetter(letter) {
+    // Simulation de la prononciation française correcte
+    if ('speechSynthesis' in window) {
+        // Correspondances phonétiques françaises
+        const frenchPronunciation = {
+            'A': 'a', 'B': 'bé', 'C': 'cé', 'D': 'dé', 'E': 'e',
+            'F': 'effe', 'G': 'gé', 'H': 'ache', 'I': 'i', 'J': 'ji',
+            'K': 'ka', 'L': 'elle', 'M': 'emme', 'N': 'èn', 'O': 'o',
+            'P': 'pé', 'Q': 'cu', 'R': 'erre', 'S': 'esse', 'T': 'té',
+            'U': 'u', 'V': 'vé', 'W': 'double vé', 'X': 'ixe', 'Y': 'i grec', 'Z': 'zède'
+        };
+        
+        const utterance = new SpeechSynthesisUtterance(frenchPronunciation[letter] || letter);
+        utterance.lang = 'fr-FR';
+        utterance.rate = 0.8;
+        speechSynthesis.speak(utterance);
+    }
+}
+
+        function playAudio(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'fr-FR';
+                utterance.rate = 0.9;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        function spellName() {
+    const name = document.getElementById('nameSpelling').value.toUpperCase();
+    if (name) {
+        // Correspondances pour l'épellation
+        const spellingPronunciation = {
+            'A': 'a', 'B': 'bé', 'C': 'cé', 'D': 'dé', 'E': 'e',
+            'F': 'effe', 'G': 'gé', 'H': 'ache', 'I': 'i', 'J': 'ji',
+            'K': 'ka', 'L': 'elle', 'M': 'emme', 'N': 'èn', 'O': 'o',
+            'P': 'pé', 'Q': 'cu', 'R': 'erre', 'S': 'esse', 'T': 'té',
+            'U': 'u', 'V': 'vé', 'W': 'double vé', 'X': 'ixe', 'Y': 'i grec', 'Z': 'zède'
+        };
+        
+        const letters = name.split('').map(letter => spellingPronunciation[letter] || letter);
+        const displayLetters = name.split('').join(' - ');
+        const pronounceLetters = letters.join(', ');
+        
+        document.getElementById('spellingResult').innerHTML = 
+            `<div class="correct">Épellation : ${displayLetters}</div>`;
+        
+        // Prononciation correcte
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(pronounceLetters);
+            utterance.lang = 'fr-FR';
+            utterance.rate = 0.7;
+            speechSynthesis.speak(utterance);
+        }
+    }
+}
+
+        function checkVerbs() {
+            const answers = {
+                'q1': 'suis',
+                'q2': 'as', 
+                'q3': 'est',
+                'q4': 'sommes',
+                'q5': 'avez'
+            };
+            
+            let score = 0;
+            let total = Object.keys(answers).length;
+            
+            for (let [id, correct] of Object.entries(answers)) {
+                const userAnswer = document.getElementById(id).value;
+                if (userAnswer === correct) {
+                    score++;
+                }
+            }
+            
+            const resultDiv = document.getElementById('verbResult');
+            if (score === total) {
+                resultDiv.innerHTML = `<div class="correct">Parfait ! ${score}/${total} ✅</div>`;
+            } else {
+                resultDiv.innerHTML = `<div class="incorrect">Score : ${score}/${total}. Essayez encore ! ❌</div>`;
+            }
+        }
+
+        function checkAnswer(inputId, correctAnswer) {
+            const userAnswer = document.getElementById(inputId).value.toLowerCase().trim();
+            const correct = correctAnswer.toLowerCase();
+            const inputElement = document.getElementById(inputId);
+            
+            if (userAnswer === correct || userAnswer.includes(correct)) {
+                inputElement.style.background = '#d4edda';
+                inputElement.style.borderColor = '#28a745';
+            } else {
+inputElement.style.background = '#f8d7da';
+                inputElement.style.borderColor = '#dc3545';
+            }
+        }
+
+        function checkQuel(selectId, correctAnswer) {
+            const userAnswer = document.getElementById(selectId).value;
+            const selectElement = document.getElementById(selectId);
+            
+            if (userAnswer === correctAnswer) {
+                selectElement.style.background = '#d4edda';
+                selectElement.style.borderColor = '#28a745';
+            } else {
+                selectElement.style.background = '#f8d7da';
+                selectElement.style.borderColor = '#dc3545';
+            }
+        }
+
+        function readPresentation() {
+            const text = document.getElementById('presentation_text').textContent;
+            playAudio(text);
+        }
+
+        // Navigation au clavier
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' && currentSection < totalSections - 1) {
+                showSection(currentSection + 1);
+            } else if (e.key === 'ArrowLeft' && currentSection > 0) {
+                showSection(currentSection - 1);
+            }
+        });
+
+        // Initialisation
+        updateProgress();
+
+        // Effets visuels supplémentaires
+        document.querySelectorAll('.input-field').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.transform = 'scale(1.02)';
+                this.style.transition = 'transform 0.2s ease';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+// Nouvelles fonctions pour les exercices améliorés
+
+        function checkExercise1() {
+            const answers = {
+                'ex1_1': 'est', 'ex1_2': 'a', 'ex1_3': 'sommes', 'ex1_4': 'avons',
+                'ex1_5': 'es', 'ex1_6': 'ai', 'ex1_7': 'sont', 'ex1_8': 'ont'
+            };
+            
+            let score = 0;
+            for (let [id, correct] of Object.entries(answers)) {
+                const userAnswer = document.getElementById(id).value;
+                const element = document.getElementById(id);
+                if (userAnswer === correct) {
+                    score++;
+                    element.style.background = '#d4edda';
+                    element.style.borderColor = '#28a745';
+                } else {
+                    element.style.background = '#f8d7da';
+                    element.style.borderColor = '#dc3545';
+                }
+            }
+            
+            const resultDiv = document.getElementById('ex1Result');
+            if (score === 8) {
+                resultDiv.innerHTML = `<div class="correct">Parfait ! ${score}/8 ✅</div>`;
+                showEncouragement();
+            } else {
+                resultDiv.innerHTML = `<div class="incorrect">Score : ${score}/8. Continuez ! 💪</div>`;
+            }
+        }
+
+        function checkExercise2() {
+            const answers = {
+                'ex2_1': 't\'appelles', 'ex2_2': 'm\'appelle', 'ex2_3': 's\'appelle', 'ex2_4': 'nous appelons',
+                'ex2_5': 'vous appelez', 'ex2_6': 's\'appellent', 'ex2_7': 's\'appelle', 'ex2_8': 's\'appelle'
+            };
+            
+            let score = 0;
+            for (let [id, correct] of Object.entries(answers)) {
+                const userAnswer = document.getElementById(id).value.toLowerCase().trim();
+                const element = document.getElementById(id);
+                if (userAnswer === correct || userAnswer === correct.replace('\'', ' ')) {
+                    score++;
+                    element.style.background = '#d4edda';
+                    element.style.borderColor = '#28a745';
+                } else {
+                    element.style.background = '#f8d7da';
+                    element.style.borderColor = '#dc3545';
+                }
+            }
+            
+            const resultDiv = document.getElementById('ex2Result');
+            if (score === 8) {
+                resultDiv.innerHTML = `<div class="correct">Excellent ! ${score}/8 ✅</div>`;
+                showEncouragement();
+            } else {
+                resultDiv.innerHTML = `<div class="incorrect">Score : ${score}/8. Réessayez ! 💪</div>`;
+            }
+        }
+
+function checkExercise3() {
+    const answers = {
+        'ex3_1': 'ne', 'ex3_2': 'suis', 'ex3_3': 'pas',
+        'ex3_4': 'n\'', 'ex3_5': 'a', 'ex3_6': 'pas',
+        'ex3_7': 'ne', 'ex3_8': 'sommes', 'ex3_9': 'pas',
+        'ex3_10': 'ne', 'ex3_11': 'parles', 'ex3_12': 'pas',
+        'ex3_13': 'n\'', 'ex3_14': 'ai', 'ex3_15': 'pas',
+        'ex3_16': 'ne', 'ex3_17': 'sont', 'ex3_18': 'pas',
+        'ex3_19': 'n\'', 'ex3_20': 'avez', 'ex3_21': 'pas',
+        'ex3_22': 'n\'', 'ex3_23': 'est', 'ex3_24': 'pas'
+    };
+    
+    let score = 0;
+    for (let [id, correct] of Object.entries(answers)) {
+        const userAnswer = document.getElementById(id).value.toLowerCase().trim();
+        const element = document.getElementById(id);
+        if (userAnswer === correct || userAnswer === correct.replace('\'', ' ')) {
+            score++;
+            element.style.background = '#d4edda';
+            element.style.borderColor = '#28a745';
+        } else {
+            element.style.background = '#f8d7da';
+            element.style.borderColor = '#dc3545';
+        }
+    }
+    
+    const resultDiv = document.getElementById('ex3Result');
+    if (score === 24) {
+        resultDiv.innerHTML = `<div class="correct">Bravo ! ${score}/24 ✅</div>`;
+        showEncouragement();
+    } else {
+        resultDiv.innerHTML = `<div class="incorrect">Score : ${score}/24. Continuez ! 💪</div>`;
+    }
+}
+
+        function checkQuelExercise() {
+            const answers = {
+                'quel1': 'Quel', 'quel2': 'Quelle', 'quel3': 'Quel', 'quel4': 'Quels',
+                'quel5': 'Quelles', 'quel6': 'Quelle', 'quel7': 'Quels', 'quel8': 'Quelle'
+            };
+            
+            let score = 0;
+            for (let [id, correct] of Object.entries(answers)) {
+                const userAnswer = document.getElementById(id).value;
+                const element = document.getElementById(id);
+                if (userAnswer === correct) {
+                    score++;
+                    element.style.background = '#d4edda';
+                    element.style.borderColor = '#28a745';
+                } else {
+                    element.style.background = '#f8d7da';
+                    element.style.borderColor = '#dc3545';
+                }
+            }
+            
+            const resultDiv = document.getElementById('quelResult');
+            if (score === 8) {
+                resultDiv.innerHTML = `<div class="correct">Parfait ! ${score}/8 ✅</div>`;
+                showEncouragement();
+            } else {
+                resultDiv.innerHTML = `<div class="incorrect">Score : ${score}/8. Réessayez ! 💪</div>`;
+            }
+        }
+
+        function generateFullPresentation() {
+            const nom = document.getElementById('profil_nom').value;
+            const prenom = document.getElementById('profil_prenom').value;
+            const age = document.getElementById('profil_age').value;
+            const nationalite = document.getElementById('profil_nationalite').value;
+            const ville = document.getElementById('profil_ville').value;
+            const adresse = document.getElementById('profil_adresse').value;
+            const telephone = document.getElementById('profil_telephone').value;
+            const langues = document.getElementById('profil_langues').value;
+            const animaux = document.getElementById('profil_animaux').value;
+            const sport1 = document.getElementById('profil_sport1').value;
+            const sport2 = document.getElementById('profil_sport2').value;
+            const film = document.getElementById('profil_film').value;
+            const chanson = document.getElementById('profil_chanson').value;
+            const profession = document.getElementById('profil_profession').value;
+
+            if (!prenom || !age) {
+                alert('Veuillez remplir au moins votre prénom et votre âge.');
+                return;
+            }
+
+            let presentation = `Bonjour, je m'appelle ${prenom}`;
+            if (nom) presentation += ` ${nom}`;
+            presentation += `. J'ai ${age} ans.`;
+            
+            if (nationalite) presentation += ` Je suis ${nationalite}.`;
+            if (ville) presentation += ` J'habite à ${ville}`;
+            if (adresse) presentation += `, ${adresse}`;
+            if (ville || adresse) presentation += `.`;
+            
+            if (telephone) presentation += ` Mon numéro de téléphone est le ${telephone}.`;
+            if (profession) presentation += ` Je suis ${profession}.`;
+            if (langues) presentation += ` Je parle ${langues}.`;
+            if (animaux) presentation += ` J'ai ${animaux}.`;
+            
+            if (sport1 && sport2) {
+                presentation += ` J'aime ${sport1} et ${sport2}.`;
+            } else if (sport1) {
+                presentation += ` J'aime ${sport1}.`;
+            }
+            
+            if (film) presentation += ` Mon film préféré est "${film}".`;
+            if (chanson) presentation += ` Ma chanson préférée est "${chanson}".`;
+
+            document.getElementById('presentation_text').textContent = presentation;
+            document.getElementById('generated_presentation').style.display = 'block';
+            
+            // Animation d'apparition
+            const presentationDiv = document.getElementById('generated_presentation');
+            presentationDiv.style.animation = 'fadeIn 0.8s ease';
+        }
+
+        // Messages d'encouragement aléatoires
+        const encouragements = [
+            "Excellent travail ! 👏",
+            "Très bien ! Continuez ! 🌟",
+            "Parfait ! Vous progressez ! 🎉",
+            "Bravo ! C'est exactement ça ! ✨",
+            "Magnifique ! Vous maîtrisez ! 🏆"
+        ];
+
+        function showEncouragement() {
+            const message = encouragements[Math.floor(Math.random() * encouragements.length)];
+            const div = document.createElement('div');
+            div.innerHTML = `<div style="position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 15px; border-radius: 10px; z-index: 1000; animation: slideIn 0.5s ease;">${message}</div>`;
+            document.body.appendChild(div);
+            
+            setTimeout(() => {
+                div.remove();
+            }, 3000);
+        }
+
+        // Animation pour les bonnes réponses
+        function addSuccessAnimation(element) {
+            element.style.animation = 'bounce 0.6s ease';
+            setTimeout(() => {
+                element.style.animation = '';
+            }, 600);
+        }
+
+        // Ajout d'animations CSS supplémentaires
+        const additionalCSS = `
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .section h2 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .alphabet-item:active {
+            transform: scale(0.95);
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .presentation-grid { grid-template-columns: 60px 1fr; gap: 8px; }
+            .verb-grid { grid-template-columns: 1fr; }
+            .nav-btn { padding: 10px 15px; margin: 5px; font-size: 14px; }
+            .alphabet-grid { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); }
+        }
+        `;
+
+        const style = document.createElement('style');
+        style.textContent = additionalCSS;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
