@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 Bingo Ludique - Classe 🎉</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #e8f4fd 0%, #f3e7ff 50%, #fff2e8 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+            animation: rainbow 3s infinite;
+        }
+
+        @keyframes rainbow {
+            0% { color: #e74c3c; }
+            16% { color: #f39c12; }
+            32% { color: #f1c40f; }
+            48% { color: #27ae60; }
+            64% { color: #3498db; }
+            80% { color: #9b59b6; }
+            100% { color: #e74c3c; }
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+
+        .tab-button {
+            padding: 12px 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            background: rgba(255,255,255,0.6);
+            color: #8e44ad;
+            border: 2px solid #8e44ad;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(45deg, #8e44ad, #9b59b6);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .tab-button:hover:not(.active) {
+            background: rgba(255,255,255,0.8);
+            transform: translateY(-1px);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tirage-section, .grille-section {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #8e44ad;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .current-number {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .number-display {
+            font-size: 4em;
+            font-weight: bold;
+            color: #8e44ad;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+            padding: 20px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            border: 3px solid #8e44ad;
+            animation: pulse 2s infinite;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .speed-control {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .speed-control label {
+            font-weight: bold;
+            color: #8e44ad;
+            margin-right: 10px;
+        }
+
+        .speed-control select {
+            padding: 8px 15px;
+            border-radius: 25px;
+            border: 2px solid #8e44ad;
+            background: white;
+            color: #8e44ad;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-family: inherit;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #42a5f5, #66bb6a);
+            color: white;
+        }
+
+        .btn-accent {
+            background: linear-gradient(45deg, #ab47bc, #ff6b6b);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .history {
+            background: rgba(255,255,255,0.6);
+            border-radius: 15px;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid rgba(142, 68, 173, 0.3);
+        }
+
+        .history-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #8e44ad;
+        }
+
+        .history-numbers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .history-number {
+            background: linear-gradient(45deg, #8e44ad, #9b59b6);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            gap: 3px;
+            margin-bottom: 20px;
+        }
+
+        .grid-section {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .section-b { background: #ff6b6b; }
+        .section-i { background: #ffa726; }
+        .section-n { background: #ffeb3b; color: #333; }
+        .section-g { background: #66bb6a; }
+        .section-o { background: #42a5f5; }
+
+        .grid-number {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.9);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            color: #2c3e50;
+        }
+
+        .grid-number:hover {
+            background: rgba(255,255,255,1);
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .grid-number.called {
+            background: linear-gradient(45deg, #e74c3c, #f39c12);
+            border-color: #f1c40f;
+            color: white;
+            animation: flash 0.5s ease-in-out;
+        }
+
+        @keyframes flash {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .bingo-cards {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .card-generator {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: center;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .bingo-card {
+            background: white;
+            color: #333;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header {
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            letter-spacing: 8px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2px;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            border: 1px solid #ddd;
+        }
+
+        .card-header-cell {
+            background: #8e44ad;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .card-number {
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card-number:hover {
+            background: #e9ecef;
+            transform: scale(1.05);
+        }
+
+        .card-number.marked {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            font-weight: bold;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        .card-free {
+            background: #f1c40f;
+            font-weight: bold;
+            font-size: 0.9em;
+            cursor: default;
+            color: #2c3e50;
+        }
+
+        .stats {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ffeb3b;
+            animation: confetti-fall 3s linear infinite;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .revision-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .number-card {
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #8e44ad;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .number-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(142, 68, 173, 0.3);
+            background: rgba(255,255,255,1);
+        }
+
+        .number-card:active {
+            transform: translateY(-2px) scale(1.01);
+        }
+
+        .card-number-big {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #8e44ad;
+            margin-bottom: 10px;
+        }
+
+        .card-letter {
+            font-size: 1.2em;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .card-written {
+            font-size: 1.1em;
+            color: #2c3e50;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .card-instruction {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            opacity: 0.8;
+        }
+
+        .revision-section {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .title {
+                font-size: 2em;
+            }
+            
+            .number-display {
+                font-size: 2.5em;
+            }
+            
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-grid {
+                grid-template-columns: repeat(10, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🎉 BINGO LUDIQUE 🎉</h1>
+            <p>Activité interactive pour la classe</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="game">🎲 Jeu de Bingo</button>
+            <button class="tab-button" data-tab="revision">📚 Révision des Nombres</button>
+        </div>
+
+        <div id="game-content" class="tab-content active">
+
+        <div class="main-content">
+            <div class="tirage-section">
+                <h2 class="section-title">🎲 Tirage des Numéros</h2>
+                
+                <div class="current-number">
+                    <div class="number-display" id="currentNumber">
+                        Prêt à jouer !
+                    </div>
+                </div>
+
+                
+                <div class="speed-control">
+                    <label for="speedSelect">🎙️ Vitesse d'annonce :</label>
+                    <select id="speedSelect">
+                        <option value="lent">🐌 Lent (pauses longues)</option>
+                        <option value="normal" selected>⚡ Normal (équilibré)</option>
+                        <option value="rapide">🚀 Rapide (rythme soutenu)</option>
+                    </select>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-primary" id="drawBtn">🎯 Tirer un numéro</button>
+                    <button class="btn btn-secondary" id="announceBtn" disabled>📢 Annoncer</button>
+                    <button class="btn btn-accent" id="resetBtn">🔄 Recommencer</button>
+                    <button class="btn btn-secondary" id="autoDrawBtn">⚡ Mode Auto</button>
+                </div>
+
+                <div class="stats">
+                    <strong>Numéros tirés : <span id="drawnCount">0</span> / 75</strong>
+                </div>
+
+                <div class="history">
+                    <div class="history-title">📝 Historique</div>
+                    <div class="history-numbers" id="historyNumbers"></div>
+                </div>
+            </div>
+
+            <div class="grille-section">
+                <h2 class="section-title">🎯 Grille de Contrôle</h2>
+                
+                <div class="grid-section section-b">B (1-15)</div>
+                <div class="control-grid" id="controlGrid"></div>
+            </div>
+        </div>
+
+        <div class="bingo-cards">
+            <h2 class="section-title">🎫 Générateur de Grilles</h2>
+            
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                <p><strong>💡 Comment jouer :</strong></p>
+                <p>• Cliquez sur les cases de vos grilles pour les marquer ✅</p>
+                <p>• Vous ne pouvez marquer que les numéros déjà tirés</p>
+                <p>• Objectif : faire une ligne, colonne ou diagonale complète !</p>
+            </div>
+            
+            <div class="card-generator">
+                <div>
+                    <label>Nombre de grilles à générer : </label>
+                    <select id="cardCount">
+                        <option value="1">1 grille</option>
+                        <option value="2">2 grilles</option>
+                        <option value="3">3 grilles</option>
+                        <option value="4" selected>4 grilles</option>
+                        <option value="6">6 grilles</option>
+                        <option value="8">8 grilles</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="generateBtn">🎰 Générer</button>
+            </div>
+
+            <div class="cards-container" id="cardsContainer"></div>
+        </div>
+        </div>
+
+        <div id="revision-content" class="tab-content">
+            <div class="revision-section">
+                <h2 class="section-title">📚 Révision des Nombres</h2>
+                
+                <!-- Zone de saisie libre -->
+                <div style="background: rgba(52, 152, 219, 0.1); padding: 20px; border-radius: 15px; margin-bottom: 25px;">
+                    <h3 style="color: #3498db; margin-bottom: 15px; text-align: center;">🔢 Convertisseur de Nombres</h3>
+                    
+                    <!-- Sélecteur de prononciation -->
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <label style="font-weight: bold; color: #2c3e50; margin-right: 15px;">🗣️ Prononciation :</label>
+                        <select id="pronunciationStyle" style="padding: 8px 15px; border-radius: 20px; border: 2px solid #3498db; background: white; color: #2c3e50; font-weight: bold;">
+                            <option value="french">🇫🇷 Française (soixante-dix, quatre-vingt, quatre-vingt-dix)</option>
+                            <option value="swiss">🇨🇭 Suisse/Belge (septante, huitante, nonante)</option>
+                        </select>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; align-items: center; justify-content: center; flex-wrap: wrap;">
+                        <input type="number" id="numberInput" placeholder="Tapez un nombre (ex: 1492)" 
+                               style="padding: 12px 20px; font-size: 1.2em; border: 2px solid #3498db; border-radius: 25px; 
+                                      text-align: center; width: 200px; background: white;">
+                        <button id="convertBtn" class="btn btn-secondary" style="padding: 12px 25px;">
+                            ✨ Convertir
+                        </button>
+                    </div>
+                    <div id="conversionResult" style="margin-top: 20px; text-align: center; min-height: 80px;">
+                        <p style="color: #7f8c8d; font-style: italic;">Entrez un nombre pour voir sa version écrite !</p>
+                    </div>
+                </div>
+
+                <!-- Grille des nombres 1-75 -->
+                <div style="background: rgba(142, 68, 173, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+                    <p><strong>💡 Nombres du Bingo (1-75) :</strong></p>
+                    <p>Cliquez sur une carte pour écouter la prononciation du numéro</p>
+                </div>
+                <div class="revision-grid" id="revisionGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class BingoGame {
+            constructor() {
+                this.drawnNumbers = [];
+                this.allNumbers = Array.from({length: 75}, (_, i) => i + 1);
+                this.currentNumber = null;
+                this.autoDrawInterval = null;
+                this.isAutoMode = false;
+                this.speechSpeed = 'normal'; // lent, normal, rapide
+                this.currentTab = 'game'; // game, revision
+                
+                this.initElements();
+                this.initControlGrid();
+                this.setupEventListeners();
+                this.generateInitialCards();
+                this.initRevisionMode();
+                this.initTabs();
+            }
+
+            initElements() {
+                this.currentNumberEl = document.getElementById('currentNumber');
+                this.drawBtn = document.getElementById('drawBtn');
+                this.announceBtn = document.getElementById('announceBtn');
+                this.resetBtn = document.getElementById('resetBtn');
+                this.autoDrawBtn = document.getElementById('autoDrawBtn');
+                this.drawnCountEl = document.getElementById('drawnCount');
+                this.historyEl = document.getElementById('historyNumbers');
+                this.controlGrid = document.getElementById('controlGrid');
+                this.cardsContainer = document.getElementById('cardsContainer');
+                this.generateBtn = document.getElementById('generateBtn');
+                this.cardCountSelect = document.getElementById('cardCount');
+                this.speedSelect = document.getElementById('speedSelect');
+                this.numberInput = document.getElementById('numberInput');
+                this.convertBtn = document.getElementById('convertBtn');
+                this.conversionResult = document.getElementById('conversionResult');
+                this.pronunciationStyle = document.getElementById('pronunciationStyle');
+            }
+
+            initControlGrid() {
+                const sections = [
+                    {letter: 'B', range: [1, 15], color: '#ff6b6b'},
+                    {letter: 'I', range: [16, 30], color: '#ffa726'},
+                    {letter: 'N', range: [31, 45], color: '#ffeb3b'},
+                    {letter: 'G', range: [46, 60], color: '#66bb6a'},
+                    {letter: 'O', range: [61, 75], color: '#42a5f5'}
+                ];
+
+                this.controlGrid.innerHTML = '';
+                
+                for (let i = 1; i <= 75; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-number';
+                    cell.textContent = i;
+                    cell.dataset.number = i;
+                    
+                    // Déterminer la couleur selon la section
+                    const section = sections.find(s => i >= s.range[0] && i <= s.range[1]);
+                    if (section) {
+                        cell.style.color = section.color;
+                        cell.style.borderColor = section.color;
+                    }
+                    
+                    this.controlGrid.appendChild(cell);
+                }
+            }
+
+            setupEventListeners() {
+                this.drawBtn.addEventListener('click', () => this.drawNumber());
+                this.announceBtn.addEventListener('click', () => this.announceNumber());
+                this.resetBtn.addEventListener('click', () => this.resetGame());
+                this.autoDrawBtn.addEventListener('click', () => this.toggleAutoMode());
+                this.generateBtn.addEventListener('click', () => this.generateCards());
+                this.speedSelect.addEventListener('change', (e) => this.speechSpeed = e.target.value);
+                this.convertBtn.addEventListener('click', () => this.convertNumber());
+                this.numberInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.convertNumber();
+                });
+            }
+
+            drawNumber() {
+                if (this.drawnNumbers.length >= 75) {
+                    alert('🎉 Tous les numéros ont été tirés ! 🎉');
+                    return;
+                }
+
+                const remaining = this.allNumbers.filter(n => !this.drawnNumbers.includes(n));
+                const randomIndex = Math.floor(Math.random() * remaining.length);
+                this.currentNumber = remaining[randomIndex];
+                
+                this.drawnNumbers.push(this.currentNumber);
+                this.updateDisplay();
+                this.announceNumber();
+                this.createConfetti();
+            }
+
+            announceNumber() {
+                if (!this.currentNumber) return;
+
+                const letter = this.getLetterForNumber(this.currentNumber);
+                const number = this.currentNumber;
+                
+                // Paramètres de vitesse selon le mode sélectionné
+                const speedSettings = {
+                    'lent': { rate: 0.6, pauseBetween: 12000, interval: 20000 },    // 12 sec entre annonces
+                    'normal': { rate: 0.6, pauseBetween: 8000, interval: 15000 },   // 8 sec entre annonces  
+                    'rapide': { rate: 0.8, pauseBetween: 4000, interval: 8000 }     // 4 sec entre annonces
+                };
+                
+                const settings = speedSettings[this.speechSpeed];
+                
+                // Première annonce
+                if ('speechSynthesis' in window) {
+                    const firstAnnouncement = `${letter} ${number}`;
+                    const utterance1 = new SpeechSynthesisUtterance(firstAnnouncement);
+                    utterance1.lang = 'fr-FR';
+                    utterance1.rate = settings.rate;
+                    utterance1.volume = 0.9;
+                    utterance1.pitch = 1.1;
+                    speechSynthesis.speak(utterance1);
+                    
+                    // Deuxième annonce après la pause de 8 secondes (ou selon le mode)
+                    setTimeout(() => {
+                        const secondAnnouncement = `Je répète, ${letter} ${number}`;
+                        const utterance2 = new SpeechSynthesisUtterance(secondAnnouncement);
+                        utterance2.lang = 'fr-FR';
+                        utterance2.rate = settings.rate;
+                        utterance2.volume = 0.9;
+                        utterance2.pitch = 1.1;
+                        speechSynthesis.speak(utterance2);
+                    }, settings.pauseBetween);
+                }
+
+                // Animation de l'annonce
+                this.currentNumberEl.style.animation = 'none';
+                setTimeout(() => {
+                    this.currentNumberEl.style.animation = 'pulse 2s infinite';
+                }, 10);
+            }
+
+            getLetterForNumber(number) {
+                if (number <= 15) return 'B';
+                if (number <= 30) return 'I';
+                if (number <= 45) return 'N';
+                if (number <= 60) return 'G';
+                return 'O';
+            }
+
+            updateDisplay() {
+                const letter = this.getLetterForNumber(this.currentNumber);
+                this.currentNumberEl.innerHTML = `${letter}<br>${this.currentNumber}`;
+                
+                this.drawnCountEl.textContent = this.drawnNumbers.length;
+                this.announceBtn.disabled = false;
+                
+                // Mettre à jour l'historique
+                this.updateHistory();
+                
+                // Mettre à jour la grille de contrôle
+                this.updateControlGrid();
+                
+                if (this.drawnNumbers.length >= 75) {
+                    this.drawBtn.disabled = true;
+                    this.stopAutoMode();
+                }
+            }
+
+            updateHistory() {
+                this.historyEl.innerHTML = '';
+                this.drawnNumbers.forEach(number => {
+                    const span = document.createElement('span');
+                    span.className = 'history-number';
+                    span.textContent = `${this.getLetterForNumber(number)}${number}`;
+                    this.historyEl.appendChild(span);
+                });
+                this.historyEl.scrollTop = this.historyEl.scrollHeight;
+            }
+
+            updateControlGrid() {
+                const cells = this.controlGrid.querySelectorAll('.grid-number');
+                cells.forEach(cell => {
+                    const number = parseInt(cell.dataset.number);
+                    if (this.drawnNumbers.includes(number)) {
+                        cell.classList.add('called');
+                    }
+                });
+            }
+
+            resetGame() {
+                this.drawnNumbers = [];
+                this.currentNumber = null;
+                this.stopAutoMode();
+                
+                this.currentNumberEl.textContent = 'Prêt à jouer !';
+                this.drawnCountEl.textContent = '0';
+                this.announceBtn.disabled = true;
+                this.drawBtn.disabled = false;
+                this.historyEl.innerHTML = '';
+                
+                // Réinitialiser la grille de contrôle
+                const cells = this.controlGrid.querySelectorAll('.grid-number');
+                cells.forEach(cell => cell.classList.remove('called'));
+            }
+
+            toggleAutoMode() {
+                if (this.isAutoMode) {
+                    this.stopAutoMode();
+                } else {
+                    this.startAutoMode();
+                }
+            }
+
+            startAutoMode() {
+                this.isAutoMode = true;
+                this.autoDrawBtn.textContent = '⏹️ Arrêter Auto';
+                this.autoDrawBtn.className = 'btn btn-accent';
+                this.drawBtn.disabled = true;
+                
+                // Utiliser l'intervalle correspondant à la vitesse sélectionnée
+                const speedSettings = {
+                    'lent': 20000,      // 20 secondes total (12 sec pause + 8 sec après répétition)
+                    'normal': 15000,    // 15 secondes total (8 sec pause + 7 sec après répétition)
+                    'rapide': 8000      // 8 secondes total (4 sec pause + 4 sec après répétition)
+                };
+                
+                const interval = speedSettings[this.speechSpeed];
+                
+                this.autoDrawInterval = setInterval(() => {
+                    if (this.drawnNumbers.length >= 75) {
+                        this.stopAutoMode();
+                        return;
+                    }
+                    this.drawNumber();
+                }, interval);
+            }
+
+            stopAutoMode() {
+                this.isAutoMode = false;
+                this.autoDrawBtn.textContent = '⚡ Mode Auto';
+                this.autoDrawBtn.className = 'btn btn-secondary';
+                this.drawBtn.disabled = false;
+                
+                if (this.autoDrawInterval) {
+                    clearInterval(this.autoDrawInterval);
+                    this.autoDrawInterval = null;
+                }
+            }
+
+            generateCards() {
+                const count = parseInt(this.cardCountSelect.value);
+                this.cardsContainer.innerHTML = '';
+                
+                for (let i = 0; i < count; i++) {
+                    const card = this.createBingoCard();
+                    this.cardsContainer.appendChild(card);
+                }
+            }
+
+            createBingoCard() {
+                const card = document.createElement('div');
+                card.className = 'bingo-card';
+                
+                // Header BINGO
+                const header = document.createElement('div');
+                header.className = 'card-header';
+                header.textContent = 'BINGO';
+                card.appendChild(header);
+                
+                // Grille 5x5
+                const grid = document.createElement('div');
+                grid.className = 'card-grid';
+                
+                // En-têtes des colonnes
+                ['B', 'I', 'N', 'G', 'O'].forEach(letter => {
+                    const cell = document.createElement('div');
+                    cell.className = 'card-cell card-header-cell';
+                    cell.textContent = letter;
+                    grid.appendChild(cell);
+                });
+                
+                // Générer les colonnes avec 5 numéros chacune
+                const columns = {
+                    B: this.getRandomNumbers(1, 15, 5),
+                    I: this.getRandomNumbers(16, 30, 5),
+                    N: this.getRandomNumbers(31, 45, 5),
+                    G: this.getRandomNumbers(46, 60, 5),
+                    O: this.getRandomNumbers(61, 75, 5)
+                };
+                
+                // Remplir la grille ligne par ligne
+                for (let row = 0; row < 5; row++) {
+                    for (let col = 0; col < 5; col++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'card-cell card-number';
+                        
+                        if (row === 2 && col === 2) {
+                            // Case centrale gratuite
+                            cell.textContent = 'FREE';
+                            cell.className = 'card-cell card-free';
+                        } else {
+                            const columnKey = ['B', 'I', 'N', 'G', 'O'][col];
+                            const numbers = columns[columnKey];
+                            
+                            // Pour la colonne N, on doit ajuster l'index à cause de la case FREE
+                            let numberIndex;
+                            if (col === 2) { // Colonne N
+                                numberIndex = row < 2 ? row : row - 1;
+                            } else {
+                                numberIndex = row;
+                            }
+                            
+                            const numberValue = numbers[numberIndex];
+                            cell.textContent = numberValue;
+                            cell.dataset.number = numberValue;
+                            
+                            // Ajouter l'événement de clic pour marquer la case
+                            cell.addEventListener('click', () => this.toggleCardCell(cell));
+                        }
+                        
+                        grid.appendChild(cell);
+                    }
+                }
+                
+                card.appendChild(grid);
+                return card;
+            }
+
+            getRandomNumbers(min, max, count) {
+                const numbers = [];
+                const available = Array.from({length: max - min + 1}, (_, i) => min + i);
+                
+                for (let i = 0; i < count; i++) {
+                    const randomIndex = Math.floor(Math.random() * available.length);
+                    numbers.push(available[randomIndex]);
+                    available.splice(randomIndex, 1);
+                }
+                
+                return numbers.sort((a, b) => a - b);
+            }
+
+            createConfetti() {
+                const colors = ['#ff6b6b', '#ffa726', '#ffeb3b', '#66bb6a', '#42a5f5', '#ab47bc'];
+                
+                for (let i = 0; i < 15; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 3000);
+                }
+            }
+
+            generateInitialCards() {
+                this.generateCards();
+            }
+
+            initTabs() {
+                const tabButtons = document.querySelectorAll('.tab-button');
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const tabName = e.target.dataset.tab;
+                        this.switchTab(tabName);
+                    });
+                });
+            }
+
+            switchTab(tabName) {
+                // Mettre à jour les boutons
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+                // Mettre à jour le contenu
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`${tabName}-content`).classList.add('active');
+
+                this.currentTab = tabName;
+            }
+
+            initRevisionMode() {
+                const numbersInFrench = {
+                    1: 'un', 2: 'deux', 3: 'trois', 4: 'quatre', 5: 'cinq',
+                    6: 'six', 7: 'sept', 8: 'huit', 9: 'neuf', 10: 'dix',
+                    11: 'onze', 12: 'douze', 13: 'treize', 14: 'quatorze', 15: 'quinze',
+                    16: 'seize', 17: 'dix-sept', 18: 'dix-huit', 19: 'dix-neuf', 20: 'vingt',
+                    21: 'vingt et un', 22: 'vingt-deux', 23: 'vingt-trois', 24: 'vingt-quatre', 25: 'vingt-cinq',
+                    26: 'vingt-six', 27: 'vingt-sept', 28: 'vingt-huit', 29: 'vingt-neuf', 30: 'trente',
+                    31: 'trente et un', 32: 'trente-deux', 33: 'trente-trois', 34: 'trente-quatre', 35: 'trente-cinq',
+                    36: 'trente-six', 37: 'trente-sept', 38: 'trente-huit', 39: 'trente-neuf', 40: 'quarante',
+                    41: 'quarante et un', 42: 'quarante-deux', 43: 'quarante-trois', 44: 'quarante-quatre', 45: 'quarante-cinq',
+                    46: 'quarante-six', 47: 'quarante-sept', 48: 'quarante-huit', 49: 'quarante-neuf', 50: 'cinquante',
+                    51: 'cinquante et un', 52: 'cinquante-deux', 53: 'cinquante-trois', 54: 'cinquante-quatre', 55: 'cinquante-cinq',
+                    56: 'cinquante-six', 57: 'cinquante-sept', 58: 'cinquante-huit', 59: 'cinquante-neuf', 60: 'soixante',
+                    61: 'soixante et un', 62: 'soixante-deux', 63: 'soixante-trois', 64: 'soixante-quatre', 65: 'soixante-cinq',
+                    66: 'soixante-six', 67: 'soixante-sept', 68: 'soixante-huit', 69: 'soixante-neuf', 70: 'soixante-dix',
+                    71: 'soixante et onze', 72: 'soixante-douze', 73: 'soixante-treize', 74: 'soixante-quatorze', 75: 'soixante-quinze'
+                };
+
+                const revisionGrid = document.getElementById('revisionGrid');
+                revisionGrid.innerHTML = '';
+
+                for (let i = 1; i <= 75; i++) {
+                    const card = document.createElement('div');
+                    card.className = 'number-card';
+                    
+                    const writtenNumber = numbersInFrench[i];
+                    
+                    card.innerHTML = `
+                        <div class="card-number-big">${i}</div>
+                        <div class="card-written">${writtenNumber}</div>
+                        <div class="card-instruction">👆 Cliquez pour écouter</div>
+                    `;
+                    
+                    card.addEventListener('click', () => this.pronounceRevisionNumber(i));
+                    revisionGrid.appendChild(card);
+                }
+            }
+
+            pronounceRevisionNumber(number) {
+                if ('speechSynthesis' in window) {
+                    const announcement = `${number}`;
+                    const utterance = new SpeechSynthesisUtterance(announcement);
+                    utterance.lang = 'fr-FR';
+                    utterance.rate = 0.6; // Vitesse fixe pour la révision
+                    utterance.volume = 0.9;
+                    utterance.pitch = 1.1;
+                    speechSynthesis.speak(utterance);
+                }
+            }
+
+            convertNumber() {
+                const inputNumber = parseInt(this.numberInput.value);
+                
+                if (isNaN(inputNumber) || inputNumber < 0 || inputNumber > 999999) {
+                    this.conversionResult.innerHTML = `
+                        <div style="color: #e74c3c; font-weight: bold;">
+                            ⚠️ Veuillez entrer un nombre entre 0 et 999 999
+                        </div>
+                    `;
+                    return;
+                }
+
+                const style = this.pronunciationStyle.value;
+                const writtenNumber = this.numberToFrench(inputNumber, style);
+                const styleLabel = style === 'swiss' ? '🇨🇭 Suisse/Belge' : '🇫🇷 Française';
+                
+                this.conversionResult.innerHTML = `
+                    <div class="conversion-result">
+                        <div class="converted-number">${inputNumber.toLocaleString('fr-FR')}</div>
+                        <div style="font-size: 0.9em; color: #7f8c8d; margin-bottom: 5px;">${styleLabel}</div>
+                        <div class="converted-text">${writtenNumber}</div>
+                        <button class="listen-btn" onclick="bingoGame.pronounceConvertedNumber('${writtenNumber}')">
+                            🔊 Écouter la prononciation
+                        </button>
+                    </div>
+                `;
+            }
+
+            pronounceConvertedNumber(text) {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'fr-FR';
+                    utterance.rate = 0.6;
+                    utterance.volume = 0.9;
+                    utterance.pitch = 1.1;
+                    speechSynthesis.speak(utterance);
+                }
+            }
+
+            numberToFrench(num, style = 'french') {
+                if (num === 0) return 'zéro';
+                
+                const units = ['', 'un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf'];
+                const teens = ['dix', 'onze', 'douze', 'treize', 'quatorze', 'quinze', 'seize', 'dix-sept', 'dix-huit', 'dix-neuf'];
+                
+                // Adaptation selon le style de prononciation
+                const tens = style === 'swiss' 
+                    ? ['', '', 'vingt', 'trente', 'quarante', 'cinquante', 'soixante', 'septante', 'huitante', 'nonante']
+                    : ['', '', 'vingt', 'trente', 'quarante', 'cinquante', 'soixante', 'soixante', 'quatre-vingt', 'quatre-vingt'];
+                
+                const convertHundreds = (n) => {
+                    let result = '';
+                    const h = Math.floor(n / 100);
+                    const remainder = n % 100;
+                    
+                    if (h > 0) {
+                        if (h === 1) {
+                            result += 'cent';
+                        } else {
+                            result += units[h] + ' cent';
+                        }
+                        if (h > 1 && remainder === 0) result += 's';
+                    }
+                    
+                    if (remainder > 0) {
+                        if (h > 0) result += ' ';
+                        
+                        if (remainder < 10) {
+                            result += units[remainder];
+                        } else if (remainder < 20) {
+                            result += teens[remainder - 10];
+                        } else {
+                            const t = Math.floor(remainder / 10);
+                            const u = remainder % 10;
+                            
+                            if (style === 'french' && (t === 7 || t === 9)) {
+                                // Prononciation française : soixante-dix, quatre-vingt-dix
+                                if (t === 7) {
+                                    result += 'soixante';
+                                    if (u === 1) {
+                                        result += '-et-onze';
+                                    } else if (u > 1) {
+                                        result += '-' + teens[u];
+                                    } else {
+                                        result += '-dix';
+                                    }
+                                } else { // t === 9
+                                    result += 'quatre-vingt';
+                                    if (u === 1) {
+                                        result += '-et-onze';
+                                    } else if (u > 1) {
+                                        result += '-' + teens[u];
+                                    } else {
+                                        result += '-dix';
+                                    }
+                                }
+                            } else if (style === 'french' && t === 8) {
+                                // Traitement spécial pour quatre-vingt (80-89)
+                                result += 'quatre-vingt';
+                                if (u === 0) {
+                                    result += 's'; // quatre-vingts
+                                } else if (u === 1) {
+                                    result += '-et-un';
+                                } else {
+                                    result += '-' + units[u];
+                                }
+                            } else {
+                                // Prononciation suisse ou nombres simples (20-69)
+                                result += tens[t];
+                                if (u > 0) {
+                                    if (u === 1 && (t === 2 || t === 3 || t === 4 || t === 5 || t === 6 || (style === 'swiss' && (t === 7 || t === 8 || t === 9)))) {
+                                        result += '-et-un';
+                                    } else {
+                                        result += '-' + units[u];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    return result;
+                };
+                
+                let result = '';
+                
+                // Millions
+                const millions = Math.floor(num / 1000000);
+                if (millions > 0) {
+                    if (millions === 1) {
+                        result += 'un million';
+                    } else {
+                        result += convertHundreds(millions) + ' millions';
+                    }
+                    num %= 1000000;
+                }
+                
+                // Milliers
+                const thousands = Math.floor(num / 1000);
+                if (thousands > 0) {
+                    if (result) result += ' ';
+                    if (thousands === 1) {
+                        result += 'mille';
+                    } else {
+                        result += convertHundreds(thousands) + ' mille';
+                    }
+                    num %= 1000;
+                }
+                
+                // Centaines, dizaines, unités
+                if (num > 0) {
+                    if (result) result += ' ';
+                    result += convertHundreds(num);
+                }
+                
+                return result;
+            }
+
+            toggleCardCell(cell) {
+                const number = parseInt(cell.dataset.number);
+                
+                // Vérifier si le numéro a été tiré
+                if (!this.drawnNumbers.includes(number)) {
+                    // Animation de secousse si le numéro n'a pas été tiré
+                    cell.style.animation = 'shake 0.5s ease-in-out';
+                    setTimeout(() => {
+                        cell.style.animation = '';
+                    }, 500);
+                    
+                    // Message d'aide (optionnel)
+                    const letter = this.getLetterForNumber(number);
+                    console.log(`Le numéro ${letter}${number} n'a pas encore été tiré !`);
+                    return;
+                }
+                
+                // Basculer l'état marqué/non marqué
+                cell.classList.toggle('marked');
+            }
+
+            playSuccessSound() {
+                // Petit effet sonore avec synthèse vocale ou bip
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance('ding');
+                    utterance.volume = 0.3;
+                    utterance.rate = 2;
+                    utterance.pitch = 2;
+                    speechSynthesis.speak(utterance);
+                }
+            }
+        }
+
+        // Initialiser le jeu quand la page est chargée
+        let bingoGame;
+        document.addEventListener('DOMContentLoaded', () => {
+            bingoGame = new BingoGame();
+        });
+    </script>
+</body>
+</html>
