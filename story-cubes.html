@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Cubes</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .dice-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .dice-number-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dice-number-control button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dice-number-control button:hover {
+            background: #45a049;
+            transform: scale(1.1);
+        }
+
+        .dice-number-control button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .dice-count {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin: 0 15px;
+        }
+
+        .roll-all-btn {
+            background: linear-gradient(135deg, #FF6B6B, #FF5722);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .roll-all-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .dice-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .die-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .die {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border: 3px solid #4CAF50;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 56px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .die:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        .die.rolling {
+            animation: roll 1s ease-in-out;
+        }
+
+        @keyframes roll {
+            0% { transform: rotate(0deg) scale(1); }
+            20% { transform: rotate(90deg) scale(1.1); }
+            40% { transform: rotate(180deg) scale(0.9); }
+            60% { transform: rotate(270deg) scale(1.1); }
+            80% { transform: rotate(360deg) scale(0.95); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .die-theme-selector {
+            position: relative;
+        }
+
+        .die-theme-selector select {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 12px;
+            background: white;
+            cursor: pointer;
+            min-width: 120px;
+        }
+
+        .die-theme-selector select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .die-roll-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .die-roll-btn:hover {
+            background: #FF5722;
+            transform: scale(1.1);
+        }
+
+        .story-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .story-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .story-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            resize: vertical;
+        }
+
+        .story-input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        #storyText {
+            min-height: 200px;
+            font-family: inherit;
+            line-height: 1.6;
+        }
+
+        .word-count {
+            color: #666;
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .export-section {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .export-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .export-pdf {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .export-jpg {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .grammar-constraint {
+            background: #e8f5e8;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .constraint-checkbox {
+            margin-right: 10px;
+        }
+
+        .history-section {
+            background: #fff3cd;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 8px;
+        }
+
+        .history-item:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .history-dice {
+            display: flex;
+            gap: 5px;
+        }
+
+        .history-die {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #4CAF50;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            background: white;
+        }
+
+        .history-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .history-themes {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .history-timestamp {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .export-preview {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            display: none;
+        }
+
+        .export-preview h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .export-preview .dice-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .export-preview .mini-die {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .shortcuts {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .examples-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .examples-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            margin: 20px;
+            position: relative;
+        }
+
+        .examples-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .examples-close:hover {
+            color: #333;
+        }
+
+        .example-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .example-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .example-section h4 {
+            color: #4CAF50;
+            margin: 15px 0 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .example-dice {
+            display: flex;
+            gap: 8px;
+            margin: 10px 0;
+            font-size: 24px;
+        }
+
+        .example-text {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .example-simple {
+            background: #e8f5e8;
+        }
+
+        .example-complex {
+            background: #e3f2fd;
+        }
+
+        .example-story {
+            background: #fff3e0;
+        }
+
+        .constraints-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .constraints-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 900px;
+            max-height: 85vh;
+            overflow-y: auto;
+            margin: 20px;
+            position: relative;
+        }
+
+        .constraints-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .constraints-close:hover {
+            color: #333;
+        }
+
+        .constraint-category {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid;
+        }
+
+        .constraint-category h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .constraint-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .constraint-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            line-height: 1.4;
+        }
+
+        .constraint-list li:last-child {
+            border-bottom: none;
+        }
+
+        .beginner {
+            background: #e8f5e8;
+            border-left-color: #4CAF50;
+        }
+
+        .intermediate {
+            background: #fff3e0;
+            border-left-color: #FF9800;
+        }
+
+        .advanced {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+
+        .creative {
+            background: #f3e5f5;
+            border-left-color: #9c27b0;
+        }
+
+        .temporal {
+            background: #e1f5fe;
+            border-left-color: #03a9f4;
+        }
+
+        .stylistic {
+            background: #fce4ec;
+            border-left-color: #e91e63;
+        }
+
+        .accessibility-keyboard {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+        }
+
+        .accessibility-keyboard h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .keyboard-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .accent-btn {
+            background: white;
+            border: 2px solid #4CAF50;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .accent-btn:hover {
+            background: #4CAF50;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .accent-btn.special {
+            border-color: #FF6B6B;
+        }
+
+        .accent-btn.special:hover {
+            background: #FF6B6B;
+        }
+
+        .keyboard-toggle {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .keyboard-toggle:hover {
+            background: #e0e0e0;
+        }
+
+        .keyboard-buttons.hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .dice-container {
+                gap: 20px;
+            }
+            
+            .die {
+                width: 100px;
+                height: 100px;
+                font-size: 45px;
+            }
+            
+            .die-theme-selector select {
+                min-width: 100px;
+                font-size: 11px;
+            }
+            
+            .dice-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .theme-colors {
+            personnages: #FF6B6B;
+            lieux: #4ECDC4;
+            objets: #45B7D1;
+            emotions: #F7DC6F;
+            actions: #BB8FCE;
+            nature: #82E0AA;
+            nourriture: #F8C471;
+        }
+
+        .die[data-theme="personnages"] {
+            border-color: #FF6B6B;
+        }
+        .die[data-theme="lieux"] {
+            border-color: #4ECDC4;
+        }
+        .die[data-theme="objets"] {
+            border-color: #45B7D1;
+        }
+        .die[data-theme="emotions"] {
+            border-color: #F7DC6F;
+        }
+        .die[data-theme="actions"] {
+            border-color: #BB8FCE;
+        }
+        .die[data-theme="nature"] {
+            border-color: #82E0AA;
+        }
+        .die[data-theme="nourriture"] {
+            border-color: #F8C471;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎲 Story Cubes 🎲</h1>
+            <p>Créez des histoires originales pour pratiquer le français !</p>
+        </div>
+
+        <div class="main-content">
+            <div class="dice-controls">
+                <div class="dice-number-control">
+                    <button id="removeDie" title="Retirer un dé">−</button>
+                    <span class="dice-count" id="diceCount">5 dés</span>
+                    <button id="addDie" title="Ajouter un dé">+</button>
+                </div>
+                
+                <button class="roll-all-btn" id="rollAllBtn">🎲 Lancer tous les dés</button>
+                <button class="roll-all-btn" id="examplesBtn" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">📖 Exemples d'histoires</button>
+                <button class="roll-all-btn" id="constraintsBtn" style="background: linear-gradient(135deg, #e67e22, #d35400);">📝 Idées de contraintes</button>
+            </div>
+
+            <div class="dice-container" id="diceContainer">
+                <!-- Les dés seront générés ici -->
+            </div>
+
+            <div class="story-section">
+                <h2>✍️ Votre histoire</h2>
+                <input type="text" id="storyTitle" class="story-input" placeholder="Titre de votre histoire...">
+                
+                <div class="accessibility-keyboard">
+                    <h4>
+                        ⌨️ Caractères français 
+                        <button class="keyboard-toggle" id="keyboardToggle">Masquer</button>
+                    </h4>
+                    <div class="keyboard-buttons" id="keyboardButtons">
+                        <button class="accent-btn" data-char="à">à</button>
+                        <button class="accent-btn" data-char="á">á</button>
+                        <button class="accent-btn" data-char="â">â</button>
+                        <button class="accent-btn" data-char="è">è</button>
+                        <button class="accent-btn" data-char="é">é</button>
+                        <button class="accent-btn" data-char="ê">ê</button>
+                        <button class="accent-btn" data-char="ë">ë</button>
+                        <button class="accent-btn" data-char="î">î</button>
+                        <button class="accent-btn" data-char="ï">ï</button>
+                        <button class="accent-btn" data-char="ô">ô</button>
+                        <button class="accent-btn" data-char="ù">ù</button>
+                        <button class="accent-btn" data-char="û">û</button>
+                        <button class="accent-btn" data-char="ü">ü</button>
+                        <button class="accent-btn" data-char="ÿ">ÿ</button>
+                        <button class="accent-btn special" data-char="ç">ç</button>
+                        <button class="accent-btn special" data-char="œ">œ</button>
+                        <button class="accent-btn special" data-char="æ">æ</button>
+                        <button class="accent-btn" data-char="À">À</button>
+                        <button class="accent-btn" data-char="É">É</button>
+                        <button class="accent-btn" data-char="È">È</button>
+                        <button class="accent-btn" data-char="Ç">Ç</button>
+                        <button class="accent-btn special" data-char="«">«</button>
+                        <button class="accent-btn special" data-char="»">»</button>
+                        <button class="accent-btn special" data-char="'">'</button>
+                    </div>
+                </div>
+                
+                <textarea id="storyText" class="story-input" placeholder="Racontez votre histoire en utilisant tous les éléments des dés..."></textarea>
+                <div class="word-count" id="wordCount">0 mots</div>
+                
+                <div class="export-section">
+                    <button class="export-btn export-pdf" id="exportPDF">📄 Exporter en PDF</button>
+                    <button class="export-btn export-jpg" id="exportJPG">🖼️ Exporter en JPG</button>
+                </div>
+            </div>
+
+            <div class="export-preview" id="exportPreview">
+                <h3 id="previewTitle">Mon Histoire</h3>
+                <div class="dice-row" id="previewDice"></div>
+                <div id="previewText"></div>
+            </div>
+
+            <div class="history-section">
+                <h3>📚 Historique (5 derniers tirages)</h3>
+                <div id="historyContainer">
+                    <p style="color: #666; font-style: italic;">Aucun tirage précédent</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal des contraintes grammaticales -->
+    <div class="constraints-modal" id="constraintsModal">
+        <div class="constraints-content">
+            <button class="constraints-close" id="closeConstraints">×</button>
+            <h2 style="text-align: center; color: #333; margin-bottom: 30px;">📝 Idées de contraintes grammaticales</h2>
+            
+            <div class="constraint-category beginner">
+                <h3>🟢 Niveau Débutant</h3>
+                <ul class="constraint-list">
+                    <li>Écrivez seulement au présent</li>
+                    <li>Utilisez la forme négative dans 2 phrases</li>
+                    <li>Commencez chaque phrase par un pronom personnel différent</li>
+                    <li>Utilisez "il y a" au moins une fois</li>
+                    <li>Écrivez des phrases de maximum 8 mots</li>
+                    <li>Utilisez seulement des verbes du 1er groupe (-er)</li>
+                    <li>Incluez au moins 3 couleurs</li>
+                    <li>Utilisez "avoir" et "être" obligatoirement</li>
+                </ul>
+            </div>
+
+            <div class="constraint-category intermediate">
+                <h3>🟠 Niveau Intermédiaire</h3>
+                <ul class="constraint-list">
+                    <li>Utilisez le passé composé uniquement</li>
+                    <li>Alternez entre présent et futur proche</li>
+                    <li>Incluez au moins 3 adjectifs qualificatifs</li>
+                    <li>Utilisez des connecteurs logiques (donc, mais, parce que, alors)</li>
+                    <li>Racontez à la première personne du singulier</li>
+                    <li>Utilisez l'imparfait pour les descriptions</li>
+                    <li>Incluez une question dans votre histoire</li>
+                    <li>Employez au moins 2 pronoms possessifs (mon, sa, leur...)</li>
+                </ul>
+            </div>
+
+            <div class="constraint-category advanced">
+                <h3>🔴 Niveau Avancé</h3>
+                <ul class="constraint-list">
+                    <li>Utilisez le conditionnel au moins 2 fois</li>
+                    <li>Mélangez passé composé et imparfait</li>
+                    <li>Incluez du discours direct (dialogue)</li>
+                    <li>Utilisez le subjonctif au moins une fois</li>
+                    <li>Employez des pronoms relatifs (qui, que, dont, où)</li>
+                    <li>Racontez d'abord au présent, puis faites un retour en arrière</li>
+                    <li>Utilisez la voix passive</li>
+                    <li>Incluez une expression idiomatique française</li>
+                </ul>
+            </div>
+
+            <div class="constraint-category creative">
+                <h3>🎭 Contraintes créatives</h3>
+                <ul class="constraint-list">
+                    <li>Écrivez comme un conte de fées (Il était une fois...)</li>
+                    <li>Rédigez sous forme de journal intime</li>
+                    <li>Écrivez seulement des phrases exclamatives</li>
+                    <li>Racontez l'histoire à l'envers (fin → début)</li>
+                    <li>Utilisez seulement des phrases interrogatives</li>
+                    <li>Écrivez comme un article de journal</li>
+                    <li>Racontez du point de vue d'un objet inanimé</li>
+                    <li>Incluez des onomatopées (boom, plouf, crac...)</li>
+                </ul>
+            </div>
+
+            <div class="constraint-category temporal">
+                <h3>⏰ Contraintes temporelles</h3>
+                <ul class="constraint-list">
+                    <li>Tout se passe en 5 minutes</li>
+                    <li>Racontez la même scène à 3 moments différents</li>
+                    <li>Utilisez uniquement le futur simple</li>
+                    <li>Alternez passé/présent/futur à chaque phrase</li>
+                    <li>L'histoire se déroule en une seule journée</li>
+                    <li>Commencez par "Hier soir..." et finissez par "Demain..."</li>
+                </ul>
+            </div>
+
+            <div class="constraint-category stylistic">
+                <h3>🎪 Contraintes de style</h3>
+                <ul class="constraint-list">
+                    <li>Écrivez en vers (rimes)</li>
+                    <li>Utilisez seulement des mots de 2 syllabes maximum</li>
+                    <li>Chaque phrase doit contenir un nombre</li>
+                    <li>Répétez le même mot dans chaque phrase</li>
+                    <li>Utilisez l'allitération (répétition de sons)</li>
+                    <li>Écrivez sans utiliser la lettre "e"</li>
+                    <li>Incluez 5 mots qui commencent par la même lettre</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f0f8f0; border-radius: 10px;">
+                <h4 style="color: #4CAF50; margin-bottom: 10px;">💡 Conseil d'utilisation</h4>
+                <p style="color: #666; line-height: 1.5;">
+                    Choisissez une contrainte adaptée au niveau de vos élèves. Vous pouvez aussi combiner plusieurs contraintes pour augmenter la difficulté !
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal des exemples -->
+    <div class="examples-modal" id="examplesModal">
+        <div class="examples-content">
+            <button class="examples-close" id="closeExamples">×</button>
+            <h2 style="text-align: center; color: #333; margin-bottom: 30px;">📖 Exemples d'histoires avec Story Cubes</h2>
+            
+            <div class="example-section example-simple">
+                <h3>Exemple 1 : Phrases simples (Niveau débutant)</h3>
+                <h4>Titre : La Surprise de Marie</h4>
+                <div class="example-dice">👩‍🏫 🏠 🍳 😀 🎁</div>
+                <div class="example-text">
+                    👩‍🏫 Marie est enseignante.<br>
+                    🏠 Après le travail elle rentre à la maison.<br>
+                    🍳 Elle prépare un dîner d'anniversaire.<br>
+                    😀 Marie et sa fille sont heureuses.<br>
+                    🎁 Marie ouvre son cadeau d'anniversaire.
+                </div>
+            </div>
+
+            <div class="example-section example-complex">
+                <h3>Exemple 2 : Phrases complexes (Niveau intermédiaire)</h3>
+                <h4>Titre : La Surprise de Marie</h4>
+                <div class="example-dice">👩‍🏫 🏠 🍳 😀 🎁</div>
+                <div class="example-text">
+                    👩‍🏫 Marie est une enseignante qui travaille dans une école primaire.<br>
+                    🏠 Elle rentre chez elle dans sa petite maison après une longue journée.<br>
+                    🍳 Elle cuisine un délicieux gâteau au chocolat pour l'anniversaire de sa fille.<br>
+                    😀 Marie est très heureuse parce qu'elle a préparé une belle surprise.<br>
+                    🎁 Elle donne un cadeau à sa fille qui sourit de joie.
+                </div>
+            </div>
+
+            <div class="example-section example-story">
+                <h3>Exemple 3 : Histoire cohérente (Niveau avancé)</h3>
+                <h4>Titre : La Surprise de Marie</h4>
+                <div class="example-dice">👩‍🏫 🏠 🍳 😀 🎁</div>
+                <div class="example-text">
+                    Marie est une enseignante qui habite dans une petite maison. Aujourd'hui, c'est samedi et elle ne travaille pas. Elle va dans sa cuisine et elle cuisine un gâteau au chocolat. Elle est très heureuse parce que c'est l'anniversaire de sa fille.<br><br>
+                    
+                    Marie prépare le gâteau avec beaucoup d'amour. Elle met de la farine, du sucre et du chocolat. L'odeur est délicieuse ! Quand le gâteau est prêt, elle sort un cadeau qu'elle cache depuis une semaine. C'est un livre d'histoires pour sa fille.<br><br>
+                    
+                    Sa fille arrive dans la cuisine. Elle voit le gâteau et le cadeau. Elle sourit et elle dit : "Merci maman !" Marie est heureuse de faire plaisir à sa fille. Elles mangent le gâteau ensemble et elles lisent le nouveau livre.<br><br>
+                    
+                    C'est une belle journée en famille.
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f0f8f0; border-radius: 10px;">
+                <h4 style="color: #4CAF50; margin-bottom: 10px;">💡 Conseils pédagogiques</h4>
+                <p style="color: #666; line-height: 1.5;">
+                    • <strong>Débutant :</strong> Une phrase simple par dé<br>
+                    • <strong>Intermédiaire :</strong> Une phrase complexe par dé avec connecteurs<br>
+                    • <strong>Avancé :</strong> Histoire fluide intégrant tous les éléments
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="shortcuts">
+        <strong>Raccourcis :</strong><br>
+        Espace : Lancer tous les dés<br>
+        Clic sur un dé : Le relancer<br>
+        Ctrl+S : Sauvegarder
+    </div>
+
+    <script>
+        // Base de données d'emojis par catégorie
+        const emojiDatabase = {
+            personnages: ['👨‍🍳', '👩‍⚕️', '🧑‍🎨', '👨‍💼', '👩‍🎓', '🧑‍🔧', '👮‍♀️', '🧑‍🚀', '👨‍🎤', '👩‍🏫', '👨‍🌾', '👩‍💻', '🧑‍🍳', '👨‍⚖️', '👩‍🔬'],
+            lieux: ['🏠', '🌲', '🏖️', '🏢', '🚗', '✈️', '🏥', '🎭', '🏪', '🗼', '🏰', '🌋', '🏜️', '🌉', '⛪'],
+            objets: ['📱', '💍', '⚽', '📚', '🎂', '🔑', '💡', '🎸', '🍎', '📸', '⌚', '🎒', '🔮', '🎯', '🎪'],
+            emotions: ['😀', '😢', '😱', '😍', '🤔', '😴', '😡', '🤗', '😂', '😟', '🥳', '😌', '😰', '🙄', '🤯'],
+            actions: ['🏃‍♂️', '💤', '🎭', '✍️', '🍳', '🚶‍♀️', '🤝', '📱', '💃', '🛌', '🎵', '🏊‍♂️', '🧘‍♀️', '🛒', '📖'],
+            nature: ['☀️', '❄️', '🌙', '⭐', '🌧️', '🌈', '🍂', '🌸', '🌊', '⚡', '🌪️', '🔥', '🌺', '🦋', '🐝'],
+            nourriture: ['🍕', '🥖', '🍰', '🥗', '🍜', '🧀', '🍓', '🥐', '🍫', '🥪', '🍝', '🥞', '🍦', '🥨', '🍵']
+        };
+
+        // Contraintes grammaticales
+        const grammarConstraints = [
+            "Utilisez le passé composé",
+            "Utilisez le futur simple",
+            "Utilisez l'imparfait",
+            "Utilisez le conditionnel",
+            "Incluez au moins 3 adjectifs",
+            "Utilisez des connecteurs logiques (donc, mais, parce que...)",
+            "Écrivez au présent uniquement",
+            "Incluez du dialogue",
+            "Utilisez la forme négative",
+            "Racontez à la première personne"
+        ];
+
+        // Variables globales
+        let diceData = [];
+        let history = [];
+        let wordCountTimer;
+        let currentFocusedInput = null;
+        let keyboardVisible = true;
+
+        // Éléments DOM
+        const diceContainer = document.getElementById('diceContainer');
+        const rollAllBtn = document.getElementById('rollAllBtn');
+        const examplesBtn = document.getElementById('examplesBtn');
+        const constraintsBtn = document.getElementById('constraintsBtn');
+        const examplesModal = document.getElementById('examplesModal');
+        const constraintsModal = document.getElementById('constraintsModal');
+        const closeExamples = document.getElementById('closeExamples');
+        const closeConstraints = document.getElementById('closeConstraints');
+        const addDieBtn = document.getElementById('addDie');
+        const removeDieBtn = document.getElementById('removeDie');
+        const diceCountSpan = document.getElementById('diceCount');
+        const storyTitle = document.getElementById('storyTitle');
+        const storyText = document.getElementById('storyText');
+        const wordCount = document.getElementById('wordCount');
+        const exportPDF = document.getElementById('exportPDF');
+        const exportJPG = document.getElementById('exportJPG');
+        const exportPreview = document.getElementById('exportPreview');
+        const historyContainer = document.getElementById('historyContainer');
+        const keyboardToggle = document.getElementById('keyboardToggle');
+        const keyboardButtons = document.getElementById('keyboardButtons');
+
+        // Initialiser avec 5 dés
+        function initializeDice() {
+            diceData = [];
+            for (let i = 0; i < 5; i++) {
+                diceData.push({
+                    id: i,
+                    theme: 'personnages',
+                    emoji: getRandomEmoji('personnages')
+                });
+            }
+            updateDiceDisplay();
+        }
+
+        // Obtenir un emoji aléatoire d'une catégorie
+        function getRandomEmoji(theme) {
+            const emojis = emojiDatabase[theme];
+            return emojis[Math.floor(Math.random() * emojis.length)];
+        }
+
+        // Mettre à jour l'affichage des dés
+        function updateDiceDisplay() {
+            diceContainer.innerHTML = '';
+            
+            diceData.forEach((die, index) => {
+                const dieWrapper = document.createElement('div');
+                dieWrapper.className = 'die-wrapper';
+                
+                dieWrapper.innerHTML = `
+                    <div class="die" data-theme="${die.theme}" data-index="${index}">
+                        ${die.emoji}
+                        <button class="die-roll-btn" title="Relancer ce dé">🎲</button>
+                    </div>
+                    <div class="die-theme-selector">
+                        <select data-index="${index}">
+                            <option value="personnages" ${die.theme === 'personnages' ? 'selected' : ''}>👥 Personnages</option>
+                            <option value="lieux" ${die.theme === 'lieux' ? 'selected' : ''}>🏠 Lieux</option>
+                            <option value="objets" ${die.theme === 'objets' ? 'selected' : ''}>📱 Objets</option>
+                            <option value="emotions" ${die.theme === 'emotions' ? 'selected' : ''}>😀 Émotions</option>
+                            <option value="actions" ${die.theme === 'actions' ? 'selected' : ''}>🏃 Actions</option>
+                            <option value="nature" ${die.theme === 'nature' ? 'selected' : ''}>🌳 Nature</option>
+                            <option value="nourriture" ${die.theme === 'nourriture' ? 'selected' : ''}>🍕 Nourriture</option>
+                        </select>
+                    </div>
+                `;
+                
+                diceContainer.appendChild(dieWrapper);
+            });
+            
+            updateDiceCount();
+            attachDiceEvents();
+        }
+
+        // Attacher les événements aux dés
+        function attachDiceEvents() {
+            // Événements pour les sélecteurs de thème
+            document.querySelectorAll('.die-theme-selector select').forEach(select => {
+                select.addEventListener('change', (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    const newTheme = e.target.value;
+                    diceData[index].theme = newTheme;
+                    diceData[index].emoji = getRandomEmoji(newTheme);
+                    
+                    const die = document.querySelector(`.die[data-index="${index}"]`);
+                    die.dataset.theme = newTheme;
+                    die.firstChild.textContent = diceData[index].emoji;
+                });
+            });
+
+            // Événements pour les boutons de relance individuelle
+            document.querySelectorAll('.die-roll-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const index = parseInt(e.target.closest('.die').dataset.index);
+                    rollSingleDie(index);
+                });
+            });
+
+            // Événements pour cliquer sur les dés
+            document.querySelectorAll('.die').forEach(die => {
+                die.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('die-roll-btn')) return;
+                    const index = parseInt(die.dataset.index);
+                    rollSingleDie(index);
+                });
+            });
+        }
+
+        // Lancer un dé individuel
+        function rollSingleDie(index) {
+            const die = document.querySelector(`.die[data-index="${index}"]`);
+            die.classList.add('rolling');
+            
+            setTimeout(() => {
+                diceData[index].emoji = getRandomEmoji(diceData[index].theme);
+                die.firstChild.textContent = diceData[index].emoji;
+                die.classList.remove('rolling');
+            }, 1000);
+        }
+
+        // Lancer tous les dés
+        function rollAllDice() {
+            diceData.forEach((die, index) => {
+                const dieElement = document.querySelector(`.die[data-index="${index}"]`);
+                dieElement.classList.add('rolling');
+                
+                setTimeout(() => {
+                    diceData[index].emoji = getRandomEmoji(diceData[index].theme);
+                    dieElement.firstChild.textContent = diceData[index].emoji;
+                    dieElement.classList.remove('rolling');
+                }, 1000 + (index * 100));
+            });
+            
+            setTimeout(() => {
+                addToHistory();
+            }, 1200);
+        }
+
+        // Ajouter un dé
+        function addDie() {
+            if (diceData.length >= 8) return;
+            
+            const newDie = {
+                id: Date.now(),
+                theme: 'personnages',
+                emoji: getRandomEmoji('personnages')
+            };
+            
+            diceData.push(newDie);
+            updateDiceDisplay();
+        }
+
+        // Retirer un dé
+        function removeDie() {
+            if (diceData.length <= 1) return;
+            
+            diceData.pop();
+            updateDiceDisplay();
+        }
+
+        // Mettre à jour le compteur de dés
+        function updateDiceCount() {
+            const count = diceData.length;
+            diceCountSpan.textContent = `${count} dé${count > 1 ? 's' : ''}`;
+            
+            addDieBtn.disabled = count >= 8;
+            removeDieBtn.disabled = count <= 1;
+        }
+
+        // Fonction pour mettre à jour la contrainte grammaticale
+        function updateGrammarConstraint() {
+            // Cette fonction n'est plus utilisée
+        }
+
+        // Fonction pour ajouter à l'historique
+        function addToHistory() {
+            const historyItem = {
+                dice: diceData.map(die => ({
+                    emoji: die.emoji,
+                    theme: die.theme
+                })),
+                timestamp: new Date().toLocaleString('fr-FR')
+            };
+
+            history.unshift(historyItem);
+            if (history.length > 5) {
+                history = history.slice(0, 5);
+            }
+
+            updateHistoryDisplay();
+        }
+
+        // Fonction pour mettre à jour l'affichage de l'historique
+        function updateHistoryDisplay() {
+            if (history.length === 0) {
+                historyContainer.innerHTML = '<p style="color: #666; font-style: italic;">Aucun tirage précédent</p>';
+                return;
+            }
+
+            historyContainer.innerHTML = '';
+            history.forEach((item, index) => {
+                const historyDiv = document.createElement('div');
+                historyDiv.className = 'history-item';
+                
+                const diceHTML = item.dice.map(die => 
+                    `<div class="history-die" style="border-color: var(--${die.theme}-color, #4CAF50)">${die.emoji}</div>`
+                ).join('');
+                
+                const themesText = [...new Set(item.dice.map(die => die.theme))].join(', ');
+                
+                historyDiv.innerHTML = `
+                    <div class="history-dice">${diceHTML}</div>
+                    <div class="history-info">
+                        <div class="history-themes">Thèmes: ${themesText}</div>
+                        <div class="history-timestamp">${item.timestamp}</div>
+                    </div>
+                `;
+                
+                historyDiv.addEventListener('click', () => loadFromHistory(index));
+                historyContainer.appendChild(historyDiv);
+            });
+        }
+
+        // Fonction pour charger depuis l'historique
+        function loadFromHistory(index) {
+            const historyItem = history[index];
+            
+            // Ajuster le nombre de dés si nécessaire
+            while (diceData.length > historyItem.dice.length) {
+                diceData.pop();
+            }
+            while (diceData.length < historyItem.dice.length) {
+                diceData.push({
+                    id: Date.now() + Math.random(),
+                    theme: 'personnages',
+                    emoji: '👨‍🍳'
+                });
+            }
+            
+            // Charger les données
+            historyItem.dice.forEach((die, i) => {
+                diceData[i].theme = die.theme;
+                diceData[i].emoji = die.emoji;
+            });
+            
+            updateDiceDisplay();
+        }
+
+        // Fonction pour compter les mots
+        function countWords(text) {
+            return text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+        }
+
+        // Fonction pour mettre à jour le compteur de mots
+        function updateWordCount() {
+            const count = countWords(storyText.value);
+            wordCount.textContent = `${count} mot${count !== 1 ? 's' : ''}`;
+        }
+
+        // Fonctions pour le clavier d'accessibilité
+        function insertCharacter(char) {
+            if (currentFocusedInput) {
+                const start = currentFocusedInput.selectionStart;
+                const end = currentFocusedInput.selectionEnd;
+                const text = currentFocusedInput.value;
+                
+                currentFocusedInput.value = text.substring(0, start) + char + text.substring(end);
+                currentFocusedInput.setSelectionRange(start + 1, start + 1);
+                currentFocusedInput.focus();
+                
+                // Déclencher l'événement input pour mettre à jour le compteur de mots
+                if (currentFocusedInput === storyText) {
+                    updateWordCount();
+                }
+            }
+        }
+
+        function toggleKeyboard() {
+            keyboardVisible = !keyboardVisible;
+            if (keyboardVisible) {
+                keyboardButtons.classList.remove('hidden');
+                keyboardToggle.textContent = 'Masquer';
+            } else {
+                keyboardButtons.classList.add('hidden');
+                keyboardToggle.textContent = 'Afficher';
+            }
+        }
+
+        // Fonction pour préparer l'aperçu d'export
+        function prepareExportPreview() {
+            const title = storyTitle.value || 'Mon Histoire';
+            const text = storyText.value || 'Aucun texte saisi.';
+            
+            document.getElementById('previewTitle').textContent = title;
+            document.getElementById('previewText').textContent = text;
+            
+            const previewDice = document.getElementById('previewDice');
+            previewDice.innerHTML = '';
+            diceData.forEach(die => {
+                const miniDie = document.createElement('div');
+                miniDie.className = 'mini-die';
+                miniDie.textContent = die.emoji;
+                previewDice.appendChild(miniDie);
+            });
+            
+            exportPreview.style.display = 'block';
+            return exportPreview;
+        }
+
+        // Fonction d'export PDF
+        function exportToPDF() {
+            if (diceData.length === 0) {
+                alert('Veuillez d\'abord générer des dés !');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            
+            const title = storyTitle.value || 'Mon Histoire';
+            const text = storyText.value || 'Aucun texte saisi.';
+            const diceText = diceData.map(die => die.emoji).join(' ');
+            const themesText = [...new Set(diceData.map(die => die.theme))].join(', ');
+            
+            // Titre
+            pdf.setFontSize(20);
+            pdf.text(title, 20, 30);
+            
+            // Dés utilisés
+            pdf.setFontSize(12);
+            pdf.text('Dés utilisés:', 20, 50);
+            pdf.setFontSize(24);
+            pdf.text(diceText, 20, 65);
+            
+            // Thèmes
+            pdf.setFontSize(10);
+            pdf.text(`Thèmes: ${themesText}`, 20, 75);
+            
+            // Histoire
+            pdf.setFontSize(12);
+            pdf.text('Histoire:', 20, 95);
+            
+            const lines = pdf.splitTextToSize(text, 170);
+            pdf.text(lines, 20, 110);
+            
+            // Date
+            pdf.setFontSize(8);
+            pdf.text(`Généré le ${new Date().toLocaleString('fr-FR')}`, 20, 280);
+            
+            pdf.save(`story-cubes-${Date.now()}.pdf`);
+        }
+
+        // Fonction d'export JPG
+        function exportToJPG() {
+            if (diceData.length === 0) {
+                alert('Veuillez d\'abord générer des dés !');
+                return;
+            }
+
+            const previewElement = prepareExportPreview();
+            
+            html2canvas(previewElement, {
+                backgroundColor: '#ffffff',
+                scale: 2
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `story-cubes-${Date.now()}.jpg`;
+                link.href = canvas.toDataURL('image/jpeg', 0.9);
+                link.click();
+                
+                exportPreview.style.display = 'none';
+            });
+        }
+
+        // Event listeners
+        rollAllBtn.addEventListener('click', rollAllDice);
+        examplesBtn.addEventListener('click', () => {
+            examplesModal.style.display = 'flex';
+        });
+        constraintsBtn.addEventListener('click', () => {
+            constraintsModal.style.display = 'flex';
+        });
+        closeExamples.addEventListener('click', () => {
+            examplesModal.style.display = 'none';
+        });
+        closeConstraints.addEventListener('click', () => {
+            constraintsModal.style.display = 'none';
+        });
+        examplesModal.addEventListener('click', (e) => {
+            if (e.target === examplesModal) {
+                examplesModal.style.display = 'none';
+            }
+        });
+        constraintsModal.addEventListener('click', (e) => {
+            if (e.target === constraintsModal) {
+                constraintsModal.style.display = 'none';
+            }
+        });
+        addDieBtn.addEventListener('click', addDie);
+        removeDieBtn.addEventListener('click', removeDie);
+        exportPDF.addEventListener('click', exportToPDF);
+        exportJPG.addEventListener('click', exportToJPG);
+
+        // Event listeners pour le clavier d'accessibilité
+        keyboardToggle.addEventListener('click', toggleKeyboard);
+        
+        // Suivre le champ de texte actif
+        storyTitle.addEventListener('focus', () => { currentFocusedInput = storyTitle; });
+        storyText.addEventListener('focus', () => { currentFocusedInput = storyText; });
+        
+        // Event listeners pour les boutons d'accents
+        document.querySelectorAll('.accent-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const char = btn.dataset.char;
+                insertCharacter(char);
+            });
+        });
+
+        // Compteur de mots avec debounce
+        storyText.addEventListener('input', () => {
+            clearTimeout(wordCountTimer);
+            wordCountTimer = setTimeout(updateWordCount, 300);
+        });
+
+        // Raccourcis clavier
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && e.target === document.body) {
+                e.preventDefault();
+                rollAllDice();
+            } else if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                alert('Histoire sauvegardée localement !');
+            }
+        });
+
+        // Initialisation
+        initializeDice();
+        updateWordCount();
+    </script>
+</body>
+</html>
