@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemple d'Examen DELF B1</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        
+        .header {
+            text-align: center;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+        
+        .section {
+            background-color: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            background-color: #34495e;
+            color: white;
+            padding: 15px;
+            margin: -25px -25px 20px -25px;
+            border-radius: 8px 8px 0 0;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .exercise {
+            margin-bottom: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .exercise-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .question {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: #2980b9;
+            margin-right: 10px;
+        }
+        
+        .options {
+            margin: 10px 0 10px 30px;
+        }
+        
+        .option {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option input {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        
+        .points {
+            color: #e67e22;
+            font-weight: bold;
+            font-size: 0.9em;
+            float: right;
+        }
+        
+        .article {
+            background-color: #ecf0f1;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 4px solid #95a5a6;
+        }
+        
+        .article-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        .table th, .table td {
+            border: 1px solid #bdc3c7;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .table th {
+            background-color: #34495e;
+            color: white;
+        }
+        
+        .association {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .association-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .email-box {
+            background-color: #e3f2fd;
+            border: 1px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .email-header {
+            background-color: #90caf9;
+            padding: 8px;
+            margin: -15px -15px 15px -15px;
+            border-radius: 5px 5px 0 0;
+            font-weight: bold;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            resize: vertical;
+        }
+        
+        .word-count {
+            text-align: right;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .submit-btn {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+        }
+        
+        .submit-btn:hover {
+            background-color: #219a52;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Exemple d'Examen DELF B1</h1>
+        <p>Diplôme d'Études en Langue Française - Niveau B1</p>
+    </div>
+
+    <!-- COMPRÉHENSION DE L'ORAL -->
+    <div class="section">
+        <div class="section-title">🎧 1. Compréhension de l'oral (25 points)</div>
+        
+        <div class="exercise">
+            <div class="exercise-title">▶ EXERCICE 1 - 7 points</div>
+            <p><em>Vous écoutez une conversation. Lisez les questions. Écoutez le document puis répondez.</em></p>
+            
+            <div class="question">
+                <span class="question-number">1</span>Ce week-end, Emma va à un festival de... <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q1" value="A"> A □ photo.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" value="B"> B □ cinéma.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" value="C"> C □ musique.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">2</span>Au festival, il est possible de... <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q2" value="A"> A □ gagner un voyage à l'étranger.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" value="B"> B □ parler avec des professionnels.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" value="C"> C □ suivre une formation en photographie.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">3</span>Durant le festival, certains voyageurs vont... <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q3" value="A"> A □ parler de leurs projets futurs.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" value="B"> B □ donner des conseils pratiques.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" value="C"> C □ partager leur expérience récente.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">4</span>Jules refuse la proposition d'Emma parce qu'il préfère... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q4" value="A"> A □ être actif.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" value="B"> B □ se reposer.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" value="C"> C □ rester en famille.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">5</span>La réaction de Jules... <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q5" value="A"> A □ déçoit
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" value="B"> B □ énerve ... Emma.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" value="C"> C □ inquiète
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">6</span>Jules a peur de... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q6" value="A"> A □ dormir en pleine nature.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q6" value="B"> B □ devoir changer ses plans.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q6" value="C"> C □ s'ennuyer avec ses cousins.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <div class="exercise-title">▶ EXERCICE 2 - 9 points</div>
+            <p><em>Vous écoutez la radio. Lisez les questions. Écoutez le document puis répondez.</em></p>
+            
+            <div class="question">
+                <span class="question-number">1</span>D'après le journaliste, les cahiers de vacances permettent... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q7" value="A"> A □ aux enfants de réviser les contenus vus en classe.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q7" value="B"> B □ aux parents d'aider leurs enfants avec leurs devoirs.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q7" value="C"> C □ aux professeurs de préparer des activités amusantes.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">2</span>En général, l'attitude des enfants concernant ces cahiers est... <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q8" value="A"> A □ assez positive.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q8" value="B"> B □ plutôt négative.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q8" value="C"> C □ totalement indifférente.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">3</span>Roger Magnard a inventé les cahiers de vacances pour... <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q9" value="A"> A □ rendre service à un ami.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q9" value="B"> B □ proposer un produit en été.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q9" value="C"> C □ répondre à une commande.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">4</span>Le premier cahier de vacances proposait des exercices sur le thème... <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q10" value="A"> A □ de l'école.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q10" value="B"> B □ des loisirs.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q10" value="C"> C □ de la famille.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">5</span>Grâce aux premiers cahiers de vacances, les enfants pouvaient gagner... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q11" value="A"> A □ des objets.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q11" value="B"> B □ de l'argent.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q11" value="C"> C □ des vacances.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">6</span>Dans les années 80, les cahiers de vacances augmentent car... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q12" value="A"> A □ le niveau des élèves commence à baisser.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q12" value="B"> B □ les professeurs donnent moins de devoirs.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q12" value="C"> C □ les résultats scolaires deviennent essentiels.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">7</span>D'après le journaliste, la plupart des enfants... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q13" value="A"> A □ ouvrent à peine
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q13" value="B"> B □ terminent rarement ... leurs cahiers de vacances.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q13" value="C"> C □ complètent rapidement
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <div class="exercise-title">▶ EXERCICE 3 - 9 points</div>
+            <p><em>Vous écoutez la radio. Lisez les questions. Écoutez le document puis répondez.</em></p>
+            
+            <div class="question">
+                <span class="question-number">1</span>Pour le journaliste cette découverte est... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q14" value="A"> A □ prévisible.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q14" value="B"> B □ fréquente.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q14" value="C"> C □ inquiétante.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">2</span>Les plastiques retrouvés dans la mer sont... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q15" value="A"> A □ transportés par le vent.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q15" value="B"> B □ jetés par les industriels.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q15" value="C"> C □ mangés par les animaux.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">3</span>L'association Zéro Plastique propose aux gens de... <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q16" value="A"> A □ créer une exposition.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q16" value="B"> B □ tenter une expérience.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q16" value="C"> C □ s'inscrire à un concours.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">4</span>Que faut-il faire pour participer à ce projet ? <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q17" value="A"> A □ devenir bénévole.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q17" value="B"> B □ donner un peu d'argent.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q17" value="C"> C □ suivre des recommandations.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">5</span>D'après Virginie, il faut essayer de... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q18" value="A"> A □ remplacer le plastique par d'autres matières.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q18" value="B"> B □ ramasser les plastiques dans les lieux pollués.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q18" value="C"> C □ recycler les boîtes et les bouteilles en plastique.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">6</span>Selon Virginie, changer ses habitudes demande... <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q19" value="A"> A □ du temps.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q19" value="B"> B □ de l'argent.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q19" value="C"> C □ des efforts.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">7</span>Pour Virginie, ce projet nous invite en particulier à... <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q20" value="A"> A □ comprendre que le plastique est partout.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q20" value="B"> B □ montrer l'exemple aux jeunes générations.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q20" value="C"> C □ dénoncer les comportements antiécologiques.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPRÉHENSION DES ÉCRITS -->
+    <div class="section">
+        <div class="section-title">📖 2. Compréhension des écrits (25 points)</div>
+        
+        <div class="exercise">
+            <div class="exercise-title">▶ EXERCICE 1 - 8 points</div>
+            <p><em>0,5 point par bonne réponse, 0 point si les deux cases « oui » et « non » sont cochées</em></p>
+            <p>Vous souhaitez faire un stage professionnel dans une association en France pendant vos vacances. Vous recherchez un programme sur le site jeunesetbénévoles.org qui correspond aux critères suivants :</p>
+            <ul>
+                <li>hébergement en groupe ;</li>
+                <li>niveau professionnel demandé : débutant ;</li>
+                <li>travail en contact avec les animaux ;</li>
+                <li>possibilité de rencontrer des jeunes de toutes nationalités.</li>
+            </ul>
+            
+            <div class="association">
+                <div class="association-title">« Les Merveilles »</div>
+                <p>Notre association organise des séjours internationaux pour des collégiens venant de tous les pays afin de découvrir la culture locale française. Pendant trois semaines, vous allez apprendre à vous occuper des vaches et faire du fromage. Il n'est pas nécessaire de connaître ce domaine. Les ateliers se feront en français ! Dans le cadre magnifique des Hautes Alpes, le centre « Les Merveilles », situé à 1000 mètres d'altitude, vous accueillera pendant la durée du programme en chambre individuelle. Des animateurs de différents pays organiseront la vie quotidienne durant la semaine et vous aideront en cas de besoin.</p>
+                
+                <table class="table">
+                    <tr>
+                        <th>« Les Merveilles »</th>
+                        <th>OUI</th>
+                        <th>NON</th>
+                    </tr>
+                    <tr>
+                        <td>1. Hébergement en groupe</td>
+                        <td><input type="checkbox" name="merveilles_1_oui"></td>
+                        <td><input type="checkbox" name="merveilles_1_non"></td>
+                    </tr>
+                    <tr>
+                        <td>2. Débutant accepté</td>
+                        <td><input type="checkbox" name="merveilles_2_oui"></td>
+                        <td><input type="checkbox" name="merveilles_2_non"></td>
+                    </tr>
+                    <tr>
+                        <td>3. Contact avec les animaux</td>
+                        <td><input type="checkbox" name="merveilles_3_oui"></td>
+                        <td><input type="checkbox" name="merveilles_3_non"></td>
+                    </tr>
+                    <tr>
+                        <td>4. Rencontre avec des jeunes de toutes nationalités</td>
+                        <td><input type="checkbox" name="merveilles_4_oui"></td>
+                        <td><input type="checkbox" name="merveilles_4_non"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="association">
+                <div class="association-title">« L'Espace »</div>
+                <p>Les bénévoles de l'association « L'Espace » font découvrir les étoiles aux lycéens depuis bientôt 25 ans dans la région du sud-ouest de la France. C'est notre passion et notre envie de partage qui nous ont donné l'idée de créer cette association. Cette année, nous voulons proposer au public un lieu ouvert pour observer le ciel : vous peindrez des chaises, vous réparerez des fauteuils. Il est donc nécessaire de savoir utiliser du matériel de bricolage ! Vous serez accueillis par petits groupes chez l'habitant pour permettre les échanges dans plusieurs langues.</p>
+                
+                <table class="table">
+                    <tr>
+                        <th>« L'Espace »</th>
+                        <th>OUI</th>
+                        <th>NON</th>
+                    </tr>
+                    <tr>
+                        <td>5. Hébergement en groupe</td>
+                        <td><input type="checkbox" name="espace_5_oui"></td>
+                        <td><input type="checkbox" name="espace_5_non"></td>
+                    </tr>
+                    <tr>
+                        <td>6. Débutant accepté</td>
+                        <td><input type="checkbox" name="espace_6_oui"></td>
+                        <td><input type="checkbox" name="espace_6_non"></td>
+                    </tr>
+                    <tr>
+                        <td>7. Contact avec les animaux</td>
+                        <td><input type="checkbox" name="espace_7_oui"></td>
+                        <td><input type="checkbox" name="espace_7_non"></td>
+                    </tr>
+                    <tr>
+                        <td>8. Rencontre avec des jeunes de toutes nationalités</td>
+                        <td><input type="checkbox" name="espace_8_oui"></td>
+                        <td><input type="checkbox" name="espace_8_non"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="association">
+                <div class="association-title">« Tous à la ferme »</div>
+                <p>Vivez le quotidien du travail d'une ferme en Normandie, découvrez un mode de vie différent et pratiquez votre français ! Nous vous proposons de nous accompagner dans les différentes activités de nos travaux agricoles : nourrir les poules, s'occuper des chevaux. Pour nous, ce centre de vacances permet d'échanger avec des ados de tous pays et de toutes cultures. Il est ouvert à tous, sans condition d'expérience. Pour dormir, il y a un grand terrain de camping avec deux grandes tentes pour six personnes. Nous préparerons les repas tous ensemble et nous vous proposerons des activités amusantes en soirée.</p>
+                
+                <table class="table">
+                    <tr>
+                        <th>« Tous à la ferme »</th>
+                        <th>OUI</th>
+                        <th>NON</th>
+                    </tr>
+                    <tr>
+                        <td>9. Hébergement en groupe</td>
+                        <td><input type="checkbox" name="ferme_9_oui"></td>
+                        <td><input type="checkbox" name="ferme_9_non"></td>
+                    </tr>
+                    <tr>
+                        <td>10. Débutant accepté</td>
+                        <td><input type="checkbox" name="ferme_10_oui"></td>
+                        <td><input type="checkbox" name="ferme_10_non"></td>
+                    </tr>
+                    <tr>
+                        <td>11. Contact avec les animaux</td>
+                        <td><input type="checkbox" name="ferme_11_oui"></td>
+                        <td><input type="checkbox" name="ferme_11_non"></td>
+                    </tr>
+                    <tr>
+                        <td>12. Rencontre avec des jeunes de toutes nationalités</td>
+                        <td><input type="checkbox" name="ferme_12_oui"></td>
+                        <td><input type="checkbox" name="ferme_12_non"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="association">
+                <div class="association-title">« Agir pour l'environnement »</div>
+                <p>Vous avez envie de vous rendre utile pour la planète pendant vos vacances ? Vous aimez bien réfléchir aux problèmes de l'environnement ? Vous voulez rencontrer des jeunes de votre âge pour partager des moments de vie en groupe ? Alors, venez cet été dans la région de Toulouse ! Cette année, le travail que nous proposons portera sur la découverte des méthodes d'agriculture naturelle. Logé en chambre collective, vous vivrez une expérience interculturelle riche car les personnes qui y participent viennent du monde entier. Cette activité est gratuite et ne demande pas de formation particulière.</p>
+                
+                <table class="table">
+                    <tr>
+                        <th>« Agir pour l'environnement »</th>
+                        <th>OUI</th>
+                        <th>NON</th>
+                    </tr>
+                  <tr>
+                        <td>13. Hébergement en groupe</td>
+                        <td><input type="checkbox" name="env_13_oui"></td>
+                        <td><input type="checkbox" name="env_13_non"></td>
+                    </tr>
+                    <tr>
+                        <td>14. Débutant accepté</td>
+                        <td><input type="checkbox" name="env_14_oui"></td>
+                        <td><input type="checkbox" name="env_14_non"></td>
+                    </tr>
+                    <tr>
+                        <td>15. Contact avec les animaux</td>
+                        <td><input type="checkbox" name="env_15_oui"></td>
+                        <td><input type="checkbox" name="env_15_non"></td>
+                    </tr>
+                    <tr>
+                        <td>16. Rencontre avec des jeunes de toutes nationalités</td>
+                        <td><input type="checkbox" name="env_16_oui"></td>
+                        <td><input type="checkbox" name="env_16_non"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <div class="exercise-title">▶ EXERCICE 2 - 8 points</div>
+            <p><em>Vous lisez cet article. Pour répondre aux questions, cochez [x] la bonne réponse.</em></p>
+            
+            <div class="article">
+                <div class="article-title">APPRENDRE L'HISTOIRE AUTREMENT</div>
+                <p>Pourquoi s'intéresser à l'histoire ? Pour des adolescents de 15 ans qui vivent dans le monde d'Internet, il est difficile de répondre à cette question car ils pensent que cette matière ne leur servira à rien dans le monde du travail.</p>
+                
+                <p>Jean-François Gosselin, professeur du lycée Marcelle-Mallet à Lévis*, a donc eu l'idée d'utiliser le jeu vidéo dans ses cours en proposant à ses élèves de revivre un grand moment historique. « Les jeux vidéo ont un côté très réaliste. Par exemple, en découvrant un jeu sur le Moyen Âge, certains élèves défendent le château fort, d'autres se mettent à la place du roi... Cela les aide à comprendre comment les gens vivaient à l'époque », a-t-il expliqué.</p>
+                
+                <p>Grâce à cette méthode, les élèves ont réalisé de longues recherches. « Ils ont appris différemment : entre les heures à la bibliothèque, les questions qu'ils devaient se poser et le travail en groupe, ils ont dû faire beaucoup d'efforts pour terminer le jeu », a-t-il ajouté.</p>
+                
+                <p>Selon l'enseignant, l'apprentissage par le jeu vidéo représente, pour les élèves, un moyen de dépasser leurs blocages, même pour ceux en échec scolaire. Les élèves sont plus motivés à terminer le projet. « J'ai des élèves qui avaient des difficultés à l'école, mais qui étaient compétents en jeu vidéo. Ils ont montré beaucoup de choses aux autres élèves, et moi-même, j'ai appris à mieux apprécier les jeux vidéo. C'était intéressant pour moi et pour les élèves », a-t-il assuré.</p>
+                
+                <p>Pour M. Gosselin, l'utilisation de la technologie de "manière intelligente" a permis aux élèves d'atteindre différents objectifs, même dans d'autres matières. « Le but n'était pas de jouer pour le plaisir de jouer, le projet était vraiment de rendre l'étude de l'histoire plus proche d'eux. Ils ont aussi acquis des connaissances en mathématiques, en économie, etc. Et c'est ce que je veux : qu'ils développent leur pensée pour devenir de meilleurs citoyens et s'intégrer dans la société », a-t-il expliqué. « Ça me semble beaucoup plus important que d'apprendre simplement des dates et des noms », a-t-il conclu.</p>
+                
+                <p><em>D'après Céline FABRIÈS, Le Soleil<br>
+                * Lévis : ville au Canada.</em></p>
+            </div>
+
+            <div class="question">
+                <span class="question-number">1</span>L'histoire est considérée par les jeunes comme... <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q21" value="A"> A □ inutile.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q21" value="B"> B □ difficile.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q21" value="C"> C □ ennuyeuse.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">2</span>Le projet a permis aux élèves de... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q22" value="A"> A □ créer un jeu vidéo.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q22" value="B"> B □ faire le travail d'un historien.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q22" value="C"> C □ découvrir des modes de vie passés.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">3</span>Grâce à cette méthode d'apprentissage, les élèves ont travaillé facilement. <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q23" value="A"> A □ Vrai
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q23" value="B"> B □ Faux
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">4</span>D'après M. Gosselin, les élèves qui ont des difficultés scolaires ont montré... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q24" value="A"> A □ leurs connaissances en histoire.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q24" value="B"> B □ leur facilité à utiliser la technologie.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q24" value="C"> C □ leur volonté de travailler en groupe.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">5</span>Le projet a permis au professeur de changer sa manière de voir le jeu vidéo. <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q25" value="A"> A □ Vrai
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q25" value="B"> B □ Faux
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">6</span>Pour Jean-François Gosselin, il est important que ses élèves s'amusent en classe. <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q26" value="A"> A □ Vrai
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q26" value="B"> B □ Faux
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">7</span>Le véritable objectif de M. Gosselin est que ses élèves... <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q27" value="A"> A □ utilisent plus les technologies.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q27" value="B"> B □ aient de bons résultats scolaires.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q27" value="C"> C □ trouvent leur place dans le monde.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <div class="exercise-title">▶ EXERCICE 3 - 9 points</div>
+            <p><em>Vous lisez cet article dans un journal.</em></p>
+            
+            <div class="article">
+                <div class="article-title">UN CHANTIER* POUR FAIRE DES RENCONTRES</div>
+                <p>Dans l'ancienne salle de sport de la ville de Bazouges plusieurs tentes et matelas ont été installés. Depuis bientôt trois semaines, cet endroit accueille des jeunes européens qui participent au Service Volontaire Européen* de l'association Études-chantiers. Celle-ci propose sur les réseaux sociaux de faire du bénévolat pour rénover* des bâtiments historiques.</p>
+                
+                <p>Le projet d'accueillir ces jeunes est né, il y a quelques mois, dans la tête du maire, Pascal Hervé. « Dans une ville voisine, j'ai assisté à une réunion d'information qui présentait les chantiers européens. J'ai eu très envie de lancer le projet dans ma commune. Mais le plus difficile a été de tout faire très vite pour pouvoir les accueillir cet été. » Finalement, il a réussi à faire venir d'Italie, d'Espagne et d'Allemagne neuf jeunes, âgés de 19 à 29 ans.</p>
+                
+                <p>Ensemble, ils réparent une maison de la mairie. Ils ont remplacé les fenêtres et nettoyé les murs. Ils sont accompagnés par un professionnel du métier jusqu'à la fin des travaux. Sur le chantier, il y a également Margherita Martini, responsable : « Je suis arrivée à Bazouges juste après mon diplôme en ressources humaines. Rien ne m'avait préparée à une telle expérience, mais je pense avoir réussi à gagner la confiance des jeunes, et c'est vraiment passionnant ! »</p>
+                
+                <p>Pour les jeunes volontaires, cette initiative est avant tout l'occasion d'avoir un échange culturel, même si, ici, on ne parle que français. « Certains d'entre eux n'avaient jamais quitté leur pays. D'autres avaient déjà fait du bénévolat à l'étranger. Mais tous adorent l'ambiance ! », explique Margherita.</p>
+                
+                <p>Les échanges se sont aussi faits avec la population locale. « C'est un projet qui touche des personnes de tous les âges puisqu'on a même organisé des rencontres culturelles dans le collège de la ville », souligne Margherita. « C'est l'aspect qui m'a le plus plu », ajoute-t-elle. « Cela aide les gens à être plus ouverts, car ils ne nous voient plus simplement comme des étrangers, mais comme des personnes qui prennent soin de leur ville. Beaucoup étaient étonnés et souhaitaient nous connaître davantage ».</p>
+                
+                <p><em>D'après Ouest France</em></p>
+                <p><em>* chantier : travaux qui rassemblent de jeunes bénévoles.<br>
+                * le Service Volontaire Européen (SVE) : permet de vivre une expérience de bénévolat en Europe.<br>
+                * rénover : faire des travaux de réparation, remettre à neuf.</em></p>
+            </div>
+
+            <div class="question">
+                <span class="question-number">1</span>L'idée du maire de recevoir des jeunes bénévoles dans sa ville lui est venue... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q28" value="A"> A □ grâce aux réseaux sociaux.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q28" value="B"> B □ dans le cadre de son travail.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q28" value="C"> C □ lors d'un voyage à l'étranger.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">2</span>D'après Pascal Hervé, le projet a été organisé... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q29" value="A"> A □ en peu de temps.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q29" value="B"> B □ avec une autre ville.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q29" value="C"> C □ pour développer le sport.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">3</span>Les jeunes bénévoles ont été autonomes pour réaliser leurs travaux. <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q30" value="A"> A □ Vrai
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q30" value="B"> B □ Faux
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">4</span>Margherita Martini avait déjà participé à un projet de ce type. <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q31" value="A"> A □ Vrai
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q31" value="B"> B □ Faux
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">5</span>Le projet permet aussi aux jeunes Européens... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q32" value="A"> A □ de trouver un travail.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q32" value="B"> B □ de pratiquer plusieurs langues.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q32" value="C"> C □ de connaître les cultures d'autres pays.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">6</span>Les expériences des jeunes bénévoles sont très différentes. <span class="points">1 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q33" value="A"> A □ Vrai
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q33" value="B"> B □ Faux
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">7</span>Le programme a permis... <span class="points">1,5 point</span>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q34" value="A"> A □ aux habitants de changer d'opinion.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q34" value="B"> B □ aux bénévoles de vivre chez l'habitant.
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q34" value="C"> C □ aux collégiens de participer aux travaux.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCTION ÉCRITE -->
+    <div class="section">
+        <div class="section-title">✍️ 3. Production écrite (25 points)</div>
+        
+        <p>Vous recevez ce message d'un ami :</p>
+        
+        <div class="email-box">
+            <div class="email-header">📧 Nouveau message</div>
+            <p><strong>Salut !</strong></p>
+            <p>Je sais que tu as étudié en France l'année dernière. Moi aussi, je pense partir étudier dans un pays étranger mais j'hésite. Je voudrais savoir ce que tu en penses. Quelle a été ton expérience ? D'après toi, est-ce que c'est une bonne idée de faire ses études dans un autre pays ? Merci d'avance pour ta réponse !</p>
+            <p>À bientôt,<br>
+            Fabien</p>
+        </div>
+        
+        <p><strong>Vous répondez à Fabien.</strong></p>
+        <p><strong>160 mots minimum</strong></p>
+        
+        <textarea id="production-ecrite" placeholder="Écrivez votre réponse ici..."></textarea>
+        
+<div class="word-count">
+            Nombre de mots : <span id="word-count">0</span>
+        </div>
+        
+        <button class="submit-btn" onclick="exportToPDF()" style="background-color: #e74c3c; margin: 20px auto 10px auto;">
+            📄 Exporter en PDF
+        </button>
+    </div>
+
+    <button class="submit-btn" onclick="submitExam()">Soumettre l'examen</button>
+
+<!-- PRODUCTION ORALE - INFORMATIONS -->
+    <div class="section">
+        <div class="section-title">🎤 4. Production orale (25 points)</div>
+        
+        <div class="exercise">
+            <div class="exercise-title">Épreuve en trois parties</div>
+            <p><strong>Durée :</strong> 15 minutes environ<br>
+            <strong>Préparation :</strong> 10 minutes (ne concerne que la 3e partie de l'épreuve)</p>
+            
+            <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                <h4 style="color: #856404; margin-top: 0;">📋 Structure de l'épreuve orale :</h4>
+                <ol style="color: #856404;">
+                    <li><strong>Entretien dirigé</strong> - Présentation personnelle et échange avec l'examinateur</li>
+                    <li><strong>Exercice en interaction</strong> - Jeu de rôle ou simulation</li>
+                    <li><strong>Expression d'un point de vue</strong> - À partir d'un document déclencheur</li>
+                </ol>
+                <p style="color: #856404; margin-bottom: 0;"><em>Cette partie de l'examen se déroule avec un examinateur et n'est pas incluse dans cette version écrite.</em></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- RÉCAPITULATIF DES POINTS -->
+    <div class="section">
+        <div class="section-title">📊 Récapitulatif des points</div>
+        
+        <table class="table" style="margin: 20px 0;">
+            <tr>
+                <th style="text-align: left; width: 60%;">Épreuve</th>
+                <th style="width: 20%;">Points</th>
+                <th style="width: 20%;">Note obtenue</th>
+            </tr>
+            <tr>
+                <td>🎧 Compréhension de l'oral</td>
+                <td>/25</td>
+                <td><input type="number" min="0" max="25" style="width: 60px; text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>📖 Compréhension des écrits</td>
+                <td>/25</td>
+                <td><input type="number" min="0" max="25" style="width: 60px; text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>✍️ Production écrite</td>
+                <td>/25</td>
+                <td><input type="number" min="0" max="25" style="width: 60px; text-align: center;"></td>
+            </tr>
+            <tr>
+                <td>🎤 Production orale</td>
+                <td>/25</td>
+                <td><input type="number" min="0" max="25" style="width: 60px; text-align: center;"></td>
+            </tr>
+            <tr style="background-color: #f8f9fa; font-weight: bold;">
+                <td><strong>TOTAL</strong></td>
+                <td><strong>/100</strong></td>
+                <td><strong><span id="total-score">0</span></strong></td>
+            </tr>
+        </table>
+        
+        <div style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 5px; margin: 20px 0;">
+            <h4 style="color: #155724; margin-top: 0;">🎯 Conditions de réussite :</h4>
+            <ul style="color: #155724; margin-bottom: 0;">
+                <li><strong>Seuil de réussite pour obtenir le diplôme :</strong> 50/100</li>
+                <li><strong>Note minimale requise par épreuve :</strong> 5/25</li>
+            </ul>
+        </div>
+        
+        <div id="result-message" style="padding: 15px; border-radius: 5px; margin: 20px 0; text-align: center; font-weight: bold; display: none;"></div>
+        
+        <button class="submit-btn" onclick="calculateTotal()" style="background-color: #007bff;">Calculer le résultat</button>
+    </div>
+
+    <!-- CONSEILS POUR L'EXAMEN -->
+    <div class="section">
+        <div class="section-title">💡 Conseils pour l'examen DELF B1</div>
+        
+        <div class="exercise">
+            <div class="exercise-title">🎧 Compréhension de l'oral</div>
+            <ul>
+                <li>Lisez attentivement les questions avant l'écoute</li>
+                <li>Concentrez-vous sur les mots-clés et les informations essentielles</li>
+                <li>Profitez des deux écoutes pour vérifier vos réponses</li>
+                <li>Ne restez pas bloqué sur une question difficile</li>
+            </ul>
+        </div>
+        
+        <div class="exercise">
+            <div class="exercise-title">📖 Compréhension des écrits</div>
+            <ul>
+                <li>Lisez d'abord les questions pour savoir quoi chercher</li>
+                <li>Repérez les mots-clés dans les textes</li>
+                <li>Attention aux détails dans les exercices de correspondance</li>
+                <li>Relisez les passages importants si nécessaire</li>
+            </ul>
+        </div>
+        
+        <div class="exercise">
+            <div class="exercise-title">✍️ Production écrite</div>
+            <ul>
+                <li>Respectez la consigne (160 mots minimum)</li>
+                <li>Structurez votre texte (introduction, développement, conclusion)</li>
+                <li>Variez le vocabulaire et les structures grammaticales</li>
+                <li>Relisez votre texte pour corriger les erreurs</li>
+                <li>Exprimez clairement votre opinion avec des exemples</li>
+            </ul>
+        </div>
+        
+        <div class="exercise">
+            <div class="exercise-title">🎤 Production orale</div>
+            <ul>
+                <li><strong>Entretien dirigé :</strong> Présentez-vous de manière naturelle et détaillée</li>
+                <li><strong>Exercice en interaction :</strong> Jouez votre rôle avec conviction</li>
+                <li><strong>Expression d'un point de vue :</strong> Argumentez votre position avec des exemples</li>
+                <li>Parlez clairement et à un rythme adapté</li>
+                <li>N'hésitez pas à demander de répéter si vous n'avez pas compris</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- RESSOURCES SUPPLÉMENTAIRES -->
+    <div class="section">
+        <div class="section-title">📚 Ressources pour se préparer</div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
+                <h4 style="color: #28a745; margin-top: 0;">🌐 Sites web officiels</h4>
+                <ul>
+                    <li>Site officiel du DELF-DALF</li>
+                    <li>France Éducation international</li>
+                    <li>TV5MONDE Apprendre</li>
+                    <li>RFI Savoirs</li>
+                </ul>
+            </div>
+            
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #17a2b8;">
+                <h4 style="color: #17a2b8; margin-top: 0;">📖 Manuels recommandés</h4>
+                <ul>
+                    <li>DELF B1 - Livre de l'élève (Hachette)</li>
+                    <li>ABC DELF B1 (CLE International)</li>
+                    <li>Réussir le DELF B1 (Didier)</li>
+                    <li>DELF B1 Tout en un (Maison des Langues)</li>
+                </ul>
+            </div>
+            
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                <h4 style="color: #e68900; margin-top: 0;">🎯 Applications mobiles</h4>
+                <ul>
+                    <li>DELF B1 Preparation</li>
+                    <li>French Listening Practice</li>
+                    <li>Conjugaison française</li>
+                    <li>Le Figaro (pour la lecture)</li>
+                </ul>
+            </div>
+            
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #dc3545;">
+                <h4 style="color: #dc3545; margin-top: 0;">🎥 Chaînes YouTube</h4>
+                <ul>
+                    <li>Français avec Pierre</li>
+                    <li>Le français en vidéo</li>
+                    <li>TV5MONDE Langue française</li>
+                    <li>France Inter - émissions culturelles</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; padding: 30px; background-color: #2c3e50; color: white; margin-top: 30px; border-radius: 10px;">
+        <h3>🏆 Bonne chance pour votre examen DELF B1 !</h3>
+        <p>Cet exemple d'examen vous a été présenté à des fins d'entraînement.<br>
+        Pour passer l'examen officiel, inscrivez-vous dans un centre agréé.</p>
+    </div>
+
+    <script>
+// Compteur de mots pour la production écrite
+document.getElementById('production-ecrite').addEventListener('input', function() {
+    const text = this.value.trim();
+    const words = text === '' ? 0 : text.split(/\s+/).length;
+    document.getElementById('word-count').textContent = words;
+});
+
+// Fonction pour empêcher de cocher les deux cases dans les exercices de compréhension des écrits
+const checkboxGroups = {};
+
+// Grouper les checkboxes par question
+document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    const name = checkbox.name;
+    const match = name.match(/^(.+)_(oui|non)$/);
+    if (match) {
+        const baseName = match[1];
+        if (!checkboxGroups[baseName]) {
+            checkboxGroups[baseName] = [];
+        }
+        checkboxGroups[baseName].push(checkbox);
+    }
+});
+
+// Ajouter des event listeners pour les groupes de checkboxes
+Object.values(checkboxGroups).forEach(group => {
+    group.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                group.forEach(other => {
+                    if (other !== this) {
+                        other.checked = false;
+                    }
+                });
+            }
+        });
+    });
+});
+
+function submitExam() {
+    alert('Examen soumis ! Dans un vrai examen, vos réponses seraient envoyées pour correction.');
+}
+
+// Fonction pour calculer le total et déterminer le résultat
+function calculateTotal() {
+    const scores = document.querySelectorAll('input[type="number"]');
+    let total = 0;
+    let allFilled = true;
+    let minScoreReached = true;
+    
+    scores.forEach(input => {
+        const value = parseInt(input.value) || 0;
+        if (input.value === '') {
+            allFilled = false;
+        } else {
+            total += value;
+            if (value < 5) {
+                minScoreReached = false;
+            }
+        }
+    });
+    
+    if (!allFilled) {
+        alert('Veuillez remplir toutes les notes avant de calculer le résultat.');
+        return;
+    }
+    
+    document.getElementById('total-score').textContent = total;
+    
+    const resultDiv = document.getElementById('result-message');
+    resultDiv.style.display = 'block';
+    
+    if (total >= 50 && minScoreReached) {
+        resultDiv.style.backgroundColor = '#d4edda';
+        resultDiv.style.border = '1px solid #c3e6cb';
+        resultDiv.style.color = '#155724';
+        resultDiv.innerHTML = '🎉 FÉLICITATIONS ! Vous avez réussi le DELF B1 !<br>Votre score : ' + total + '/100';
+    } else if (total >= 50 && !minScoreReached) {
+        resultDiv.style.backgroundColor = '#fff3cd';
+        resultDiv.style.border = '1px solid #ffeaa7';
+        resultDiv.style.color = '#856404';
+        resultDiv.innerHTML = '⚠️ Score total suffisant (' + total + '/100) mais note minimale non atteinte dans au moins une épreuve.<br>Il faut minimum 5/25 dans chaque épreuve.';
+    } else {
+        resultDiv.style.backgroundColor = '#f8d7da';
+        resultDiv.style.border = '1px solid #f5c6cb';
+        resultDiv.style.color = '#721c24';
+        resultDiv.innerHTML = '❌ Score insuffisant pour obtenir le diplôme.<br>Votre score : ' + total + '/100 (minimum requis : 50/100)';
+    }
+}
+
+// Fonction pour exporter la production écrite en PDF
+function exportToPDF() {
+    const text = document.getElementById('production-ecrite').value.trim();
+    const wordCount = document.getElementById('word-count').textContent;
+    
+    if (text === '') {
+        alert('Veuillez d\'abord écrire votre production écrite avant d\'exporter.');
+        return;
+    }
+    
+    // Créer un nouveau document PDF
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Configuration
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 20;
+    const lineHeight = 7;
+    const maxWidth = pageWidth - (margin * 2);
+    
+    // En-tête du document
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.text('DELF B1 - Production Écrite', margin, margin);
+    
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Sujet : Réponse à Fabien sur les études à l\'étranger', margin, margin + 10);
+    doc.text('Nombre de mots : ' + wordCount, margin, margin + 20);
+    doc.text('Date : ' + new Date().toLocaleDateString('fr-FR'), margin, margin + 30);
+    
+    // Ligne de séparation
+    doc.line(margin, margin + 35, pageWidth - margin, margin + 35);
+    
+    // Contenu de la production écrite
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    
+    // Diviser le texte en lignes qui s'adaptent à la largeur de la page
+    const lines = doc.splitTextToSize(text, maxWidth);
+    
+    let currentY = margin + 50;
+    
+    lines.forEach((line, index) => {
+        // Vérifier si on doit créer une nouvelle page
+        if (currentY + lineHeight > pageHeight - margin) {
+            doc.addPage();
+            currentY = margin;
+        }
+        
+        doc.text(line, margin, currentY);
+        currentY += lineHeight;
+    });
+    
+    // Pied de page
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'italic');
+        doc.text('Page ' + i + ' / ' + totalPages, pageWidth - margin - 20, pageHeight - 10);
+        doc.text('Exemple d\'examen DELF B1 - Production écrite', margin, pageHeight - 10);
+    }
+    
+    // Télécharger le PDF
+    const fileName = 'DELF_B1_Production_Ecrite_' + new Date().toISOString().slice(0,10) + '.pdf';
+   doc.save(fileName);
+}
+</script>
+
+</body>
+</html>
