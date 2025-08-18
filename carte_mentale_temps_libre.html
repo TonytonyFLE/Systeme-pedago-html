@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le temps libre - Carte mentale de conversation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-radius: 15px;
+            color: white;
+            position: relative;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: white;
+            color: #333;
+        }
+        
+        .mind-map-container {
+            margin: 40px 0;
+            background: radial-gradient(ellipse at center, rgba(78,205,196,0.1) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 20px;
+            padding: 40px;
+        }
+        
+        .mind-map-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr auto 1fr;
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .central-node {
+            grid-column: 2;
+            grid-row: 2;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            padding: 30px 40px;
+            border-radius: 50px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 15px 35px rgba(255, 154, 158, 0.4);
+            z-index: 10;
+            border: 4px solid white;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .branch {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            border: 3px solid #4ecdc4;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(78, 205, 196, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            position: relative;
+        }
+        
+        .branch:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(78, 205, 196, 0.4);
+        }
+        
+        .branch h3 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            line-height: 1.3;
+        }
+        
+        /* Positionnement dans la grille */
+        .branch:nth-child(1) { grid-column: 1; grid-row: 1; }
+        .branch:nth-child(2) { grid-column: 3; grid-row: 1; }
+        .branch:nth-child(3) { grid-column: 1; grid-row: 2; }
+        .branch:nth-child(4) { grid-column: 3; grid-row: 2; }
+        .branch:nth-child(5) { grid-column: 1; grid-row: 3; }
+        .branch:nth-child(6) { grid-column: 3; grid-row: 3; }
+        
+        /* Lignes de connexion avec pseudo-éléments - masquées par défaut */
+        .branch::before {
+            display: none;
+        }
+        
+        .card-game-section {
+            margin-top: 50px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            border-radius: 20px;
+            color: white;
+        }
+        
+        .card-game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .card-game-header h2 {
+            margin: 0;
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .timer-display {
+            font-size: 2rem;
+            font-weight: bold;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 10px;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .timer-display.warning {
+            background: rgba(255,255,0,0.3);
+            animation: pulse 1s infinite;
+        }
+        
+        .timer-display.danger {
+            background: rgba(255,0,0,0.3);
+            animation: pulse 0.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .card-display {
+            background: white;
+            color: #333;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .card-display.flip {
+            transform: rotateY(180deg);
+        }
+        
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .game-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .game-btn:hover:not(:disabled) {
+            background: white;
+            color: #f093fb;
+            transform: translateY(-2px);
+        }
+        
+        .game-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .game-stats {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .instructions-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+        }
+        
+        .lexique-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .close-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .lexique-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .lexique-column {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #4ecdc4;
+        }
+        
+        .lexique-column h3 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            text-align: center;
+            padding: 10px;
+            background: #4ecdc4;
+            color: white;
+            border-radius: 8px;
+        }
+        
+        .lexique-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .lexique-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        
+        .lexique-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        
+        .french-word {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .german-word {
+            color: #e74c3c;
+            font-style: italic;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #4ecdc4;
+            border-radius: 25px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        
+        .variant {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #4ecdc4;
+        }
+        
+        .variant h4 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+        
+        @media (max-width: 768px) {
+            .mind-map-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto auto auto;
+                gap: 15px;
+                padding: 0 10px;
+            }
+            
+            .central-node {
+                grid-column: 1 / 3;
+                grid-row: 1;
+                font-size: 1.3rem;
+                padding: 20px;
+                margin-bottom: 10px;
+            }
+            
+            .branch {
+                grid-column: auto !important;
+                grid-row: auto !important;
+                padding: 15px 10px;
+                font-size: 0.9rem;
+                min-height: 80px;
+            }
+            
+            .branch h3 {
+                font-size: 1rem;
+                line-height: 1.2;
+            }
+            
+            /* Réorganisation des branches en 2 colonnes sous le nœud central */
+            .branch:nth-child(1) { grid-column: 1; grid-row: 2; }
+            .branch:nth-child(2) { grid-column: 2; grid-row: 2; }
+            .branch:nth-child(3) { grid-column: 1; grid-row: 3; }
+            .branch:nth-child(4) { grid-column: 2; grid-row: 3; }
+            .branch:nth-child(5) { grid-column: 1; grid-row: 4; }
+            .branch:nth-child(6) { grid-column: 2; grid-row: 4; }
+            
+            .mind-map-container {
+                padding: 20px 10px;
+            }
+            
+            .controls {
+                position: static;
+                text-align: center;
+                margin-top: 20px;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                padding: 8px 16px;
+                font-size: 12px;
+                margin: 5px;
+                width: 120px;
+            }
+            
+            .card-game-section {
+                padding: 20px 15px;
+                margin-top: 30px;
+            }
+            
+            .card-game-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .card-game-header h2 {
+                font-size: 1.5rem;
+                margin: 0;
+            }
+            
+            .timer-display {
+                font-size: 1.4rem;
+                padding: 8px 15px;
+                align-self: center;
+            }
+            
+            .card-display {
+                font-size: 1.6rem;
+                padding: 25px 15px;
+                margin: 15px 0;
+                min-height: 80px;
+                line-height: 1.2;
+            }
+            
+            .game-controls {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .game-btn {
+                flex: 1;
+                min-width: 120px;
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+            
+            .game-stats {
+                font-size: 1rem;
+                margin-top: 15px;
+            }
+            
+            .modal-content {
+                margin: 20px;
+                padding: 25px;
+                max-height: 90vh;
+                border-radius: 15px;
+            }
+            
+            .modal-header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .variant {
+                padding: 15px;
+                margin: 15px 0;
+            }
+            
+            .variant h4 {
+                font-size: 1rem;
+            }
+            
+            .lexique-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .lexique-column {
+                padding: 15px;
+            }
+            
+            .lexique-item {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+            }
+            
+            .german-word {
+                margin-top: 5px;
+                font-size: 0.9rem;
+            }
+            
+            .variant p {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Le temps libre</h1>
+            <div class="subtitle">Carte mentale de conversation</div>
+            <div class="controls">
+                <button class="btn" onclick="showInstructions()">Mode d'emploi</button>
+                <button class="btn" onclick="showLexique()">Lexique FR-DE</button>
+            </div>
+        </div>
+        
+        <div class="mind-map-container">
+            <div class="mind-map-grid">
+                <!-- Branches disposées en grille 3x3 avec le centre au milieu -->
+                <div class="branch">
+                    <h3>Mes sports favoris</h3>
+                </div>
+                
+                <div class="branch">
+                    <h3>Mes loisirs préférés</h3>
+                </div>
+                
+                <div class="branch">
+                    <h3>Ce que je n'aime pas faire</h3>
+                </div>
+                
+                <div class="branch">
+                    <h3>Comment j'organise mon temps libre</h3>
+                </div>
+                
+                <div class="branch">
+                    <h3>Les activités coûteuses</h3>
+                </div>
+                
+                <div class="branch">
+                    <h3>Les activités gratuites</h3>
+                </div>
+                
+                <!-- Nœud central -->
+                <div class="central-node">
+                    MON TEMPS LIBRE
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-game-section">
+            <div class="card-game-header">
+                <h2>Jeu de cartes conversation</h2>
+                <div class="timer-display" id="timer">3:00</div>
+            </div>
+            
+            <div class="card-display" id="currentCard">
+                Cliquez sur "Nouvelle carte" pour commencer
+            </div>
+            
+            <div class="game-controls">
+                <button class="game-btn" onclick="toggleTimer()" id="timerBtn">Mettre en pause</button>
+                <button class="game-btn" onclick="nextCard()" id="nextBtn">Nouvelle carte</button>
+                <button class="game-btn" onclick="resetGame()" id="resetBtn">Recommencer</button>
+            </div>
+            
+            <div class="game-stats">
+                <span id="cardCounter">Carte 0 / 48</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Lexique -->
+    <div class="lexique-modal" id="lexiqueModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Lexique Français-Allemand</h2>
+                <button class="close-btn" onclick="hideLexique()">×</button>
+            </div>
+            
+            <input type="text" class="search-box" id="searchBox" placeholder="Rechercher un mot..." onkeyup="filterLexique()">
+            
+            <div class="lexique-grid">
+                <div class="lexique-column">
+                    <h3>Sports & Activités physiques</h3>
+                    <ul class="lexique-list" id="sports-list">
+                        <li class="lexique-item"><span class="french-word">Le football</span><span class="german-word">der Fußball</span></li>
+                        <li class="lexique-item"><span class="french-word">Le tennis</span><span class="german-word">das Tennis</span></li>
+                        <li class="lexique-item"><span class="french-word">La natation</span><span class="german-word">das Schwimmen</span></li>
+                        <li class="lexique-item"><span class="french-word">Le vélo</span><span class="german-word">das Fahrrad</span></li>
+                        <li class="lexique-item"><span class="french-word">La course à pied</span><span class="german-word">das Laufen</span></li>
+                        <li class="lexique-item"><span class="french-word">Le basket</span><span class="german-word">der Basketball</span></li>
+                        <li class="lexique-item"><span class="french-word">La gymnastique</span><span class="german-word">die Gymnastik</span></li>
+                        <li class="lexique-item"><span class="french-word">Le ski</span><span class="german-word">das Skifahren</span></li>
+                        <li class="lexique-item"><span class="french-word">La randonnée</span><span class="german-word">das Wandern</span></li>
+                        <li class="lexique-item"><span class="french-word">La musculation</span><span class="german-word">das Krafttraining</span></li>
+                        <li class="lexique-item"><span class="french-word">Le yoga</span><span class="german-word">das Yoga</span></li>
+                        <li class="lexique-item"><span class="french-word">Les matchs</span><span class="german-word">die Spiele</span></li>
+                        <li class="lexique-item"><span class="french-word">Les compétitions</span><span class="german-word">die Wettkämpfe</span></li>
+                        <li class="lexique-item"><span class="french-word">L'entraînement</span><span class="german-word">das Training</span></li>
+                        <li class="lexique-item"><span class="french-word">L'équipe</span><span class="german-word">die Mannschaft</span></li>
+                        <li class="lexique-item"><span class="french-word">L'effort</span><span class="german-word">die Anstrengung</span></li>
+                        <li class="lexique-item"><span class="french-word">La motivation</span><span class="german-word">die Motivation</span></li>
+                    </ul>
+                </div>
+                
+                <div class="lexique-column">
+                    <h3>Loisirs & Culture</h3>
+                    <ul class="lexique-list" id="loisirs-list">
+                        <li class="lexique-item"><span class="french-word">La lecture</span><span class="german-word">das Lesen</span></li>
+                        <li class="lexique-item"><span class="french-word">Le cinéma</span><span class="german-word">das Kino</span></li>
+                        <li class="lexique-item"><span class="french-word">La musique</span><span class="german-word">die Musik</span></li>
+                        <li class="lexique-item"><span class="french-word">La télévision</span><span class="german-word">das Fernsehen</span></li>
+                        <li class="lexique-item"><span class="french-word">Les jeux vidéo</span><span class="german-word">die Videospiele</span></li>
+                        <li class="lexique-item"><span class="french-word">La cuisine</span><span class="german-word">das Kochen</span></li>
+                        <li class="lexique-item"><span class="french-word">Le jardinage</span><span class="german-word">die Gartenarbeit</span></li>
+                        <li class="lexique-item"><span class="french-word">La peinture</span><span class="german-word">das Malen</span></li>
+                        <li class="lexique-item"><span class="french-word">La photographie</span><span class="german-word">die Fotografie</span></li>
+                        <li class="lexique-item"><span class="french-word">La danse</span><span class="german-word">das Tanzen</span></li>
+                        <li class="lexique-item"><span class="french-word">Le théâtre</span><span class="german-word">das Theater</span></li>
+                        <li class="lexique-item"><span class="french-word">Les voyages</span><span class="german-word">das Reisen</span></li>
+                        <li class="lexique-item"><span class="french-word">Le bricolage</span><span class="german-word">das Basteln</span></li>
+                        <li class="lexique-item"><span class="french-word">Les sorties</span><span class="german-word">die Ausgänge</span></li>
+                        <li class="lexique-item"><span class="french-word">Les concerts</span><span class="german-word">die Konzerte</span></li>
+                        <li class="lexique-item"><span class="french-word">Internet</span><span class="german-word">das Internet</span></li>
+                        <li class="lexique-item"><span class="french-word">Les réseaux sociaux</span><span class="german-word">die sozialen Netzwerke</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="lexique-grid">
+                <div class="lexique-column">
+                    <h3>Organisation & Temps</h3>
+                    <ul class="lexique-list" id="temps-list">
+                        <li class="lexique-item"><span class="french-word">Le planning</span><span class="german-word">die Planung</span></li>
+                        <li class="lexique-item"><span class="french-word">Les vacances</span><span class="german-word">die Ferien</span></li>
+                        <li class="lexique-item"><span class="french-word">Le week-end</span><span class="german-word">das Wochenende</span></li>
+                        <li class="lexique-item"><span class="french-word">Le repos</span><span class="german-word">die Ruhe</span></li>
+                        <li class="lexique-item"><span class="french-word">La détente</span><span class="german-word">die Entspannung</span></li>
+                        <li class="lexique-item"><span class="french-word">La routine</span><span class="german-word">die Routine</span></li>
+                        <li class="lexique-item"><span class="french-word">L'aventure</span><span class="german-word">das Abenteuer</span></li>
+                        <li class="lexique-item"><span class="french-word">La passion</span><span class="german-word">die Leidenschaft</span></li>
+                    </ul>
+                </div>
+                
+                <div class="lexique-column">
+                    <h3>Sentiments & Relations</h3>
+                    <ul class="lexique-list" id="sentiments-list">
+                        <li class="lexique-item"><span class="french-word">Les amis</span><span class="german-word">die Freunde</span></li>
+                        <li class="lexique-item"><span class="french-word">La famille</span><span class="german-word">die Familie</span></li>
+                        <li class="lexique-item"><span class="french-word">L'ennui</span><span class="german-word">die Langeweile</span></li>
+                        <li class="lexique-item"><span class="french-word">Le stress</span><span class="german-word">der Stress</span></li>
+                        <li class="lexique-item"><span class="french-word">L'argent</span><span class="german-word">das Geld</span></li>
+                        <li class="lexique-item"><span class="french-word">La paresse</span><span class="german-word">die Faulheit</span></li>
+                        <li class="lexique-item"><span class="french-word">La solitude</span><span class="german-word">die Einsamkeit</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="instructions-modal" id="instructionsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Mode d'emploi</h2>
+                <button class="close-btn" onclick="hideInstructions()">×</button>
+            </div>
+            
+            <div class="variant">
+                <h4>Variante 1 : Travail en binômes avec la carte mentale</h4>
+                <p>Distribuez une copie de la carte mentale à chaque binôme. Les apprenants utilisent le jeu de cartes pour classer les mots dans les différentes catégories en discutant de leurs choix personnels concernant leur temps libre, leurs sports et loisirs préférés.</p>
+            </div>
+            
+            <div class="variant">
+                <h4>Variante 2 : Travail en grand groupe (recommandée)</h4>
+                <p>Affichez la carte mentale au format A3. Utilisez le jeu de cartes numérique en mode projection. Chaque élève tire une carte à tour de rôle et explique dans quelle catégorie il la placerait et pourquoi (ex: "Je mets 'le football' dans 'mes sports favoris' car je regarde tous les matchs de mon équipe").</p>
+            </div>
+            
+            <div class="variant">
+                <h4>Variante 3 : Jeu de conversation avec timer automatique</h4>
+                <p>Utilisez le jeu de cartes avec le timer automatique. Dès qu'une nouvelle carte s'affiche, le timer de 3 minutes se lance automatiquement. L'apprenant doit parler du mot affiché pendant toute la durée. Il peut mettre en pause le timer ou passer à la carte suivante, mais l'objectif est de parler le plus possible.</p>
+            </div>
+            
+            <div class="variant">
+                <h4>Utilisation du jeu de cartes :</h4>
+                <p>• Cliquez sur "Nouvelle carte" pour afficher un mot aléatoire et démarrer le timer<br>
+                • Utilisez "Mettre en pause/Reprendre" pour contrôler le timer<br>
+                • L'apprenant peut passer à la carte suivante avant la fin du timer<br>
+                • Le timer se remet automatiquement à 3 minutes pour chaque nouvelle carte<br>
+                • Le compteur indique le nombre de cartes vues</p>
+            </div>
+            
+            <div class="variant">
+                <h4>Questions pour lancer la discussion :</h4>
+                <p>• "Quel sport vous surprend dans cette liste ?" • "Comment organisez-vous votre week-end ?" • "Que faites-vous quand vous vous ennuyez ?" • "Quel mot associez-vous à la motivation ?" • "Préférez-vous les activités seul ou en groupe ?"</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const words = [
+            "Le football", "Le tennis", "La natation", "Le vélo", "La course à pied", 
+            "Le basket", "La gymnastique", "Le ski", "La lecture", "Le cinéma",
+            "La musique", "La télévision", "Les jeux vidéo", "La cuisine", "Le jardinage",
+            "La peinture", "La photographie", "La danse", "Le théâtre", "Les voyages",
+            "La randonnée", "Le bricolage", "La musculation", "Le yoga", "Les sorties",
+            "Les amis", "La famille", "L'ennui", "Le stress", "La détente",
+            "L'argent", "Le planning", "Les vacances", "Le week-end", "Internet",
+            "Les réseaux sociaux", "Les concerts", "Les matchs", "Les compétitions", "L'entraînement",
+            "La paresse", "L'effort", "La motivation", "Le repos", "L'équipe",
+            "La solitude", "L'aventure", "La routine", "La passion"
+        ];
+        
+        let shuffledWords = [];
+        let currentIndex = 0;
+        let timerInterval;
+        let timeLeft = 180; // 3 minutes en secondes
+        let isTimerRunning = false;
+        
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        function initGame() {
+            shuffledWords = shuffleArray(words);
+            currentIndex = 0;
+            updateCardCounter();
+        }
+        
+        function nextCard() {
+            if (currentIndex < shuffledWords.length) {
+                document.getElementById('currentCard').textContent = shuffledWords[currentIndex];
+                currentIndex++;
+                updateCardCounter();
+                
+                // Animation de flip
+                const card = document.getElementById('currentCard');
+                card.classList.add('flip');
+                setTimeout(() => card.classList.remove('flip'), 300);
+                
+                // Démarrer automatiquement le timer
+                if (!isTimerRunning) {
+                    startTimer();
+                }
+            } else {
+                document.getElementById('currentCard').textContent = "Toutes les cartes ont été vues !";
+                document.getElementById('nextBtn').disabled = true;
+                stopTimer();
+            }
+        }
+        
+        function updateCardCounter() {
+            document.getElementById('cardCounter').textContent = `Carte ${currentIndex} / ${words.length}`;
+        }
+        
+        function startTimer() {
+            if (!isTimerRunning) {
+                isTimerRunning = true;
+                timeLeft = 180; // Reset à 3 minutes à chaque nouvelle carte
+                document.getElementById('timerBtn').textContent = "Mettre en pause";
+                
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    
+                    if (timeLeft <= 0) {
+                        stopTimer();
+                        alert("Temps écoulé ! Passez à la carte suivante.");
+                    }
+                }, 1000);
+            }
+        }
+        
+        function toggleTimer() {
+            if (isTimerRunning) {
+                pauseTimer();
+            } else {
+                resumeTimer();
+            }
+        }
+        
+        function pauseTimer() {
+            if (isTimerRunning) {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+                document.getElementById('timerBtn').textContent = "Reprendre";
+            }
+        }
+        
+        function resumeTimer() {
+            if (!isTimerRunning && timeLeft > 0) {
+                isTimerRunning = true;
+                document.getElementById('timerBtn').textContent = "Mettre en pause";
+                
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    
+                    if (timeLeft <= 0) {
+                        stopTimer();
+                        alert("Temps écoulé ! Passez à la carte suivante.");
+                    }
+                }, 1000);
+            }
+        }
+        
+        function stopTimer() {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            document.getElementById('timerBtn').textContent = "Mettre en pause";
+            updateTimerDisplay();
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            const timerElement = document.getElementById('timer');
+            
+            timerElement.textContent = display;
+            
+            // Changement de couleur selon le temps restant
+            timerElement.classList.remove('warning', 'danger');
+            if (timeLeft <= 30) {
+                timerElement.classList.add('danger');
+            } else if (timeLeft <= 60) {
+                timerElement.classList.add('warning');
+            }
+        }
+        
+        function resetGame() {
+            stopTimer();
+            initGame();
+            document.getElementById('currentCard').textContent = "Cliquez sur 'Nouvelle carte' pour commencer";
+            document.getElementById('nextBtn').disabled = false;
+            timeLeft = 180;
+            updateTimerDisplay();
+        }
+        
+        function showLexique() {
+            document.getElementById('lexiqueModal').style.display = 'block';
+        }
+        
+        function hideLexique() {
+            document.getElementById('lexiqueModal').style.display = 'none';
+            document.getElementById('searchBox').value = '';
+            filterLexique(); // Reset le filtre
+        }
+        
+        function showLexique() {
+            document.getElementById('lexiqueModal').style.display = 'block';
+        }
+        
+        function hideLexique() {
+            document.getElementById('lexiqueModal').style.display = 'none';
+            document.getElementById('searchBox').value = '';
+            filterLexique(); // Reset le filtre
+        }
+        
+        function filterLexique() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const allItems = document.querySelectorAll('.lexique-item');
+            
+            allItems.forEach(item => {
+                const frenchWord = item.querySelector('.french-word').textContent.toLowerCase();
+                const germanWord = item.querySelector('.german-word').textContent.toLowerCase();
+                
+                if (frenchWord.includes(searchTerm) || germanWord.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        function showInstructions() {
+            document.getElementById('instructionsModal').style.display = 'block';
+        }
+        
+        function hideInstructions() {
+            document.getElementById('instructionsModal').style.display = 'none';
+        }
+        
+        // Fermer les modals en cliquant à l'extérieur
+        window.onclick = function(event) {
+            const instructionsModal = document.getElementById('instructionsModal');
+            const lexiqueModal = document.getElementById('lexiqueModal');
+            
+            if (event.target == instructionsModal) {
+                hideInstructions();
+            }
+            if (event.target == lexiqueModal) {
+                hideLexique();
+            }
+        }
+        
+        // Initialiser le jeu au chargement
+        window.onload = function() {
+            initGame();
+            updateTimerDisplay();
+        };
+    </script>
+</body>
+</html>
