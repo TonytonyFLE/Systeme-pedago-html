@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartes mentales de conversation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-radius: 15px;
+            color: white;
+            position: relative;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .error {
+            background: #ff6b6b;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .theme-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .theme-select-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid #4ecdc4;
+        }
+        
+        .theme-select-container label {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 16px;
+            white-space: nowrap;
+        }
+        
+        #theme-select {
+            padding: 10px 15px;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            cursor: pointer;
+            min-width: 200px;
+            outline: none;
+        }
+        
+        .theme-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .theme-icon {
+            font-size: 1.5rem;
+        }
+        
+        .theme-description {
+            font-style: italic;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .theme-niveau {
+            background: #4ecdc4;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid #4ecdc4;
+            color: #4ecdc4;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .btn:hover {
+            background: #4ecdc4;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .mind-map-container {
+            margin: 40px 0;
+            background: radial-gradient(ellipse at center, rgba(78,205,196,0.1) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 20px;
+            padding: 40px;
+        }
+        
+        .mind-map-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr auto 1fr;
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .central-node {
+            grid-column: 2;
+            grid-row: 2;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            padding: 30px 40px;
+            border-radius: 50px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 15px 35px rgba(255, 154, 158, 0.4);
+            z-index: 10;
+            border: 4px solid white;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .branch {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            border: 3px solid #4ecdc4;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(78, 205, 196, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            position: relative;
+        }
+        
+        .branch:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(78, 205, 196, 0.4);
+        }
+        
+        .branch h3 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            line-height: 1.3;
+        }
+        
+        .branch.empty {
+            opacity: 0.3;
+            cursor: default;
+        }
+        
+        .branch.empty:hover {
+            transform: none;
+            box-shadow: 0 8px 20px rgba(78, 205, 196, 0.3);
+        }
+        
+        .branch:nth-child(1) { grid-column: 1; grid-row: 1; }
+        .branch:nth-child(2) { grid-column: 3; grid-row: 1; }
+        .branch:nth-child(3) { grid-column: 1; grid-row: 2; }
+        .branch:nth-child(4) { grid-column: 3; grid-row: 2; }
+        .branch:nth-child(5) { grid-column: 1; grid-row: 3; }
+        .branch:nth-child(6) { grid-column: 3; grid-row: 3; }
+        
+        .card-game-section {
+            margin-top: 50px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            border-radius: 20px;
+            color: white;
+        }
+        
+        .card-game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .timer-display {
+            font-size: 2rem;
+            font-weight: bold;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 10px;
+            min-width: 100px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .timer-display.warning {
+            background: rgba(255,255,0,0.3);
+            animation: pulse 1s infinite;
+        }
+        
+        .timer-display.danger {
+            background: rgba(255,0,0,0.3);
+            animation: pulse 0.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .card-display {
+            background: white;
+            color: #333;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .game-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .game-btn:hover:not(:disabled) {
+            background: white;
+            color: #f093fb;
+            transform: translateY(-2px);
+        }
+        
+        .game-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .game-stats {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .close-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .lexique-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .lexique-column {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #4ecdc4;
+        }
+        
+        .lexique-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        
+        .lexique-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #4ecdc4;
+            border-radius: 25px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        
+        .variant {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #4ecdc4;
+        }
+        
+        .variant h4 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .theme-select-container {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+            }
+            
+            #theme-select {
+                min-width: 150px;
+            }
+            
+            .mind-map-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto auto auto;
+                gap: 15px;
+                padding: 0 10px;
+            }
+            
+            .central-node {
+                grid-column: 1 / 3;
+                grid-row: 1;
+                font-size: 1.3rem;
+                padding: 20px;
+            }
+            
+            .branch {
+                grid-column: auto !important;
+                grid-row: auto !important;
+                padding: 15px 10px;
+                font-size: 0.9rem;
+                min-height: 80px;
+            }
+            
+            .branch h3 {
+                font-size: 1rem;
+                line-height: 1.2;
+            }
+            
+            .branch:nth-child(1) { grid-column: 1; grid-row: 2; }
+            .branch:nth-child(2) { grid-column: 2; grid-row: 2; }
+            .branch:nth-child(3) { grid-column: 1; grid-row: 3; }
+            .branch:nth-child(4) { grid-column: 2; grid-row: 3; }
+            .branch:nth-child(5) { grid-column: 1; grid-row: 4; }
+            .branch:nth-child(6) { grid-column: 2; grid-row: 4; }
+            
+            .card-game-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .card-display {
+                font-size: 1.6rem;
+                padding: 25px 15px;
+            }
+            
+            .game-controls {
+                gap: 10px;
+            }
+            
+            .game-btn {
+                flex: 1;
+                min-width: 120px;
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+            
+            .lexique-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="main-title">Cartes mentales de conversation</h1>
+            <div class="subtitle" id="main-subtitle">Tandem français-allemand</div>
+        </div>
+        
+        <div id="loading" class="loading">
+            Chargement des cartes mentales...
+        </div>
+        
+        <div id="error-message" class="error" style="display: none;">
+            Erreur lors du chargement des données. Veuillez vérifier que les fichiers JSON sont disponibles.
+        </div>
+        
+        <div id="main-content" style="display: none;">
+            <div class="theme-selector">
+                <div class="theme-select-container">
+                    <label for="theme-select">Choisir un thème :</label>
+                    <select id="theme-select" onchange="switchTheme(this.value)">
+                        <option value="">-- Sélectionner un thème --</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="theme-info" class="theme-info" style="display: none;">
+                <span id="theme-icon" class="theme-icon"></span>
+                <span id="theme-description" class="theme-description"></span>
+                <span id="theme-niveau" class="theme-niveau"></span>
+            </div>
+            
+            <div class="controls">
+                <button class="btn" onclick="showInstructions()">Mode d'emploi</button>
+                <button class="btn" onclick="showLexique()" id="lexique-btn" disabled>Lexique FR-DE</button>
+            </div>
+            
+            <div class="mind-map-container">
+                <div class="mind-map-grid">
+                    <div class="branch empty"><h3 id="branch-1"></h3></div>
+                    <div class="branch empty"><h3 id="branch-2"></h3></div>
+                    <div class="branch empty"><h3 id="branch-3"></h3></div>
+                    <div class="branch empty"><h3 id="branch-4"></h3></div>
+                    <div class="branch empty"><h3 id="branch-5"></h3></div>
+                    <div class="branch empty"><h3 id="branch-6"></h3></div>
+                    <div class="central-node" id="central-title">CHOISIR UN THÈME</div>
+                </div>
+            </div>
+            
+            <div class="card-game-section">
+                <div class="card-game-header">
+                    <h2>Jeu de cartes conversation</h2>
+                    <div class="timer-display" id="timer">3:00</div>
+                </div>
+                
+                <div class="card-display" id="currentCard">
+                    Sélectionnez un thème pour commencer
+                </div>
+                
+                <div class="game-controls">
+                    <button class="game-btn" onclick="toggleTimer()" id="timerBtn" disabled>Démarrer</button>
+                    <button class="game-btn" onclick="nextCard()" id="nextBtn" disabled>Nouvelle carte</button>
+                    <button class="game-btn" onclick="resetGame()" id="resetBtn" disabled>Recommencer</button>
+                </div>
+                
+                <div class="game-stats">
+                    <span id="cardCounter">Carte 0 / 0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modals -->
+    <div class="modal" id="instructionsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Mode d'emploi</h2>
+                <button class="close-btn" onclick="hideModal('instructionsModal')">×</button>
+            </div>
+            
+            <div class="variant">
+                <h4>Variante 1 : Travail en binômes avec la carte mentale</h4>
+                <p>Distribuez une copie de la carte mentale à chaque binôme. Les apprenants utilisent le jeu de cartes pour classer les mots dans les différentes catégories en discutant de leurs choix personnels.</p>
+            </div>
+            
+            <div class="variant">
+                <h4>Variante 2 : Travail en grand groupe (recommandée)</h4>
+                <p>Affichez la carte mentale au format A3. Utilisez le jeu de cartes numérique en mode projection. Chaque élève tire une carte à tour de rôle et explique dans quelle catégorie il la placerait et pourquoi.</p>
+            </div>
+            
+            <div class="variant">
+                <h4>Variante 3 : Jeu de conversation avec timer automatique</h4>
+                <p>Utilisez le jeu de cartes avec le timer automatique. Dès qu'une nouvelle carte s'affiche, le timer de 3 minutes se lance. L'apprenant doit parler du mot affiché pendant toute la durée.</p>
+            </div>
+            
+            <div class="variant">
+                <h4>Utilisation du jeu de cartes :</h4>
+                <p>• Cliquez sur "Nouvelle carte" pour afficher un mot aléatoire et démarrer le timer<br>
+                • Utilisez "Démarrer/Pause" pour contrôler le timer<br>
+                • L'apprenant peut passer à la carte suivante avant la fin du timer<br>
+                • Le timer se remet automatiquement à 3 minutes pour chaque nouvelle carte</p>
+            </div>
+            
+            <div class="variant">
+                <h4>Questions pour lancer la discussion :</h4>
+                <p>• "Dans quelle catégorie placez-vous ce mot ?"<br>
+                • "Pourquoi ce choix ?"<br>
+                • "Êtes-vous d'accord avec votre partenaire ?"<br>
+                • "Pouvez-vous donner un exemple ?"<br>
+                • "Et vous, qu'est-ce que vous en pensez ?"</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="lexiqueModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="lexique-title">Lexique</h2>
+                <button class="close-btn" onclick="hideModal('lexiqueModal')">×</button>
+            </div>
+            <div id="lexiqueContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let config = {};
+        let cartesDisponibles = [];
+        let carteActuelle = null;
+        let currentTheme = null;
+        let shuffledWords = [];
+        let currentIndex = 0;
+        let timerInterval;
+        let timeLeft = 180;
+        let isTimerRunning = false;
+
+        // Chargement de la configuration et des cartes
+        async function loadConfig() {
+            try {
+                const response = await fetch('config-cartes.json');
+                if (!response.ok) throw new Error('Configuration non trouvée');
+                config = await response.json();
+                
+                // Mise à jour du titre depuis la config
+                document.getElementById('main-title').textContent = config.metadata.titre_general;
+                document.getElementById('main-subtitle').textContent = config.metadata.sous_titre;
+                
+                // Charger les cartes actives
+                await loadAvailableCards();
+                
+            } catch (error) {
+                console.error('Erreur de chargement:', error);
+                showError('Impossible de charger la configuration.');
+            }
+        }
+
+        async function loadAvailableCards() {
+            const cartesActives = config.cartes_disponibles
+                .filter(carte => carte.actif)
+                .sort((a, b) => a.ordre - b.ordre);
+            
+            cartesDisponibles = [];
+            
+            for (const carteConfig of cartesActives) {
+                try {
+                    const response = await fetch(carteConfig.fichier);
+                    if (response.ok) {
+                        const carteData = await response.json();
+                        cartesDisponibles.push(carteData);
+                    }
+                } catch (error) {
+                    console.warn(`Carte ${carteConfig.fichier} non disponible:`, error);
+                }
+            }
+            
+            if (cartesDisponibles.length === 0) {
+                showError('Aucune carte mentale disponible.');
+                return;
+            }
+            
+            populateThemeSelector();
+            showMainContent();
+        }
+
+        function populateThemeSelector() {
+            const select = document.getElementById('theme-select');
+            select.innerHTML = '<option value="">-- Sélectionner un thème --</option>';
+            
+            cartesDisponibles.forEach((carte, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${carte.icone} ${carte.nom} (${carte.niveau.join(', ')})`;
+                select.appendChild(option);
+            });
+        }
+
+        function switchTheme(index) {
+            if (index === '' || index < 0 || index >= cartesDisponibles.length) {
+                resetUI();
+                return;
+            }
+            
+            carteActuelle = cartesDisponibles[index];
+            currentTheme = carteActuelle.id;
+            
+            updateThemeInfo();
+            updateMindMap();
+            enableGameControls();
+            resetGame();
+        }
+
+        function updateThemeInfo() {
+            if (!carteActuelle) return;
+            
+            document.getElementById('theme-icon').textContent = carteActuelle.icone;
+            document.getElementById('theme-description').textContent = carteActuelle.description;
+            document.getElementById('theme-niveau').textContent = carteActuelle.niveau.join(', ');
+            document.getElementById('theme-info').style.display = 'flex';
+            
+            // Activer le bouton lexique
+            document.getElementById('lexique-btn').disabled = false;
+        }
+
+        function updateMindMap() {
+            if (!carteActuelle) return;
+            
+            document.getElementById('central-title').textContent = carteActuelle.nom.toUpperCase();
+            
+            // Mettre à jour les branches
+            for (let i = 1; i <= 6; i++) {
+                const branchElement = document.getElementById(`branch-${i}`);
+                const branchContainer = branchElement.parentElement;
+                
+                if (carteActuelle.branches[i-1]) {
+                    branchElement.textContent = carteActuelle.branches[i-1];
+                    branchContainer.classList.remove('empty');
+                } else {
+                    branchElement.textContent = '';
+                    branchContainer.classList.add('empty');
+                }
+            }
+            
+            // Appliquer la couleur du thème
+            if (carteActuelle.couleur) {
+                const centralNode = document.getElementById('central-title');
+                centralNode.style.background = `linear-gradient(45deg, ${carteActuelle.couleur}, #fecfef)`;
+            }
+        }
+
+        function resetUI() {
+            currentTheme = null;
+            carteActuelle = null;
+            
+            document.getElementById('theme-info').style.display = 'none';
+            document.getElementById('central-title').textContent = 'CHOISIR UN THÈME';
+            
+            // Vider les branches
+            for (let i = 1; i <= 6; i++) {
+                const branchElement = document.getElementById(`branch-${i}`);
+                const branchContainer = branchElement.parentElement;
+                branchElement.textContent = '';
+                branchContainer.classList.add('empty');
+            }
+            
+            // Désactiver les contrôles
+            disableGameControls();
+            document.getElementById('lexique-btn').disabled = true;
+            
+            // Réinitialiser le jeu
+            stopTimer();
+            document.getElementById('currentCard').textContent = "Sélectionnez un thème pour commencer";
+            document.getElementById('cardCounter').textContent = "Carte 0 / 0";
+            timeLeft = config.parametres?.duree_timer_defaut || 180;
+            updateTimerDisplay();
+        }
+
+        function enableGameControls() {
+            document.getElementById('timerBtn').disabled = false;
+            document.getElementById('nextBtn').disabled = false;
+            document.getElementById('resetBtn').disabled = false;
+        }
+
+        function disableGameControls() {
+            document.getElementById('timerBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('resetBtn').disabled = true;
+        }
+
+        // Fonctions du jeu de cartes
+        function nextCard() {
+            if (!carteActuelle) {
+                alert('Veuillez d\'abord sélectionner un thème !');
+                return;
+            }
+            
+            if (currentIndex < carteActuelle.mots.length) {
+                document.getElementById('currentCard').textContent = shuffledWords[currentIndex];
+                currentIndex++;
+                updateCardCounter();
+                
+                if (!isTimerRunning) {
+                    startTimer();
+                }
+            } else {
+                document.getElementById('currentCard').textContent = "Toutes les cartes ont été vues !";
+                stopTimer();
+            }
+        }
+
+        function updateCardCounter() {
+            if (!carteActuelle) return;
+            document.getElementById('cardCounter').textContent = `Carte ${currentIndex} / ${carteActuelle.mots.length}`;
+        }
+
+        function startTimer() {
+            isTimerRunning = true;
+            timeLeft = config.parametres?.duree_timer_defaut || 180;
+            document.getElementById('timerBtn').textContent = "Pause";
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    stopTimer();
+                    alert("Temps écoulé ! Passez à la carte suivante.");
+                }
+            }, 1000);
+        }
+
+        function toggleTimer() {
+            if (!carteActuelle) {
+                alert('Veuillez d\'abord sélectionner un thème !');
+                return;
+            }
+            
+            if (isTimerRunning) {
+                stopTimer();
+                document.getElementById('timerBtn').textContent = "Reprendre";
+            } else {
+                startTimer();
+            }
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            const timerElement = document.getElementById('timer');
+            
+            timerElement.textContent = display;
+            
+            // Changement de couleur selon le temps restant
+            timerElement.classList.remove('warning', 'danger');
+            if (timeLeft <= 30) {
+                timerElement.classList.add('danger');
+            } else if (timeLeft <= 60) {
+                timerElement.classList.add('warning');
+            }
+        }
+
+        function resetGame() {
+            stopTimer();
+            
+            if (!carteActuelle) {
+                document.getElementById('currentCard').textContent = "Sélectionnez un thème pour commencer";
+                document.getElementById('cardCounter').textContent = "Carte 0 / 0";
+                return;
+            }
+            
+            shuffledWords = [...carteActuelle.mots].sort(() => Math.random() - 0.5);
+            currentIndex = 0;
+            timeLeft = config.parametres?.duree_timer_defaut || 180;
+            updateTimerDisplay();
+            updateCardCounter();
+            document.getElementById('currentCard').textContent = "Cliquez sur 'Nouvelle carte' pour commencer";
+            document.getElementById('timerBtn').textContent = "Démarrer";
+        }
+
+        // Fonctions des modals
+        function showInstructions() {
+            document.getElementById('instructionsModal').style.display = 'block';
+        }
+
+        function showLexique() {
+            if (!carteActuelle) {
+                alert('Veuillez d\'abord sélectionner un thème pour voir le lexique !');
+                return;
+            }
+            
+            let lexiqueHtml = `<input type="text" class="search-box" placeholder="Rechercher..." onkeyup="filterLexique()">`;
+            lexiqueHtml += '<div class="lexique-grid">';
+            
+            Object.keys(carteActuelle.lexique).forEach(category => {
+                lexiqueHtml += `
+                    <div class="lexique-column">
+                        <h3 style="background: ${carteActuelle.couleur || '#4ecdc4'}; color: white; padding: 10px; margin: 0 0 15px 0; border-radius: 5px; text-align: center;">${category}</h3>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                `;
+                
+                carteActuelle.lexique[category].forEach(item => {
+                    lexiqueHtml += `
+                        <li class="lexique-item">
+                            <span style="font-weight: bold; color: #2c3e50;">${item.fr}</span>
+                            <span style="color: #e74c3c; font-style: italic;">${item.de}</span>
+                        </li>
+                    `;
+                });
+                
+                lexiqueHtml += '</ul></div>';
+            });
+            
+            lexiqueHtml += '</div>';
+            
+            document.getElementById('lexique-title').textContent = `Lexique - ${carteActuelle.nom}`;
+            document.getElementById('lexiqueContent').innerHTML = lexiqueHtml;
+            document.getElementById('lexiqueModal').style.display = 'block';
+        }
+
+        function filterLexique() {
+            const searchTerm = event.target.value.toLowerCase();
+            const allItems = document.querySelectorAll('.lexique-item');
+            
+            allItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Fonctions utilitaires
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error-message').textContent = message;
+            document.getElementById('error-message').style.display = 'block';
+        }
+
+        function showMainContent() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+        }
+
+        // Gestionnaires d'événements
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Raccourcis clavier (si activés dans la config)
+        document.addEventListener('keydown', function(event) {
+            if (config.parametres?.raccourcis_clavier !== false) {
+                if (event.code === 'Space') {
+                    event.preventDefault();
+                    nextCard();
+                } else if (event.code === 'Enter') {
+                    event.preventDefault();
+                    toggleTimer();
+                } else if (event.code === 'Escape') {
+                    hideModal('instructionsModal');
+                    hideModal('lexiqueModal');
+                }
+            }
+        });
+
+        // Initialisation
+        window.onload = function() {
+            loadConfig();
+        };
+    </script>
+</body>
+</html>

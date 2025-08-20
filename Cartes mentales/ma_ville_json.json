@@ -1,0 +1,81 @@
+{
+  "id": "ma-ville",
+  "nom": "Ma ville",
+  "description": "Décrire sa ville et son environnement",
+  "niveau": ["A1", "A2", "B1"],
+  "icone": "🏙️",
+  "couleur": "#4ecdc4",
+  "branches": [
+    "Qu'est-ce qu'il y a dans ma ville ?",
+    "Qu'est-ce que j'aime ?",
+    "Qu'est-ce qu'on peut faire comme activité ?",
+    "Qu'est-ce qu'il n'y a pas dans ma ville ?",
+    "Qu'est-ce que je veux changer ?",
+    "Qu'est-ce que je déteste ?"
+  ],
+  "mots": [
+    "un cinéma", "un bar", "un restaurant", "la pollution",
+    "le travail", "les transports publics", "le bruit", "une route",
+    "un quartier moderne", "un supermarché", "les gens", "un hôpital",
+    "une mairie", "un musée", "une rivière", "un parc",
+    "un commerce", "un théâtre", "un lac", "un quartier historique",
+    "l'architecture", "une école", "des déchets", "la culture",
+    "un appartement", "une maison", "un stade", "une église",
+    "un marché", "un centre commercial", "un hôtel", "une université",
+    "un club de fitness", "la police", "une piscine", "une piste cyclable",
+    "près de", "loin de", "à côté de", "en face de", "derrière"
+  ],
+  "lexique": {
+    "Lieux publics": [
+      {"fr": "un cinéma", "de": "ein Kino"},
+      {"fr": "un restaurant", "de": "ein Restaurant"},
+      {"fr": "un hôpital", "de": "ein Krankenhaus"},
+      {"fr": "une mairie", "de": "ein Rathaus"},
+      {"fr": "un musée", "de": "ein Museum"},
+      {"fr": "un parc", "de": "ein Park"},
+      {"fr": "un théâtre", "de": "ein Theater"},
+      {"fr": "une école", "de": "eine Schule"},
+      {"fr": "une église", "de": "eine Kirche"},
+      {"fr": "un marché", "de": "ein Markt"},
+      {"fr": "une université", "de": "eine Universität"},
+      {"fr": "une piscine", "de": "ein Schwimmbad"},
+      {"fr": "un supermarché", "de": "ein Supermarkt"},
+      {"fr": "un centre commercial", "de": "ein Einkaufszentrum"},
+      {"fr": "un hôtel", "de": "ein Hotel"},
+      {"fr": "un club de fitness", "de": "ein Fitnessstudio"}
+    ],
+    "Logement & Quartiers": [
+      {"fr": "un appartement", "de": "eine Wohnung"},
+      {"fr": "une maison", "de": "ein Haus"},
+      {"fr": "un quartier moderne", "de": "ein modernes Viertel"},
+      {"fr": "un quartier historique", "de": "ein historisches Viertel"},
+      {"fr": "l'architecture", "de": "die Architektur"}
+    ],
+    "Problèmes urbains": [
+      {"fr": "la pollution", "de": "die Verschmutzung"},
+      {"fr": "le bruit", "de": "der Lärm"},
+      {"fr": "les embouteillages", "de": "die Staus"},
+      {"fr": "des déchets", "de": "der Müll"},
+      {"fr": "la criminalité", "de": "die Kriminalität"}
+    ],
+    "Transport & Infrastructure": [
+      {"fr": "les transports publics", "de": "die öffentlichen Verkehrsmittel"},
+      {"fr": "une piste cyclable", "de": "ein Radweg"},
+      {"fr": "une route", "de": "eine Straße"},
+      {"fr": "un parking", "de": "ein Parkplatz"}
+    ],
+    "Prépositions de lieu": [
+      {"fr": "près de", "de": "in der Nähe von"},
+      {"fr": "loin de", "de": "weit von"},
+      {"fr": "à côté de", "de": "neben"},
+      {"fr": "en face de", "de": "gegenüber von"},
+      {"fr": "derrière", "de": "hinter"}
+    ],
+    "Concepts généraux": [
+      {"fr": "les gens", "de": "die Leute"},
+      {"fr": "la culture", "de": "die Kultur"},
+      {"fr": "le travail", "de": "die Arbeit"},
+      {"fr": "la police", "de": "die Polizei"}
+    ]
+  }
+}

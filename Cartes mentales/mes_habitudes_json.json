@@ -1,0 +1,114 @@
+{
+  "id": "mes-habitudes",
+  "nom": "Mes habitudes",
+  "description": "Parler de ses bonnes et mauvaises habitudes quotidiennes",
+  "niveau": ["A1", "A2", "B1"],
+  "icone": "🔄",
+  "couleur": "#95e1d3",
+  "branches": [
+    "Mes bonnes habitudes",
+    "Mes mauvaises habitudes",
+    "jamais",
+    "rarement",
+    "souvent",
+    "tout le temps"
+  ],
+  "mots": [
+    "regarder des vidéos débiles sur Youtube", "ranger ma chambre", "travailler", "laver mes vêtements",
+    "regarder des séries TV sur Internet", "lire la presse people", "regarder la vie de mes amis sur Facebook", "arriver en retard au travail / à l'école",
+    "manger des sucreries", "boire des sodas", "faire du sport", "dormir",
+    "parler de moi", "partir en vacances", "acheter des choses inutiles", "me laver",
+    "utiliser les transports en commun", "me laver les cheveux", "manger des fruits et des légumes", "manger un hamburger",
+    "me préparer un bon petit-déjeuner", "boire du thé", "faire la cuisine", "faire la vaisselle",
+    "marcher", "naviguer sur internet", "regarder la télévision", "faire mon lit",
+    "repasser mes vêtements", "faire des selfies", "envoyer des SMS", "téléphoner",
+    "boire de l'eau", "étudier", "manger des sushis", "me coiffer",
+    "manger des sandwichs", "me promener dans un parc", "sortir en discothèque ou dans un bar", "me déplacer en voiture",
+    "lire", "fumer", "boire des boissons énergétiques", "prendre des médicaments",
+    "me déplacer à vélo", "boire des jus de fruits", "boire du café", "être assis(e)",
+    "parler avec ma mère", "faire les courses", "manger bio", "nettoyer la salle de bain",
+    "boire de l'alcool", "manger de la viande", "me brosser les dents", "manger du fromage"
+  ],
+  "lexique": {
+    "Adverbes de fréquence": [
+      {"fr": "jamais", "de": "niemals"},
+      {"fr": "rarement", "de": "selten"},
+      {"fr": "pas assez", "de": "nicht genug"},
+      {"fr": "souvent", "de": "oft"},
+      {"fr": "régulièrement", "de": "regelmäßig"},
+      {"fr": "tout le temps", "de": "die ganze Zeit"},
+      {"fr": "toujours", "de": "immer"}
+    ],
+    "Hygiène & Santé": [
+      {"fr": "me laver", "de": "mich waschen"},
+      {"fr": "me laver les cheveux", "de": "mir die Haare waschen"},
+      {"fr": "me brosser les dents", "de": "mir die Zähne putzen"},
+      {"fr": "me coiffer", "de": "mir die Haare kämmen"},
+      {"fr": "faire du sport", "de": "Sport machen"},
+      {"fr": "dormir", "de": "schlafen"},
+      {"fr": "prendre des médicaments", "de": "Medikamente nehmen"}
+    ],
+    "Alimentation": [
+      {"fr": "manger des fruits et des légumes", "de": "Obst und Gemüse essen"},
+      {"fr": "manger des sucreries", "de": "Süßigkeiten essen"},
+      {"fr": "manger un hamburger", "de": "einen Hamburger essen"},
+      {"fr": "manger des sushis", "de": "Sushi essen"},
+      {"fr": "manger bio", "de": "Bio essen"},
+      {"fr": "manger de la viande", "de": "Fleisch essen"},
+      {"fr": "manger du fromage", "de": "Käse essen"},
+      {"fr": "manger des sandwichs", "de": "Sandwiches essen"},
+      {"fr": "me préparer un bon petit-déjeuner", "de": "mir ein gutes Frühstück zubereiten"},
+      {"fr": "faire la cuisine", "de": "kochen"}
+    ],
+    "Boissons": [
+      {"fr": "boire de l'eau", "de": "Wasser trinken"},
+      {"fr": "boire du café", "de": "Kaffee trinken"},
+      {"fr": "boire du thé", "de": "Tee trinken"},
+      {"fr": "boire des sodas", "de": "Limonaden trinken"},
+      {"fr": "boire des jus de fruits", "de": "Fruchtsäfte trinken"},
+      {"fr": "boire des boissons énergétiques", "de": "Energy-Drinks trinken"},
+      {"fr": "boire de l'alcool", "de": "Alkohol trinken"}
+    ],
+    "Activités domestiques": [
+      {"fr": "ranger ma chambre", "de": "mein Zimmer aufräumen"},
+      {"fr": "faire mon lit", "de": "mein Bett machen"},
+      {"fr": "faire la vaisselle", "de": "das Geschirr spülen"},
+      {"fr": "repasser mes vêtements", "de": "meine Kleidung bügeln"},
+      {"fr": "laver mes vêtements", "de": "meine Kleidung waschen"},
+      {"fr": "nettoyer la salle de bain", "de": "das Badezimmer putzen"},
+      {"fr": "faire les courses", "de": "einkaufen gehen"}
+    ],
+    "Technologies & Médias": [
+      {"fr": "regarder des vidéos débiles sur Youtube", "de": "dumme Videos auf Youtube schauen"},
+      {"fr": "regarder des séries TV sur Internet", "de": "TV-Serien im Internet schauen"},
+      {"fr": "regarder la télévision", "de": "fernsehen"},
+      {"fr": "naviguer sur internet", "de": "im Internet surfen"},
+      {"fr": "regarder la vie de mes amis sur Facebook", "de": "das Leben meiner Freunde auf Facebook anschauen"},
+      {"fr": "faire des selfies", "de": "Selfies machen"},
+      {"fr": "envoyer des SMS", "de": "SMS schicken"},
+      {"fr": "téléphoner", "de": "telefonieren"}
+    ],
+    "Transport & Déplacements": [
+      {"fr": "utiliser les transports en commun", "de": "öffentliche Verkehrsmittel benutzen"},
+      {"fr": "me déplacer en voiture", "de": "mit dem Auto fahren"},
+      {"fr": "me déplacer à vélo", "de": "mit dem Fahrrad fahren"},
+      {"fr": "marcher", "de": "zu Fuß gehen"}
+    ],
+    "Loisirs & Social": [
+      {"fr": "lire", "de": "lesen"},
+      {"fr": "étudier", "de": "lernen"},
+      {"fr": "me promener dans un parc", "de": "in einem Park spazieren gehen"},
+      {"fr": "sortir en discothèque ou dans un bar", "de": "in die Disco oder in eine Bar gehen"},
+      {"fr": "partir en vacances", "de": "in den Urlaub fahren"},
+      {"fr": "parler avec ma mère", "de": "mit meiner Mutter sprechen"},
+      {"fr": "parler de moi", "de": "über mich sprechen"}
+    ],
+    "Mauvaises habitudes": [
+      {"fr": "fumer", "de": "rauchen"},
+      {"fr": "arriver en retard", "de": "zu spät kommen"},
+      {"fr": "acheter des choses inutiles", "de": "unnötige Sachen kaufen"},
+      {"fr": "lire la presse people", "de": "Klatschzeitschriften lesen"},
+      {"fr": "être assis(e)", "de": "sitzen"}
+    ]
+  }
+}

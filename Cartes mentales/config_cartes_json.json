@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "titre_general": "Cartes mentales de conversation",
+    "sous_titre": "Tandem français-allemand",
+    "version": "2.0",
+    "auteur": "Équipe pédagogique",
+    "description": "Collection de cartes mentales interactives pour l'apprentissage du français en tandem"
+  },
+  "cartes_disponibles": [
+    {
+      "fichier": "temps-libre.json",
+      "actif": true,
+      "ordre": 1
+    },
+    {
+      "fichier": "ma-ville.json",
+      "actif": true,
+      "ordre": 2
+    },
+    {
+      "fichier": "mes-vacances.json",
+      "actif": true,
+      "ordre": 3
+    },
+    {
+      "fichier": "mes-habitudes.json",
+      "actif": true,
+      "ordre": 4
+    },
+    {
+      "fichier": "repas-famille.json",
+      "actif": true,
+      "ordre": 5
+    },
+    {
+      "fichier": "travail-ideal.json",
+      "actif": true,
+      "ordre": 6
+    },
+    {
+      "fichier": "la-sante.json",
+      "actif": true,
+      "ordre": 7
+    },
+    {
+      "fichier": "delinquance-jeunes.json",
+      "actif": true,
+      "ordre": 8
+    },
+    {
+      "fichier": "medias-manipulation.json",
+      "actif": true,
+      "ordre": 9
+    },
+    {
+      "fichier": "aimer-pour-la-vie.json",
+      "actif": true,
+      "ordre": 10
+    }
+  ],
+  "parametres": {
+    "duree_timer_defaut": 180,
+    "langue_interface": "fr",
+    "mode_debug": false,
+    "raccourcis_clavier": true
+  }
+}

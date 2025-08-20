@@ -1,0 +1,87 @@
+{
+  "id": "temps-libre",
+  "nom": "Le temps libre",
+  "description": "Parler de ses loisirs, sports et activités",
+  "niveau": ["A1", "A2", "B1"],
+  "icone": "🎯",
+  "couleur": "#ff6b6b",
+  "branches": [
+    "Mes sports favoris",
+    "Mes loisirs préférés", 
+    "Ce que je n'aime pas faire",
+    "Comment j'organise mon temps libre",
+    "Les activités coûteuses",
+    "Les activités gratuites"
+  ],
+  "mots": [
+    "Le football", "Le tennis", "La natation", "Le vélo", "La course à pied",
+    "Le basket", "La gymnastique", "Le ski", "La lecture", "Le cinéma",
+    "La musique", "La télévision", "Les jeux vidéo", "La cuisine", "Le jardinage",
+    "La peinture", "La photographie", "La danse", "Le théâtre", "Les voyages",
+    "La randonnée", "Le bricolage", "La musculation", "Le yoga", "Les sorties",
+    "Les amis", "La famille", "L'ennui", "Le stress", "La détente",
+    "L'argent", "Le planning", "Les vacances", "Le week-end", "Internet",
+    "Les réseaux sociaux", "Les concerts", "Les matchs", "Les compétitions", "L'entraînement",
+    "La paresse", "L'effort", "La motivation", "Le repos", "L'équipe",
+    "La solitude", "L'aventure", "La routine", "La passion"
+  ],
+  "lexique": {
+    "Sports & Activités physiques": [
+      {"fr": "Le football", "de": "der Fußball"},
+      {"fr": "Le tennis", "de": "das Tennis"},
+      {"fr": "La natation", "de": "das Schwimmen"},
+      {"fr": "Le vélo", "de": "das Fahrrad"},
+      {"fr": "La course à pied", "de": "das Laufen"},
+      {"fr": "Le basket", "de": "der Basketball"},
+      {"fr": "La gymnastique", "de": "die Gymnastik"},
+      {"fr": "Le ski", "de": "das Skifahren"},
+      {"fr": "La randonnée", "de": "das Wandern"},
+      {"fr": "La musculation", "de": "das Krafttraining"},
+      {"fr": "Le yoga", "de": "das Yoga"},
+      {"fr": "Les matchs", "de": "die Spiele"},
+      {"fr": "Les compétitions", "de": "die Wettkämpfe"},
+      {"fr": "L'entraînement", "de": "das Training"},
+      {"fr": "L'équipe", "de": "die Mannschaft"},
+      {"fr": "L'effort", "de": "die Anstrengung"},
+      {"fr": "La motivation", "de": "die Motivation"}
+    ],
+    "Loisirs & Culture": [
+      {"fr": "La lecture", "de": "das Lesen"},
+      {"fr": "Le cinéma", "de": "das Kino"},
+      {"fr": "La musique", "de": "die Musik"},
+      {"fr": "La télévision", "de": "das Fernsehen"},
+      {"fr": "Les jeux vidéo", "de": "die Videospiele"},
+      {"fr": "La cuisine", "de": "das Kochen"},
+      {"fr": "Le jardinage", "de": "die Gartenarbeit"},
+      {"fr": "La peinture", "de": "das Malen"},
+      {"fr": "La photographie", "de": "die Fotografie"},
+      {"fr": "La danse", "de": "das Tanzen"},
+      {"fr": "Le théâtre", "de": "das Theater"},
+      {"fr": "Les voyages", "de": "das Reisen"},
+      {"fr": "Le bricolage", "de": "das Basteln"},
+      {"fr": "Les sorties", "de": "die Ausgänge"},
+      {"fr": "Les concerts", "de": "die Konzerte"},
+      {"fr": "Internet", "de": "das Internet"},
+      {"fr": "Les réseaux sociaux", "de": "die sozialen Netzwerke"}
+    ],
+    "Organisation & Temps": [
+      {"fr": "Le planning", "de": "die Planung"},
+      {"fr": "Les vacances", "de": "die Ferien"},
+      {"fr": "Le week-end", "de": "das Wochenende"},
+      {"fr": "Le repos", "de": "die Ruhe"},
+      {"fr": "La détente", "de": "die Entspannung"},
+      {"fr": "La routine", "de": "die Routine"},
+      {"fr": "L'aventure", "de": "das Abenteuer"},
+      {"fr": "La passion", "de": "die Leidenschaft"}
+    ],
+    "Sentiments & Relations": [
+      {"fr": "Les amis", "de": "die Freunde"},
+      {"fr": "La famille", "de": "die Familie"},
+      {"fr": "L'ennui", "de": "die Langeweile"},
+      {"fr": "Le stress", "de": "der Stress"},
+      {"fr": "L'argent", "de": "das Geld"},
+      {"fr": "La paresse", "de": "die Faulheit"},
+      {"fr": "La solitude", "de": "die Einsamkeit"}
+    ]
+  }
+}
