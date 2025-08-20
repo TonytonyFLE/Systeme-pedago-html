@@ -1,0 +1,77 @@
+{
+  "id": "medias-manipulation",
+  "nom": "Les médias nous manipulent !",
+  "description": "Débattre de l'influence et de la manipulation des médias",
+  "niveau": ["B1", "B2", "C1"],
+  "icone": "📺",
+  "couleur": "#f77f00",
+  "branches": [
+    "De quelles manières ?",
+    "Quels médias sont dangereux ?",
+    "Pourquoi ?",
+    "Comment se protéger ?",
+    "Mes expériences personnelles",
+    "Les conséquences sur la société"
+  ],
+  "mots": [
+    "L'information", "Les images", "Les journalistes",
+    "La politique", "Le sport", "La presse people",
+    "La publicité", "Internet", "La mondialisation",
+    "La presse en ligne", "Trier", "La télé-réalité",
+    "Consommer", "La culture de masse", "Mentir",
+    "La bêtise", "La radio", "Les clichés",
+    "La conspiration", "Juger", "La violence",
+    "La télévision", "La hiérarchisation des infos", "Les faits-divers",
+    "L'argent", "L'actualité internationale", "Le sexe",
+    "L'esprit critique", "Choquer", "La vulgarité",
+    "Le pouvoir", "La une", "Les caricatures",
+    "Le terrorisme", "La liberté d'expression"
+  ],
+  "lexique": {
+    "Types de médias": [
+      {"fr": "La télévision", "de": "das Fernsehen"},
+      {"fr": "La radio", "de": "das Radio"},
+      {"fr": "La presse en ligne", "de": "die Online-Presse"},
+      {"fr": "Internet", "de": "das Internet"},
+      {"fr": "La presse people", "de": "die Boulevardpresse"},
+      {"fr": "Les journalistes", "de": "die Journalisten"},
+      {"fr": "La une", "de": "die Titelseite"}
+    ],
+    "Techniques de manipulation": [
+      {"fr": "Les images", "de": "die Bilder"},
+      {"fr": "La hiérarchisation des infos", "de": "die Hierarchisierung der Informationen"},
+      {"fr": "Mentir", "de": "lügen"},
+      {"fr": "Choquer", "de": "schockieren"},
+      {"fr": "Les clichés", "de": "die Klischees"},
+      {"fr": "Les caricatures", "de": "die Karikaturen"},
+      {"fr": "La vulgarité", "de": "die Vulgarität"},
+      {"fr": "Juger", "de": "urteilen"}
+    ],
+    "Contenus & Sujets": [
+      {"fr": "L'information", "de": "die Information"},
+      {"fr": "La politique", "de": "die Politik"},
+      {"fr": "Le sport", "de": "der Sport"},
+      {"fr": "La télé-réalité", "de": "das Reality-TV"},
+      {"fr": "Les faits-divers", "de": "die Vermischten Meldungen"},
+      {"fr": "L'actualité internationale", "de": "die internationalen Nachrichten"},
+      {"fr": "Le terrorisme", "de": "der Terrorismus"},
+      {"fr": "Le sexe", "de": "der Sex"},
+      {"fr": "La violence", "de": "die Gewalt"}
+    ],
+    "Enjeux économiques & sociaux": [
+      {"fr": "L'argent", "de": "das Geld"},
+      {"fr": "Le pouvoir", "de": "die Macht"},
+      {"fr": "La publicité", "de": "die Werbung"},
+      {"fr": "Consommer", "de": "konsumieren"},
+      {"fr": "La mondialisation", "de": "die Globalisierung"},
+      {"fr": "La culture de masse", "de": "die Massenkultur"}
+    ],
+    "Défense & Esprit critique": [
+      {"fr": "L'esprit critique", "de": "der kritische Geist"},
+      {"fr": "Trier", "de": "sortieren"},
+      {"fr": "La liberté d'expression", "de": "die Meinungsfreiheit"},
+      {"fr": "La conspiration", "de": "die Verschwörung"},
+      {"fr": "La bêtise", "de": "die Dummheit"}
+    ]
+  }
+}

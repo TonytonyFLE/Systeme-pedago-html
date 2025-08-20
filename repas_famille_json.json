@@ -1,0 +1,97 @@
+{
+  "id": "repas-famille",
+  "nom": "Les repas de famille",
+  "description": "Parler des réunions familiales et des sujets de conversation",
+  "niveau": ["A2", "B1", "B2"],
+  "icone": "🍽️",
+  "couleur": "#f4a261",
+  "branches": [
+    "Qui et quand ?",
+    "Qu'est-ce que je mange ?",
+    "Qu'est-ce qu'on fait ?",
+    "De quoi on parle ?",
+    "Ce que j'en pense ?",
+    "Qu'est-ce qu'on boit ?"
+  ],
+  "mots": [
+    "L'ennui", "Le confit", "Le cousin germain",
+    "La spécialité culinaire de ma maman", "La femme au foyer", "L'enterrement",
+    "La joie", "Les études", "Les projets",
+    "Les incompréhensions", "La belle-famille", "Le gendre",
+    "Ma ville natale", "Le mariage", "L'anniversaire",
+    "La liberté", "La blague", "Le divorce",
+    "Le parrain", "Le baptême", "Rassurant",
+    "La nièce", "Le gluten", "La maladie",
+    "Le parent éloigné", "La vie intime", "Les liens biologiques",
+    "Le travail", "La crise économique", "L'amour",
+    "La politique", "Le concubinage", "Mes amis d'enfance",
+    "Raté", "Gras", "Regarder la télévision",
+    "Le jugement", "L'adolescent", "Les jeux de société",
+    "La confiance", "L'arrière-grand-mère", "L'alcool",
+    "Vieux", "L'intolérance", "Les enfants qui crient",
+    "Végétarien", "La religion"
+  ],
+  "lexique": {
+    "Famille proche": [
+      {"fr": "La belle-famille", "de": "die Schwiegereltern"},
+      {"fr": "Le gendre", "de": "der Schwiegersohn"},
+      {"fr": "Le parrain", "de": "der Pate"},
+      {"fr": "La nièce", "de": "die Nichte"},
+      {"fr": "Le cousin germain", "de": "der Cousin ersten Grades"},
+      {"fr": "L'arrière-grand-mère", "de": "die Urgroßmutter"},
+      {"fr": "Le parent éloigné", "de": "der entfernte Verwandte"},
+      {"fr": "Les liens biologiques", "de": "die biologischen Verwandtschaftsverhältnisse"}
+    ],
+    "Occasions & Événements": [
+      {"fr": "L'anniversaire", "de": "der Geburtstag"},
+      {"fr": "Le mariage", "de": "die Hochzeit"},
+      {"fr": "Le baptême", "de": "die Taufe"},
+      {"fr": "L'enterrement", "de": "die Beerdigung"},
+      {"fr": "Le divorce", "de": "die Scheidung"},
+      {"fr": "Le concubinage", "de": "die Lebensgemeinschaft"}
+    ],
+    "Nourriture & Boissons": [
+      {"fr": "La spécialité culinaire de ma maman", "de": "die kulinarische Spezialität meiner Mama"},
+      {"fr": "Le confit", "de": "das Confit"},
+      {"fr": "Le gluten", "de": "das Gluten"},
+      {"fr": "L'alcool", "de": "der Alkohol"},
+      {"fr": "Végétarien", "de": "vegetarisch"},
+      {"fr": "Gras", "de": "fettig"},
+      {"fr": "Raté", "de": "misslungen"}
+    ],
+    "Sujets de conversation": [
+      {"fr": "Les études", "de": "das Studium"},
+      {"fr": "Les projets", "de": "die Projekte"},
+      {"fr": "Le travail", "de": "die Arbeit"},
+      {"fr": "La politique", "de": "die Politik"},
+      {"fr": "La religion", "de": "die Religion"},
+      {"fr": "La crise économique", "de": "die Wirtschaftskrise"},
+      {"fr": "Ma ville natale", "de": "meine Heimatstadt"},
+      {"fr": "Mes amis d'enfance", "de": "meine Kindheitsfreunde"},
+      {"fr": "La vie intime", "de": "das Intimleben"},
+      {"fr": "La femme au foyer", "de": "die Hausfrau"}
+    ],
+    "Sentiments & Émotions": [
+      {"fr": "L'ennui", "de": "die Langeweile"},
+      {"fr": "La joie", "de": "die Freude"},
+      {"fr": "Les incompréhensions", "de": "die Missverständnisse"},
+      {"fr": "La liberté", "de": "die Freiheit"},
+      {"fr": "L'amour", "de": "die Liebe"},
+      {"fr": "Le jugement", "de": "das Urteil"},
+      {"fr": "La confiance", "de": "das Vertrauen"},
+      {"fr": "L'intolérance", "de": "die Intoleranz"},
+      {"fr": "Rassurant", "de": "beruhigend"}
+    ],
+    "Activités": [
+      {"fr": "Les jeux de société", "de": "die Gesellschaftsspiele"},
+      {"fr": "Regarder la télévision", "de": "fernsehen"},
+      {"fr": "La blague", "de": "der Witz"}
+    ],
+    "Problèmes & Difficultés": [
+      {"fr": "La maladie", "de": "die Krankheit"},
+      {"fr": "L'adolescent", "de": "der Jugendliche"},
+      {"fr": "Les enfants qui crient", "de": "die schreienden Kinder"},
+      {"fr": "Vieux", "de": "alt"}
+    ]
+  }
+}

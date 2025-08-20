@@ -1,0 +1,82 @@
+{
+  "id": "aimer-pour-la-vie",
+  "nom": "Aimer pour la vie ?",
+  "description": "Débattre de l'amour durable et des relations de couple",
+  "niveau": ["B1", "B2", "C1"],
+  "icone": "💕",
+  "couleur": "#ff6b9d",
+  "branches": [
+    "La recette de l'amour qui dure",
+    "Les avantages d'une relation durable",
+    "Les inconvénients d'une relation durable",
+    "Ce qui met l'amour en danger",
+    "Mes expériences",
+    "Ma philosophie de l'amour"
+  ],
+  "mots": [
+    "La fidélité", "Les différences", "La religion",
+    "Les enfants", "Inutile", "Le désir",
+    "L'argent", "La tradition", "La différence d'âge",
+    "Le quotidien", "Vivre des expériences", "L'écoute",
+    "La pression sociale", "La nouveauté", "La tolérance",
+    "L'ennui", "Les disputes", "La place de l'homme et de la femme",
+    "Les points communs", "Accepter", "Connaître",
+    "Le mariage", "La beauté", "Le travail",
+    "Les tâches ménagères", "La sexualité", "La liberté",
+    "Les objectifs communs", "La nécessité", "La société",
+    "Le respect", "La promesse", "Divorcer",
+    "Le coup de foudre", "L'habitude", "L'espoir",
+    "La volonté", "Les crédits"
+  ],
+  "lexique": {
+    "Fondements du couple": [
+      {"fr": "La fidélité", "de": "die Treue"},
+      {"fr": "Le respect", "de": "der Respekt"},
+      {"fr": "L'écoute", "de": "das Zuhören"},
+      {"fr": "La tolérance", "de": "die Toleranz"},
+      {"fr": "Les points communs", "de": "die Gemeinsamkeiten"},
+      {"fr": "Les objectifs communs", "de": "die gemeinsamen Ziele"},
+      {"fr": "La promesse", "de": "das Versprechen"},
+      {"fr": "La volonté", "de": "der Wille"},
+      {"fr": "Accepter", "de": "akzeptieren"},
+      {"fr": "Connaître", "de": "kennen"}
+    ],
+    "Défis & Difficultés": [
+      {"fr": "Les différences", "de": "die Unterschiede"},
+      {"fr": "Les disputes", "de": "die Streitigkeiten"},
+      {"fr": "L'ennui", "de": "die Langeweile"},
+      {"fr": "Le quotidien", "de": "der Alltag"},
+      {"fr": "L'habitude", "de": "die Gewohnheit"},
+      {"fr": "La différence d'âge", "de": "der Altersunterschied"},
+      {"fr": "Les tâches ménagères", "de": "die Hausarbeit"},
+      {"fr": "Les crédits", "de": "die Kredite"},
+      {"fr": "La pression sociale", "de": "der gesellschaftliche Druck"}
+    ],
+    "Aspects de la relation": [
+      {"fr": "Le désir", "de": "das Verlangen"},
+      {"fr": "La sexualité", "de": "die Sexualität"},
+      {"fr": "La beauté", "de": "die Schönheit"},
+      {"fr": "Le coup de foudre", "de": "die Liebe auf den ersten Blick"},
+      {"fr": "L'espoir", "de": "die Hoffnung"},
+      {"fr": "La nécessité", "de": "die Notwendigkeit"},
+      {"fr": "Inutile", "de": "nutzlos"},
+      {"fr": "La nouveauté", "de": "die Neuheit"},
+      {"fr": "Vivre des expériences", "de": "Erfahrungen machen"}
+    ],
+    "Cadre social & familial": [
+      {"fr": "Le mariage", "de": "die Ehe"},
+      {"fr": "Les enfants", "de": "die Kinder"},
+      {"fr": "La famille", "de": "die Familie"},
+      {"fr": "La société", "de": "die Gesellschaft"},
+      {"fr": "La tradition", "de": "die Tradition"},
+      {"fr": "La religion", "de": "die Religion"},
+      {"fr": "La place de l'homme et de la femme", "de": "die Rolle von Mann und Frau"},
+      {"fr": "Divorcer", "de": "sich scheiden lassen"}
+    ],
+    "Ressources & Contraintes": [
+      {"fr": "L'argent", "de": "das Geld"},
+      {"fr": "Le travail", "de": "die Arbeit"},
+      {"fr": "La liberté", "de": "die Freiheit"}
+    ]
+  }
+}

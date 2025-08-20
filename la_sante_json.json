@@ -1,0 +1,85 @@
+{
+  "id": "la-sante",
+  "nom": "La santé",
+  "description": "Parler de santé, de maladies et du système de soins",
+  "niveau": ["A2", "B1", "B2"],
+  "icone": "🏥",
+  "couleur": "#2a9d8f",
+  "branches": [
+    "Les problèmes de santé que je peux avoir",
+    "Le système de santé de mon pays",
+    "Les conséquences sur ma vie si je suis malade",
+    "Comment je me soigne ?",
+    "Comment je fais pour rester en bonne santé ?",
+    "Mes expériences médicales"
+  ],
+  "mots": [
+    "L'alimentation", "La chirurgie esthétique", "Les symptômes",
+    "Le sport", "Le stress", "Les prix des visites et des médicaments",
+    "L'état des hôpitaux", "La dépression", "L'homéopathie",
+    "Perdre son travail", "L'allergie", "Inégalitaire",
+    "Les médecines parallèles", "Le moral", "Être seul",
+    "L'asthme", "Les loisirs", "L'écoute",
+    "Le lieu de vie", "L'opération chirurgicale", "Attendre",
+    "Les maladies cardiaques", "Souffrir", "Le remboursement",
+    "La visite médicale", "Les drogues", "L'insomnie",
+    "L'automédication", "Privatiser", "Attraper la grippe",
+    "L'obésité", "Les sites internet médicaux", "Psychologue",
+    "L'ordonnance", "La vieillesse", "Les épidémies",
+    "Sédentaire", "La compétence des médecins", "Les cliniques privées",
+    "Le cancer", "Les plantes"
+  ],
+  "lexique": {
+    "Maladies & Problèmes de santé": [
+      {"fr": "Le cancer", "de": "der Krebs"},
+      {"fr": "Les maladies cardiaques", "de": "die Herzkrankheiten"},
+      {"fr": "L'asthme", "de": "das Asthma"},
+      {"fr": "L'allergie", "de": "die Allergie"},
+      {"fr": "La dépression", "de": "die Depression"},
+      {"fr": "L'obésité", "de": "die Fettleibigkeit"},
+      {"fr": "L'insomnie", "de": "die Schlaflosigkeit"},
+      {"fr": "Les épidémies", "de": "die Epidemien"},
+      {"fr": "Les symptômes", "de": "die Symptome"},
+      {"fr": "Attraper la grippe", "de": "die Grippe bekommen"},
+      {"fr": "La vieillesse", "de": "das Alter"}
+    ],
+    "Soins & Traitements": [
+      {"fr": "La visite médicale", "de": "der Arztbesuch"},
+      {"fr": "L'ordonnance", "de": "das Rezept"},
+      {"fr": "Les prix des visites et des médicaments", "de": "die Preise für Arztbesuche und Medikamente"},
+      {"fr": "Le remboursement", "de": "die Erstattung"},
+      {"fr": "L'opération chirurgicale", "de": "die Operation"},
+      {"fr": "La chirurgie esthétique", "de": "die Schönheitschirurgie"},
+      {"fr": "L'automédication", "de": "die Selbstmedikation"},
+      {"fr": "L'homéopathie", "de": "die Homöopathie"},
+      {"fr": "Les médecines parallèles", "de": "die Alternativmedizin"},
+      {"fr": "Les plantes", "de": "die Pflanzen"},
+      {"fr": "Les drogues", "de": "die Drogen"}
+    ],
+    "Système de santé": [
+      {"fr": "L'état des hôpitaux", "de": "der Zustand der Krankenhäuser"},
+      {"fr": "Les cliniques privées", "de": "die Privatkliniken"},
+      {"fr": "La compétence des médecins", "de": "die Kompetenz der Ärzte"},
+      {"fr": "Privatiser", "de": "privatisieren"},
+      {"fr": "Inégalitaire", "de": "ungleich"},
+      {"fr": "Les sites internet médicaux", "de": "die medizinischen Internetseiten"}
+    ],
+    "Prévention & Bien-être": [
+      {"fr": "L'alimentation", "de": "die Ernährung"},
+      {"fr": "Le sport", "de": "der Sport"},
+      {"fr": "Les loisirs", "de": "die Freizeit"},
+      {"fr": "Le lieu de vie", "de": "der Wohnort"},
+      {"fr": "Sédentaire", "de": "sitzend"},
+      {"fr": "Le stress", "de": "der Stress"},
+      {"fr": "Le moral", "de": "die Moral"}
+    ],
+    "Conséquences & Impact": [
+      {"fr": "Perdre son travail", "de": "seine Arbeit verlieren"},
+      {"fr": "Être seul", "de": "allein sein"},
+      {"fr": "Souffrir", "de": "leiden"},
+      {"fr": "Attendre", "de": "warten"},
+      {"fr": "L'écoute", "de": "das Zuhören"},
+      {"fr": "Psychologue", "de": "der Psychologe"}
+    ]
+  }
+}

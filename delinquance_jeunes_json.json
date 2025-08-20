@@ -1,0 +1,88 @@
+{
+  "id": "delinquance-jeunes",
+  "nom": "La délinquance chez les jeunes",
+  "description": "Débattre des causes et conséquences de la délinquance juvénile",
+  "niveau": ["B1", "B2", "C1"],
+  "icone": "⚖️",
+  "couleur": "#d62828",
+  "branches": [
+    "Les causes",
+    "L'influence des médias",
+    "Les conséquences",
+    "Comment lutter contre ?",
+    "Des exemples",
+    "Mes expériences"
+  ],
+  "mots": [
+    "Le chômage", "La drogue", "Les diplômes",
+    "Les ghettos", "Les valeurs", "La religion",
+    "La prison", "L'école", "Le racisme",
+    "La médiatisation", "Les jeux vidéo", "Le rap",
+    "Les préjugés", "L'agression", "Les émeutes",
+    "La peur", "Les graffitis", "Le football",
+    "Le vol", "Brûler des voitures", "L'intégration",
+    "L'autorité", "La maison de correction", "Mineur",
+    "L'absence de repères", "L'éducation civique", "L'immigration",
+    "La violence à la TV", "La prévention", "Le terrorisme",
+    "Les armes à feu", "La répression policière", "Le conflit de génération",
+    "Laxiste", "Les travaux d'intérêt général", "Les peines de prison",
+    "La pauvreté", "Internet", "Les parents",
+    "Les insultes", "Le meurtre", "Pas d'avenir"
+  ],
+  "lexique": {
+    "Causes socio-économiques": [
+      {"fr": "Le chômage", "de": "die Arbeitslosigkeit"},
+      {"fr": "La pauvreté", "de": "die Armut"},
+      {"fr": "Les ghettos", "de": "die Ghettos"},
+      {"fr": "L'absence de repères", "de": "das Fehlen von Orientierungspunkten"},
+      {"fr": "L'immigration", "de": "die Einwanderung"},
+      {"fr": "L'intégration", "de": "die Integration"},
+      {"fr": "Le conflit de génération", "de": "der Generationskonflikt"},
+      {"fr": "Pas d'avenir", "de": "keine Zukunft"}
+    ],
+    "Influences & Médias": [
+      {"fr": "Les jeux vidéo", "de": "die Videospiele"},
+      {"fr": "Le rap", "de": "der Rap"},
+      {"fr": "La violence à la TV", "de": "die Gewalt im Fernsehen"},
+      {"fr": "Internet", "de": "das Internet"},
+      {"fr": "La médiatisation", "de": "die Mediendarstellung"},
+      {"fr": "Les valeurs", "de": "die Werte"},
+      {"fr": "La religion", "de": "die Religion"}
+    ],
+    "Types de délinquance": [
+      {"fr": "Le vol", "de": "der Diebstahl"},
+      {"fr": "L'agression", "de": "der Angriff"},
+      {"fr": "Les graffitis", "de": "die Graffiti"},
+      {"fr": "Brûler des voitures", "de": "Autos anzünden"},
+      {"fr": "Les émeutes", "de": "die Unruhen"},
+      {"fr": "Les armes à feu", "de": "die Schusswaffen"},
+      {"fr": "Les insultes", "de": "die Beleidigungen"},
+      {"fr": "Le meurtre", "de": "der Mord"},
+      {"fr": "Le terrorisme", "de": "der Terrorismus"},
+      {"fr": "La drogue", "de": "die Droge"}
+    ],
+    "Système judiciaire & Sanctions": [
+      {"fr": "La prison", "de": "das Gefängnis"},
+      {"fr": "Les peines de prison", "de": "die Gefängnisstrafen"},
+      {"fr": "La maison de correction", "de": "die Besserungsanstalt"},
+      {"fr": "Les travaux d'intérêt général", "de": "die gemeinnützige Arbeit"},
+      {"fr": "Mineur", "de": "minderjährig"},
+      {"fr": "La répression policière", "de": "die polizeiliche Repression"},
+      {"fr": "Laxiste", "de": "nachsichtig"}
+    ],
+    "Prévention & Solutions": [
+      {"fr": "L'éducation civique", "de": "die Bürgerkunde"},
+      {"fr": "La prévention", "de": "die Prävention"},
+      {"fr": "L'école", "de": "die Schule"},
+      {"fr": "Les diplômes", "de": "die Abschlüsse"},
+      {"fr": "Les parents", "de": "die Eltern"},
+      {"fr": "L'autorité", "de": "die Autorität"},
+      {"fr": "Le football", "de": "der Fußball"}
+    ],
+    "Conséquences & Impact": [
+      {"fr": "La peur", "de": "die Angst"},
+      {"fr": "Les préjugés", "de": "die Vorurteile"},
+      {"fr": "Le racisme", "de": "der Rassismus"}
+    ]
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "id": "travail-ideal",
+  "nom": "Le travail idéal",
+  "description": "Parler de ses aspirations professionnelles et du monde du travail",
+  "niveau": ["A2", "B1", "B2"],
+  "icone": "💼",
+  "couleur": "#e76f51",
+  "branches": [
+    "Les priorités pour moi",
+    "Comment mettre toutes les chances de mon côté ?",
+    "Les métiers que je ne voudrais pas exercer",
+    "Les problèmes à éviter",
+    "Mes qualités professionnelles",
+    "Mes défauts professionnels"
+  ],
+  "mots": [
+    "L'épanouissement professionnel", "Répétitif", "Épuisant", "Des responsabilités",
+    "La carrière", "La lettre de motivation", "Métro boulot dodo", "L'entretien d'embauche",
+    "Caissière de supermarché", "La vie de famille", "La crise", "Le harcèlement",
+    "L'esprit d'entreprise", "Stimulant", "La hiérarchie", "Le salaire",
+    "La formation", "Travailler à la chaîne", "La routine", "La faillite",
+    "Obtenir une promotion", "Le voyage d'affaires", "Les primes", "Le burn-out",
+    "Le stress", "Le congé", "Les heures supplémentaires", "Les diplômes",
+    "Les transports publics", "Le cadre", "Le travail manuel", "Faire de l'intérim",
+    "Intellectuel", "L'immigration", "Le CV", "Une grande entreprise",
+    "Le licenciement"
+  ],
+  "lexique": {
+    "Carrière & Développement": [
+      {"fr": "L'épanouissement professionnel", "de": "die berufliche Erfüllung"},
+      {"fr": "La carrière", "de": "die Laufbahn"},
+      {"fr": "Obtenir une promotion", "de": "eine Beförderung bekommen"},
+      {"fr": "La formation", "de": "die Ausbildung"},
+      {"fr": "Les diplômes", "de": "die Abschlüsse"},
+      {"fr": "L'esprit d'entreprise", "de": "der Unternehmergeist"},
+      {"fr": "Le CV", "de": "der Lebenslauf"},
+      {"fr": "La lettre de motivation", "de": "das Motivationsschreiben"},
+      {"fr": "L'entretien d'embauche", "de": "das Vorstellungsgespräch"}
+    ],
+    "Conditions de travail": [
+      {"fr": "Le salaire", "de": "das Gehalt"},
+      {"fr": "Les primes", "de": "die Prämien"},
+      {"fr": "Les heures supplémentaires", "de": "die Überstunden"},
+      {"fr": "Le congé", "de": "der Urlaub"},
+      {"fr": "La hiérarchie", "de": "die Hierarchie"},
+      {"fr": "Le cadre", "de": "die Führungskraft"},
+      {"fr": "Des responsabilités", "de": "Verantwortung"},
+      {"fr": "Les transports publics", "de": "die öffentlichen Verkehrsmittel"}
+    ],
+    "Types de travail": [
+      {"fr": "Le travail manuel", "de": "die körperliche Arbeit"},
+      {"fr": "Intellectuel", "de": "geistig"},
+      {"fr": "Travailler à la chaîne", "de": "am Fließband arbeiten"},
+      {"fr": "Faire de l'intérim", "de": "Zeitarbeit machen"},
+      {"fr": "Caissière de supermarché", "de": "Supermarktkassiererin"},
+      {"fr": "Le voyage d'affaires", "de": "die Geschäftsreise"}
+    ],
+    "Qualités & Défauts": [
+      {"fr": "Stimulant", "de": "anregend"},
+      {"fr": "Épuisant", "de": "erschöpfend"},
+      {"fr": "Répétitif", "de": "sich wiederholend"},
+      {"fr": "La routine", "de": "die Routine"},
+      {"fr": "Métro boulot dodo", "de": "der Alltagstrott"}
+    ],
+    "Problèmes professionnels": [
+      {"fr": "Le stress", "de": "der Stress"},
+      {"fr": "Le burn-out", "de": "das Burnout"},
+      {"fr": "Le harcèlement", "de": "die Belästigung"},
+      {"fr": "La crise", "de": "die Krise"},
+      {"fr": "La faillite", "de": "die Pleite"},
+      {"fr": "Le licenciement", "de": "die Kündigung"}
+    ],
+    "Entreprise & Structure": [
+      {"fr": "Une grande entreprise", "de": "ein Großunternehmen"},
+      {"fr": "L'immigration", "de": "die Einwanderung"},
+      {"fr": "La vie de famille", "de": "das Familienleben"}
+    ]
+  }
+}

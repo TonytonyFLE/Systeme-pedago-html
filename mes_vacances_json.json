@@ -1,0 +1,90 @@
+{
+  "id": "mes-vacances",
+  "nom": "Mes vacances",
+  "description": "Parler de voyages et de vacances",
+  "niveau": ["A1", "A2", "B1"],
+  "icone": "✈️",
+  "couleur": "#667eea",
+  "branches": [
+    "Qu'est-ce que j'aime faire ?",
+    "Avec qui j'aime partir ?",
+    "Où j'aime partir ?",
+    "Comment j'aime voyager ?",
+    "Quand je préfère partir ?",
+    "Qu'est-ce qu'on peut faire ?"
+  ],
+  "mots": [
+    "en automne", "dans un pays étranger", "à la campagne", "à la mer",
+    "dans une grande ville", "magnifique", "faire du sport", "visiter des monuments",
+    "faire des belles photos", "me reposer", "la culture", "calme",
+    "faire un sport extrême", "les habitants", "il fait froid", "nager",
+    "au Sud", "il fait beau", "voir la nature", "mes amis",
+    "en voiture", "à la montagne", "en hiver", "ma famille",
+    "des inconnus", "en bus", "lire", "en avion",
+    "à pied", "en été", "au printemps", "en couple",
+    "faire la fête", "faire du shopping", "faire du ski", "aller à la plage",
+    "visiter des musées", "se relaxer", "rencontrer des gens", "en train",
+    "le soleil", "randonner", "il fait chaud", "authentique",
+    "les paysages", "bronzer", "au Nord", "manger la cuisine locale"
+  ],
+  "lexique": {
+    "Destinations": [
+      {"fr": "à la mer", "de": "am Meer"},
+      {"fr": "à la montagne", "de": "in den Bergen"},
+      {"fr": "à la campagne", "de": "auf dem Land"},
+      {"fr": "dans un pays étranger", "de": "in einem fremden Land"},
+      {"fr": "dans une grande ville", "de": "in einer Großstadt"},
+      {"fr": "au Sud", "de": "im Süden"},
+      {"fr": "au Nord", "de": "im Norden"}
+    ],
+    "Activités de vacances": [
+      {"fr": "faire du sport", "de": "Sport machen"},
+      {"fr": "visiter des monuments", "de": "Denkmäler besuchen"},
+      {"fr": "me reposer", "de": "mich ausruhen"},
+      {"fr": "nager", "de": "schwimmen"},
+      {"fr": "randonner", "de": "wandern"},
+      {"fr": "faire du ski", "de": "Ski fahren"},
+      {"fr": "faire la fête", "de": "feiern"},
+      {"fr": "bronzer", "de": "sich bräunen"},
+      {"fr": "faire des belles photos", "de": "schöne Fotos machen"},
+      {"fr": "rencontrer des gens", "de": "Leute treffen"},
+      {"fr": "visiter des musées", "de": "Museen besuchen"},
+      {"fr": "se relaxer", "de": "sich entspannen"},
+      {"fr": "faire du shopping", "de": "einkaufen gehen"},
+      {"fr": "aller à la plage", "de": "an den Strand gehen"},
+      {"fr": "voir la nature", "de": "die Natur sehen"},
+      {"fr": "manger la cuisine locale", "de": "lokale Küche essen"}
+    ],
+    "Moyens de transport": [
+      {"fr": "en voiture", "de": "mit dem Auto"},
+      {"fr": "en train", "de": "mit dem Zug"},
+      {"fr": "en avion", "de": "mit dem Flugzeug"},
+      {"fr": "en bus", "de": "mit dem Bus"},
+      {"fr": "à pied", "de": "zu Fuß"}
+    ],
+    "Saisons & Météo": [
+      {"fr": "en été", "de": "im Sommer"},
+      {"fr": "en hiver", "de": "im Winter"},
+      {"fr": "au printemps", "de": "im Frühling"},
+      {"fr": "en automne", "de": "im Herbst"},
+      {"fr": "il fait beau", "de": "es ist schön"},
+      {"fr": "il fait chaud", "de": "es ist heiß"},
+      {"fr": "il fait froid", "de": "es ist kalt"},
+      {"fr": "le soleil", "de": "die Sonne"}
+    ],
+    "Compagnons de voyage": [
+      {"fr": "mes amis", "de": "meine Freunde"},
+      {"fr": "ma famille", "de": "meine Familie"},
+      {"fr": "en couple", "de": "zu zweit"},
+      {"fr": "des inconnus", "de": "Fremde"}
+    ],
+    "Adjectifs & Impressions": [
+      {"fr": "magnifique", "de": "wunderschön"},
+      {"fr": "calme", "de": "ruhig"},
+      {"fr": "authentique", "de": "authentisch"},
+      {"fr": "les paysages", "de": "die Landschaften"},
+      {"fr": "les habitants", "de": "die Einwohner"},
+      {"fr": "la culture", "de": "die Kultur"}
+    ]
+  }
+}
