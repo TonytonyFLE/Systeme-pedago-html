@@ -8,52 +8,52 @@
   },
   "cartes_disponibles": [
     {
-      "fichier": "temps-libre.json",
+      "fichier": "temps_libre_json.json",
       "actif": true,
       "ordre": 1
     },
     {
-      "fichier": "ma-ville.json",
+      "fichier": "ma_ville_json.json",
       "actif": true,
       "ordre": 2
     },
     {
-      "fichier": "mes-vacances.json",
+      "fichier": "mes_vacances_json.json",
       "actif": true,
       "ordre": 3
     },
     {
-      "fichier": "mes-habitudes.json",
+      "fichier": "mes_habitudes_json.json",
       "actif": true,
       "ordre": 4
     },
     {
-      "fichier": "repas-famille.json",
+      "fichier": "repas_famille_json.json",
       "actif": true,
       "ordre": 5
     },
     {
-      "fichier": "travail-ideal.json",
+      "fichier": "travail_ideal_json.json",
       "actif": true,
       "ordre": 6
     },
     {
-      "fichier": "la-sante.json",
+      "fichier": "la_sante_json.json",
       "actif": true,
       "ordre": 7
     },
     {
-      "fichier": "delinquance-jeunes.json",
+      "fichier": "delinquance_jeunes_json.json",
       "actif": true,
       "ordre": 8
     },
     {
-      "fichier": "medias-manipulation.json",
+      "fichier": "medias_manipulation_json.json",
       "actif": true,
       "ordre": 9
     },
     {
-      "fichier": "aimer-pour-la-vie.json",
+      "fichier": "aimer_pour_la_vie_json.json",
       "actif": true,
       "ordre": 10
     }
