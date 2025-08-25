@@ -648,7 +648,7 @@
         // Chargement de la configuration et des cartes
         async function loadConfig() {
             try {
-                const response = await fetch('config-cartes.json');
+                const response = await fetch('config_cartes_json.json');
                 if (!response.ok) throw new Error('Configuration non trouvée');
                 config = await response.json();
                 
