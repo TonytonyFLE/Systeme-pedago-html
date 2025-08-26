@@ -10,7 +10,7 @@ class ChapterManager {
         this.correctAnswers = 0;
         this.exerciseStates = new Map(); // Stocke l'état de chaque exercice
         this.config = {
-            baseUrl: '/Systeme-pedago-html/MaW/data/'
+            baseUrl: '/Systeme-pedago-html/MaW/data/',
             defaultChapter: 1
         };
     }
