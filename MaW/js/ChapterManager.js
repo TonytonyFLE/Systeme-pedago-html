@@ -822,27 +822,24 @@ class MathInputSystem {
         };
         
 this.conversions = {
-    // Opérateurs de base (gardez ceux-ci)
     '*': '×', '.': '·', '/': '÷', '-': '−',
     '^2': '²', '^3': '³', '^4': '⁴', '^5': '⁵',
     'pi': 'π', 'Pi': 'π', 'PI': 'π',
-    
-    // Pour l'instant, gardez les caractères Unicode pour les fractions
-    '1/2': '½',
-    '1/3': '⅓',
-    '2/3': '⅔',
-    '1/4': '¼',
-    '3/4': '¾',
-    '1/5': '⅕',
-    '2/5': '⅖',
-    '3/5': '⅗',
-    '4/5': '⅘',
-    '1/6': '⅙',
-    '5/6': '⅚',
-    '1/8': '⅛',
-    '3/8': '⅜',
-    '5/8': '⅝',
-    '7/8': '⅞'
+    '1/2': '<span class="fraction"><span class="numerator">1</span><span class="denominator">2</span></span>',
+    '1/3': '<span class="fraction"><span class="numerator">1</span><span class="denominator">3</span></span>',
+    '2/3': '<span class="fraction"><span class="numerator">2</span><span class="denominator">3</span></span>',
+    '1/4': '<span class="fraction"><span class="numerator">1</span><span class="denominator">4</span></span>',
+    '3/4': '<span class="fraction"><span class="numerator">3</span><span class="denominator">4</span></span>',
+    '1/5': '<span class="fraction"><span class="numerator">1</span><span class="denominator">5</span></span>',
+    '2/5': '<span class="fraction"><span class="numerator">2</span><span class="denominator">5</span></span>',
+    '3/5': '<span class="fraction"><span class="numerator">3</span><span class="denominator">5</span></span>',
+    '4/5': '<span class="fraction"><span class="numerator">4</span><span class="denominator">5</span></span>',
+    '1/6': '<span class="fraction"><span class="numerator">1</span><span class="denominator">6</span></span>',
+    '5/6': '<span class="fraction"><span class="numerator">5</span><span class="denominator">6</span></span>',
+    '1/8': '<span class="fraction"><span class="numerator">1</span><span class="denominator">8</span></span>',
+    '3/8': '<span class="fraction"><span class="numerator">3</span><span class="denominator">8</span></span>',
+    '5/8': '<span class="fraction"><span class="numerator">5</span><span class="denominator">8</span></span>',
+    '7/8': '<span class="fraction"><span class="numerator">7</span><span class="denominator">8</span></span>'
 };
         
         this.createPalette();
@@ -939,29 +936,28 @@ this.conversions = {
         this.palette.style.left = Math.max(10, left) + 'px';
     }
     
-    handleInput(input) {
-        let value = input.value;
-        let converted = value;
-        
-        const sortedConversions = Object.entries(this.conversions)
-            .sort(([a], [b]) => b.length - a.length);
-        
-        for (const [from, to] of sortedConversions) {
-            const regex = new RegExp(from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
-            converted = converted.replace(regex, to);
-        }
-        
-        if (converted !== value) {
-            const selectionStart = input.selectionStart;
-            input.value = converted;
-            
-            const lengthDiff = converted.length - value.length;
-            input.setSelectionRange(
-                selectionStart + lengthDiff, 
-                selectionStart + lengthDiff
-            );
-        }
+handleInput(input) {
+    let content = input.textContent || input.innerText || '';
+    let converted = content;
+    
+    const sortedConversions = Object.entries(this.conversions)
+        .sort(([a], [b]) => b.length - a.length);
+    
+    for (const [from, to] of sortedConversions) {
+        const regex = new RegExp(from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+        converted = converted.replace(regex, to);
     }
+    
+    if (converted !== content) {
+        input.innerHTML = converted;
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(input);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
+}
     
     insertSymbol(symbol) {
         if (!this.activeInput) return;
