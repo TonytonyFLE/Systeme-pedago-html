@@ -645,12 +645,5 @@ const chapterManager = new ChapterManager();
 
 // Initialisation automatique au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
-    // Configuration pour GitHub Pages ou serveur local
-    const isGitHub = window.location.hostname.includes('github.io');
-    chapterManager.configure({
-        baseUrl: isGitHub ? '/Systeme-pedago-html/MaW/data/' : './data/',
-        defaultChapter: 1
-    });
-    
     chapterManager.loadChapter();
 });
