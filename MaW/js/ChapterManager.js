@@ -405,22 +405,22 @@ class ChapterManager {
                 totalQuestions = exercise.questions.length;
                 
                 exercise.questions.forEach(question => {
-                    const userAnswer = document.getElementById(question.id).value.trim();
-                    const correctAnswer = question.answer.toString().trim();
-                    
-                    if (question.type === 'number') {
-                        const userNum = parseFloat(userAnswer);
-                        const correctNum = parseFloat(correctAnswer);
-                        if (!isNaN(userNum) && Math.abs(userNum - correctNum) < 0.001) {
-                            correctCount++;
-                        }
-                    } else {
-                        // Gestion flexible des réponses textuelles
-                        if (this.compareTextAnswers(userAnswer, correctAnswer)) {
-                            correctCount++;
-                        }
-                    }
-                });
+    const userAnswer = document.getElementById(question.id).value.trim();
+    const correctAnswer = question.answer.toString().trim();
+    
+    if (question.type === 'number') {
+        const userNum = parseFloat(userAnswer);
+        const correctNum = parseFloat(correctAnswer);
+        if (!isNaN(userNum) && Math.abs(userNum - correctNum) < 0.001) {
+            correctCount++;
+        }
+    } else {
+        // Gestion flexible des réponses textuelles
+        if (this.compareTextAnswers(userAnswer, correctAnswer)) {
+            correctCount++;
+        }
+    }
+});
                 
                 isCorrect = correctCount === totalQuestions;
                 feedback = totalQuestions === 1 ? 
