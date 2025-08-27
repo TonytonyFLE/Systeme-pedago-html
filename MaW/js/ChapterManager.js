@@ -973,17 +973,29 @@ handleInput(input) {
     }
 }
     
-    insertSymbol(symbol) {
-        if (!this.activeInput) return;
-        
-        const start = this.activeInput.selectionStart;
-        const end = this.activeInput.selectionEnd;
-        const value = this.activeInput.value;
-        
-        this.activeInput.value = value.substring(0, start) + symbol + value.substring(end);
-        this.activeInput.focus();
-        this.activeInput.setSelectionRange(start + symbol.length, start + symbol.length);
-    }
+insertSymbol(symbol) {
+    if (!this.activeInput) return;
+    
+    // Pour contenteditable, on utilise l'API Selection
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+    
+    // Supprimer le contenu sélectionné
+    range.deleteContents();
+    
+    // Créer un nœud texte avec le symbole
+    const textNode = document.createTextNode(symbol);
+    range.insertNode(textNode);
+    
+    // Positionner le curseur après le symbole inséré
+    range.setStartAfter(textNode);
+    range.setEndAfter(textNode);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    
+    // Déclencher la conversion après insertion
+    this.handleInput(this.activeInput);
+}
     
     normalizeAnswer(answer) {
         let normalized = answer.trim();
