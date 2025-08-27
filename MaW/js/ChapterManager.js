@@ -532,13 +532,13 @@ class ChapterManager {
                 
                 sortedQuestions.forEach(q => {
                     const inputType = q.type === 'number' ? 'number' : 'text';
-                    html += `<div>
-                        <label><strong>${q.label}</strong></label>
-                        html += `<div contenteditable="true" class="answer-input math-input" id="${q.id}" 
+html += `<div>
+    <label><strong>${q.label}</strong></label>
+    <div contenteditable="true" class="answer-input math-input" id="${q.id}" 
          data-placeholder="${q.placeholder || ''}" 
          data-exercise-type="${mathType}"
-         data-input-type="${inputType}"></div>`;
-                    </div>`;
+         data-input-type="${inputType}"></div>
+</div>`;
                 });
                 html += '</div>';
                 break;
@@ -546,13 +546,13 @@ class ChapterManager {
             case 'single_input':
                 const q = exercise.questions[0];
                 const inputType = q.type === 'number' ? 'number' : 'text';
-                html += `<div>
-                    <label><strong>${q.label}</strong></label>
-                    html += `<div contenteditable="true" class="answer-input math-input" id="${q.id}" 
+html += `<div>
+    <label><strong>${q.label}</strong></label>
+    <div contenteditable="true" class="answer-input math-input" id="${q.id}" 
          data-placeholder="${q.placeholder || ''}" 
          data-exercise-type="${mathType}"
-         data-input-type="${inputType}"></div>`;
-                </div>`;
+         data-input-type="${inputType}"></div>
+</div>`;
                 break;
                 
             case 'textarea':
