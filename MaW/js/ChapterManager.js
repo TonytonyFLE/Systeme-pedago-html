@@ -512,28 +512,34 @@ class ChapterManager {
      * Remet à zéro un exercice
      * @param {number} exerciseId - ID de l'exercice
      */
-    resetExercise(exerciseId) {
-        const exercise = this.currentChapter.exercises.find(ex => ex.id === exerciseId);
-        if (!exercise) return;
+resetExercise(exerciseId) {
+    const exercise = this.currentChapter.exercises.find(ex => ex.id === exerciseId);
+    if (!exercise) return;
 
-        // Réinitialiser les champs de saisie
-        switch (exercise.type) {
-            case 'grid_input':
-            case 'single_input':
-                exercise.questions.forEach(question => {
-                    const element = document.getElementById(question.id);
-                    if (element) element.value = '';
-                });
-                break;
-                
-            case 'textarea':
-                const element = document.getElementById(`ex${exerciseId}_text`);
-                if (element) element.value = '';
-                break;
-        }
-        
-        this.resetFeedback(exerciseId);
+    // Réinitialiser les champs de saisie
+    switch (exercise.type) {
+        case 'grid_input':
+        case 'single_input':
+            exercise.questions.forEach(question => {
+                const element = document.getElementById(question.id);
+                if (element) {
+                    element.value = '';
+                    element.classList.remove('correct', 'incorrect');
+                }
+            });
+            break;
+            
+        case 'textarea':
+            const element = document.getElementById(`ex${exerciseId}_text`);
+            if (element) {
+                element.value = '';
+                element.classList.remove('correct', 'incorrect');
+            }
+            break;
     }
+    
+    this.resetFeedback(exerciseId);
+}
 
     /**
      * Affiche un feedback
