@@ -88,31 +88,31 @@ class ChapterManager {
                             </div>
                         </div>
                         
-                        <div class="help-section">
-                            <h4>Fractions courantes :</h4>
-                            <div class="conversion-grid">
-                                <div class="conversion-item">
-                                    <span class="input-example">1/2</span>
-                                    <span class="arrow">→</span>
-                                    <span class="output-example">½</span>
-                                </div>
-                                <div class="conversion-item">
-                                    <span class="input-example">1/3</span>
-                                    <span class="arrow">→</span>
-                                    <span class="output-example">⅓</span>
-                                </div>
-                                <div class="conversion-item">
-                                    <span class="input-example">2/3</span>
-                                    <span class="arrow">→</span>
-                                    <span class="output-example">⅔</span>
-                                </div>
-                                <div class="conversion-item">
-                                    <span class="input-example">3/4</span>
-                                    <span class="arrow">→</span>
-                                    <span class="output-example">¾</span>
-                                </div>
-                            </div>
-                        </div>
+<div class="help-section">
+    <h4>Fractions courantes :</h4>
+    <div class="conversion-grid">
+        <div class="conversion-item">
+            <span class="input-example">1/2</span>
+            <span class="arrow">→</span>
+            <span class="output-example"><span class="fraction"><span class="numerator">1</span><span class="denominator">2</span></span></span>
+        </div>
+        <div class="conversion-item">
+            <span class="input-example">1/3</span>
+            <span class="arrow">→</span>
+            <span class="output-example"><span class="fraction"><span class="numerator">1</span><span class="denominator">3</span></span></span>
+        </div>
+        <div class="conversion-item">
+            <span class="input-example">2/3</span>
+            <span class="arrow">→</span>
+            <span class="output-example"><span class="fraction"><span class="numerator">2</span><span class="denominator">3</span></span></span>
+        </div>
+        <div class="conversion-item">
+            <span class="input-example">3/4</span>
+            <span class="arrow">→</span>
+            <span class="output-example"><span class="fraction"><span class="numerator">3</span><span class="denominator">4</span></span></span>
+        </div>
+    </div>
+</div>
                         
                         <div class="help-section">
                             <h4>Constantes :</h4>
@@ -872,12 +872,25 @@ this.conversions = {
                 }
             }, 100);
         });
-        
-        document.addEventListener('input', (e) => {
-            if (e.target.classList.contains('math-input')) {
-                this.handleInput(e.target);
-            }
-        });
+
+        // Gérer les événements pour contenteditable
+document.addEventListener('input', (e) => {
+    if (e.target.classList.contains('math-input')) {
+        this.handleInput(e.target);
+    }
+});
+
+document.addEventListener('keyup', (e) => {
+    if (e.target.classList.contains('math-input')) {
+        this.handleInput(e.target);
+    }
+});
+
+document.addEventListener('paste', (e) => {
+    if (e.target.classList.contains('math-input')) {
+        setTimeout(() => this.handleInput(e.target), 10);
+    }
+});
         
         this.palette.addEventListener('click', (e) => {
             if (e.target.classList.contains('symbol-btn')) {
