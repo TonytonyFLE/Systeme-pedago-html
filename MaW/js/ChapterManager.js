@@ -823,9 +823,23 @@ class MathInputSystem {
         };
         
 this.conversions = {
-    '*': '×', '.': '·', '/': '÷', '-': '−',
+    // Multiplication (deux raccourcis)
+    '*': '×',      // Astérisque vers croix de multiplication
+    '.': '·',      // Point vers point médian de multiplication
+    
+    // Division
+    ':': '÷',      // Deux-points vers symbole division
+    
+    // Soustraction
+    '-': '−',      // Tiret vers signe moins typographique
+    
+    // Exposants
     '^2': '²', '^3': '³', '^4': '⁴', '^5': '⁵',
+    
+    // Constantes
     'pi': 'π', 'Pi': 'π', 'PI': 'π',
+    
+    // Fractions (maintenant sans conflits)
     '1/2': '<span class="fraction"><span class="numerator">1</span><span class="denominator">2</span></span>',
     '1/3': '<span class="fraction"><span class="numerator">1</span><span class="denominator">3</span></span>',
     '2/3': '<span class="fraction"><span class="numerator">2</span><span class="denominator">3</span></span>',
