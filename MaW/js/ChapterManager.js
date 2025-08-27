@@ -820,41 +820,34 @@ class MathInputSystem {
             fractions: ['½', '⅓', '¼', '⅔', '¾', '⅘'],
             advanced: ['×', '÷', '²', '³', '⁴', 'π', '½', '⅓', '¼'],
             simple: ['÷', '×']
+            convertToSuperscript(number) {
+    const superscriptMap = {
+        '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵',
+        '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻', '+': '⁺'
+    };
+    return number.split('').map(digit => superscriptMap[digit] || digit).join('');
+}
         };
         
 this.conversions = {
-    // Multiplication (deux raccourcis)
-    '*': '·',      // Astérisque vers croix de multiplication
-    '.': '·',      // Point vers point médian de multiplication
-    
-    // Division
-    ':': '÷',      // Deux-points vers symbole division
-    
-    // Soustraction
-    '-': '−',      // Tiret vers signe moins typographique
-    
-    // Exposants
-    '^2': '²', '^3': '³', '^4': '⁴', '^5': '⁵',
+    // Opérateurs de base
+    '*': '×',
+    '.': '·',
+    ':': '÷',
+    '-': '−',
     
     // Constantes
     'pi': 'π', 'Pi': 'π', 'PI': 'π',
     
-    // Fractions (maintenant sans conflits)
-    '1/2': '<span class="fraction"><span class="numerator">1</span><span class="denominator">2</span></span>',
-    '1/3': '<span class="fraction"><span class="numerator">1</span><span class="denominator">3</span></span>',
-    '2/3': '<span class="fraction"><span class="numerator">2</span><span class="denominator">3</span></span>',
-    '1/4': '<span class="fraction"><span class="numerator">1</span><span class="denominator">4</span></span>',
-    '3/4': '<span class="fraction"><span class="numerator">3</span><span class="denominator">4</span></span>',
-    '1/5': '<span class="fraction"><span class="numerator">1</span><span class="denominator">5</span></span>',
-    '2/5': '<span class="fraction"><span class="numerator">2</span><span class="denominator">5</span></span>',
-    '3/5': '<span class="fraction"><span class="numerator">3</span><span class="denominator">5</span></span>',
-    '4/5': '<span class="fraction"><span class="numerator">4</span><span class="denominator">5</span></span>',
-    '1/6': '<span class="fraction"><span class="numerator">1</span><span class="denominator">6</span></span>',
-    '5/6': '<span class="fraction"><span class="numerator">5</span><span class="denominator">6</span></span>',
-    '1/8': '<span class="fraction"><span class="numerator">1</span><span class="denominator">8</span></span>',
-    '3/8': '<span class="fraction"><span class="numerator">3</span><span class="denominator">8</span></span>',
-    '5/8': '<span class="fraction"><span class="numerator">5</span><span class="denominator">8</span></span>',
-    '7/8': '<span class="fraction"><span class="numerator">7</span><span class="denominator">8</span></span>'
+    // Racines
+    'sqrt': '√',
+    'cbrt': '∛',
+    
+    // Opérateurs de comparaison
+    '<=': '≤',
+    '>=': '≥',
+    '!=': '≠',
+    '~=': '≈'
 };
         
         this.createPalette();
@@ -968,6 +961,26 @@ handleInput(input) {
     let content = input.textContent || input.innerText || '';
     let converted = content;
     
+    // 1. Exposants généraux (avant les conversions simples)
+    converted = converted.replace(/\^(-?\d+)/g, (match, number) => {
+        return this.convertToSuperscript(number);
+    });
+    
+    // 2. Fractions générales 
+    converted = converted.replace(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/g, (match, num, den) => {
+        return `<span class="fraction"><span class="numerator">${num}</span><span class="denominator">${den}</span></span>`;
+    });
+    
+    // 10. Fractions avec parenthèses complexes
+    converted = converted.replace(/\(([^)]+)\)\/\(([^)]+)\)/g, (match, num, den) => {
+        return `<span class="complex-fraction"><span class="numerator">${num}</span><span class="denominator">${den}</span></span>`;
+    });
+    
+    // 4. Racines avec notation fonctionnelle
+    converted = converted.replace(/sqrt\(([^)]+)\)/g, '√($1)');
+    converted = converted.replace(/cbrt\(([^)]+)\)/g, '∛($1)');
+    
+    // Conversions simples (ordre par longueur décroissante)
     const sortedConversions = Object.entries(this.conversions)
         .sort(([a], [b]) => b.length - a.length);
     
