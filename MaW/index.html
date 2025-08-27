@@ -684,6 +684,28 @@
 .variable {
     font-style: italic;
 }
+        /* Styles pour contenteditable */
+.answer-input[contenteditable="true"] {
+    min-height: 25px;
+    padding: 10px 15px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    background: white;
+    cursor: text;
+}
+
+.answer-input[contenteditable="true"]:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.answer-input[contenteditable="true"]:empty:before {
+    content: attr(data-placeholder);
+    color: #999;
+    font-style: italic;
+}
     </style>
 </head>
 <body>
