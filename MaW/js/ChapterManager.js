@@ -407,19 +407,28 @@ class ChapterManager {
                 exercise.questions.forEach(question => {
     const userAnswer = document.getElementById(question.id).value.trim();
     const correctAnswer = question.answer.toString().trim();
+    const inputElement = document.getElementById(question.id);
+    
+    let isQuestionCorrect = false;
     
     if (question.type === 'number') {
         const userNum = parseFloat(userAnswer);
         const correctNum = parseFloat(correctAnswer);
         if (!isNaN(userNum) && Math.abs(userNum - correctNum) < 0.001) {
             correctCount++;
+            isQuestionCorrect = true;
         }
     } else {
         // Gestion flexible des réponses textuelles
         if (this.compareTextAnswers(userAnswer, correctAnswer)) {
             correctCount++;
+            isQuestionCorrect = true;
         }
     }
+    
+    // Ajouter la classe visuelle
+    inputElement.classList.remove('correct', 'incorrect');
+    inputElement.classList.add(isQuestionCorrect ? 'correct' : 'incorrect');
 });
                 
                 isCorrect = correctCount === totalQuestions;
