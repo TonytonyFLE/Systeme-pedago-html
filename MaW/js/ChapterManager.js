@@ -534,10 +534,10 @@ class ChapterManager {
                     const inputType = q.type === 'number' ? 'number' : 'text';
                     html += `<div>
                         <label><strong>${q.label}</strong></label>
-                        <input type="${inputType}" class="answer-input math-input" id="${q.id}" 
-                               placeholder="${q.placeholder || ''}" 
-                               data-exercise-type="${mathType}"
-                               ${inputType === 'number' ? 'step="any"' : ''}>
+                        <div contenteditable="true" class="answer-input math-input" id="${q.id}" 
+         data-placeholder="${q.placeholder || ''}" 
+         data-exercise-type="${mathType}"
+         data-input-type="${inputType}"></div>`;
                     </div>`;
                 });
                 html += '</div>';
@@ -548,10 +548,10 @@ class ChapterManager {
                 const inputType = q.type === 'number' ? 'number' : 'text';
                 html += `<div>
                     <label><strong>${q.label}</strong></label>
-                    <input type="${inputType}" class="answer-input math-input" id="${q.id}" 
-                           placeholder="${q.placeholder || ''}" 
-                           data-exercise-type="${mathType}"
-                           style="width: 300px;" ${inputType === 'number' ? 'step="any"' : ''}>
+                    <div contenteditable="true" class="answer-input math-input" id="${q.id}" 
+         data-placeholder="${q.placeholder || ''}" 
+         data-exercise-type="${mathType}"
+         data-input-type="${inputType}"></div>`;
                 </div>`;
                 break;
                 
@@ -821,14 +821,29 @@ class MathInputSystem {
             simple: ['÷', '×']
         };
         
-        this.conversions = {
-            '*': '×', '.': '·', '/': '÷', '-': '−',
-            '^2': '²', '^3': '³', '^4': '⁴', '^5': '⁵',
-            '1/2': '½', '1/3': '⅓', '2/3': '⅔', '1/4': '¼', '3/4': '¾',
-            '1/5': '⅕', '2/5': '⅖', '3/5': '⅗', '4/5': '⅘', '1/6': '⅙', '5/6': '⅚',
-            '1/8': '⅛', '3/8': '⅜', '5/8': '⅝', '7/8': '⅞',
-            'pi': 'π', 'Pi': 'π', 'PI': 'π'
-        };
+this.conversions = {
+    // Opérateurs de base (gardez ceux-ci)
+    '*': '×', '.': '·', '/': '÷', '-': '−',
+    '^2': '²', '^3': '³', '^4': '⁴', '^5': '⁵',
+    'pi': 'π', 'Pi': 'π', 'PI': 'π',
+    
+    // Pour l'instant, gardez les caractères Unicode pour les fractions
+    '1/2': '½',
+    '1/3': '⅓',
+    '2/3': '⅔',
+    '1/4': '¼',
+    '3/4': '¾',
+    '1/5': '⅕',
+    '2/5': '⅖',
+    '3/5': '⅗',
+    '4/5': '⅘',
+    '1/6': '⅙',
+    '5/6': '⅚',
+    '1/8': '⅛',
+    '3/8': '⅜',
+    '5/8': '⅝',
+    '7/8': '⅞'
+};
         
         this.createPalette();
         this.init();
