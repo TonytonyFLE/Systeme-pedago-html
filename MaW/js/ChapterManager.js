@@ -824,7 +824,7 @@ class MathInputSystem {
         
 this.conversions = {
     // Multiplication (deux raccourcis)
-    '*': '×',      // Astérisque vers croix de multiplication
+    '*': '·',      // Astérisque vers croix de multiplication
     '.': '·',      // Point vers point médian de multiplication
     
     // Division
