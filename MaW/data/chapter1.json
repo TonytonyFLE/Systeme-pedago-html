@@ -1,4 +1,3 @@
-
 {
   "chapter": {
     "number": 1,
@@ -263,16 +262,16 @@
       "type": "grid_input",
       "description": "Calculez mentalement en tenant compte de la priorité des opérations :",
       "questions": [
-        { "label": "a) 10 + 9 - [8 - (7 - 6)] =", "id": "ex3_a", "answer": 12, "type": "number" },
-        { "label": "b) (12 + 8) - (15 - 7) =", "id": "ex3_b", "answer": 12, "type": "number" },
-        { "label": "c) [1 + (4 - 2)] - [5 - (3 + 1)] =", "id": "ex3_c", "answer": 2, "type": "number" },
-        { "label": "d) 28 - 12 + (14 - 8) =", "id": "ex3_d", "answer": 22, "type": "number" },
-        { "label": "e) 15 + (16 - 6) - 8 =", "id": "ex3_e", "answer": 17, "type": "number" },
-        { "label": "f) 13 + [(14 + 15) - (16 + 12)] =", "id": "ex3_f", "answer": 14, "type": "number" },
-        { "label": "g) 18 - [12 - (2 + 4)] - 4 =", "id": "ex3_g", "answer": 8, "type": "number" },
-        { "label": "h) 45 - (17 + 8) + 20 =", "id": "ex3_h", "answer": 40, "type": "number" },
-        { "label": "i) 21 - [49 - (40 + 2)] =", "id": "ex3_i", "answer": 14, "type": "number" },
-        { "label": "j) 36 + (18 - 16 - 2) =", "id": "ex3_j", "answer": 36, "type": "number" }
+        { "label": "a) 10 + 9 − [8 − (7 − 6)]", "id": "ex3_a", "answer": 12, "type": "number" },
+        { "label": "b) (12 + 8) − (15 − 7)", "id": "ex3_b", "answer": 12, "type": "number" },
+        { "label": "c) [1 + (4 − 2)] − [5 − (3 + 1)]", "id": "ex3_c", "answer": 2, "type": "number" },
+        { "label": "d) 28 − 12 + (14 − 8)", "id": "ex3_d", "answer": 22, "type": "number" },
+        { "label": "e) 15 + (16 − 6) − 8", "id": "ex3_e", "answer": 17, "type": "number" },
+        { "label": "f) 13 + [(14 + 15) − (16 + 12)]", "id": "ex3_f", "answer": 14, "type": "number" },
+        { "label": "g) 18 − [12 − (2 + 4)] − 4", "id": "ex3_g", "answer": 8, "type": "number" },
+        { "label": "h) 45 − (17 + 8) + 20", "id": "ex3_h", "answer": 40, "type": "number" },
+        { "label": "i) 21 − [49 − (40 + 2)]", "id": "ex3_i", "answer": 14, "type": "number" },
+        { "label": "j) 36 + (18 − 16 − 2)", "id": "ex3_j", "answer": 36, "type": "number" }
       ],
       "solution": "Solutions détaillées:\na) 10 + 9 - [8 - (7 - 6)] = 10 + 9 - [8 - 1] = 10 + 9 - 7 = 12\nb) (12 + 8) - (15 - 7) = 20 - 8 = 12\nc) [1 + (4 - 2)] - [5 - (3 + 1)] = [1 + 2] - [5 - 4] = 3 - 1 = 2\nd) 28 - 12 + (14 - 8) = 28 - 12 + 6 = 22\ne) 15 + (16 - 6) - 8 = 15 + 10 - 8 = 17\nf) 13 + [(14 + 15) - (16 + 12)] = 13 + [29 - 28] = 13 + 1 = 14\ng) 18 - [12 - (2 + 4)] - 4 = 18 - [12 - 6] - 4 = 18 - 6 - 4 = 8\nh) 45 - (17 + 8) + 20 = 45 - 25 + 20 = 40\ni) 21 - [49 - (40 + 2)] = 21 - [49 - 42] = 21 - 7 = 14\nj) 36 + (18 - 16 - 2) = 36 + 0 = 36"
     },
@@ -283,16 +282,16 @@
       "type": "grid_input",
       "description": "Mettez des parenthèses sur les calculs suivants afin que le résultat soit correct :",
       "questions": [
-        { "label": "a) 6 - 5 · 7 + 3 = 10", "id": "ex4_a", "answer": "(6 - 5) · (7 + 3) = 10", "placeholder": "Placez les parenthèses" },
-        { "label": "b) 6 - 5 · 7 + 3 = -32", "id": "ex4_b", "answer": "6 - (5 · 7 + 3) = -32", "placeholder": "Placez les parenthèses" },
-        { "label": "c) 3 + 8 - 7 · 5 = 20", "id": "ex4_c", "answer": "(3 + 8 - 7) · 5 = 20", "placeholder": "Placez les parenthèses" },
-        { "label": "d) 3 + 8 - 7 · 5 = 8", "id": "ex4_d", "answer": "3 + (8 - 7) · 5 = 8", "placeholder": "Placez les parenthèses" },
-        { "label": "e) 12 · 3 + 1 · 5 + 6 · 4 = 264", "id": "ex4_e", "answer": "12 · (3 + 1) · 5 + 6 · 4 = 264", "placeholder": "Placez les parenthèses" },
-        { "label": "f) 12 · 3 + 1 · 5 + 6 · 4 = 92", "id": "ex4_f", "answer": "12 · (3 + 1) · (5 + 6) : 4 = 92", "placeholder": "Placez les parenthèses" },
-        { "label": "g) 23 - 2 + 1 · 5 · 2 - 1 = 8", "id": "ex4_g", "answer": "(23 - 2 + 1) · 5 · (2 - 1) = 8", "placeholder": "Placez les parenthèses" },
-        { "label": "h) 23 - 2 + 1 · 5 · 2 - 1 = -8", "id": "ex4_h", "answer": "23 - (2 + 1) · 5 · 2 - 1 = -8", "placeholder": "Placez les parenthèses" },
-        { "label": "i) 14 - 3 + 5 · 6 = 36", "id": "ex4_i", "answer": "(14 - 3 + 5) · 6 = 36", "placeholder": "Placez les parenthèses" },
-        { "label": "j) 14 - 3 + 5 · 6 = -34", "id": "ex4_j", "answer": "14 - (3 + 5) · 6 = -34", "placeholder": "Placez les parenthèses" }
+        { "label": "a) 6 − 5 × 7 + 3 = 10", "id": "ex4_a", "answer": "(6 − 5) × (7 + 3) = 10", "placeholder": "Placez les parenthèses" },
+        { "label": "b) 6 − 5 × 7 + 3 = −32", "id": "ex4_b", "answer": "6 − (5 × 7 + 3) = −32", "placeholder": "Placez les parenthèses" },
+        { "label": "c) 3 + 8 − 7 × 5 = 20", "id": "ex4_c", "answer": "(3 + 8 − 7) × 5 = 20", "placeholder": "Placez les parenthèses" },
+        { "label": "d) 3 + 8 − 7 × 5 = 8", "id": "ex4_d", "answer": "3 + (8 − 7) × 5 = 8", "placeholder": "Placez les parenthèses" },
+        { "label": "e) 12 × 3 + 1 × 5 + 6 × 4 = 264", "id": "ex4_e", "answer": "12 × (3 + 1) × 5 + 6 × 4 = 264", "placeholder": "Placez les parenthèses" },
+        { "label": "f) 12 × 3 + 1 × 5 + 6 × 4 = 92", "id": "ex4_f", "answer": "12 × (3 + 1) × (5 + 6) ÷ 4 = 92", "placeholder": "Placez les parenthèses" },
+        { "label": "g) 23 − 2 + 1 × 5 × 2 − 1 = 8", "id": "ex4_g", "answer": "(23 − 2 + 1) × 5 × (2 − 1) = 8", "placeholder": "Placez les parenthèses" },
+        { "label": "h) 23 − 2 + 1 × 5 × 2 − 1 = −8", "id": "ex4_h", "answer": "23 − (2 + 1) × 5 × 2 − 1 = −8", "placeholder": "Placez les parenthèses" },
+        { "label": "i) 14 − 3 + 5 × 6 = 36", "id": "ex4_i", "answer": "(14 − 3 + 5) × 6 = 36", "placeholder": "Placez les parenthèses" },
+        { "label": "j) 14 − 3 + 5 × 6 = −34", "id": "ex4_j", "answer": "14 − (3 + 5) × 6 = −34", "placeholder": "Placez les parenthèses" }
       ],
       "solution": "Solutions:\na) (6 - 5) · (7 + 3) = 1 · 10 = 10\nb) 6 - (5 · 7 + 3) = 6 - (35 + 3) = 6 - 38 = -32\nc) (3 + 8 - 7) · 5 = 4 · 5 = 20\nd) 3 + (8 - 7) · 5 = 3 + 1 · 5 = 3 + 5 = 8\ne) 12 · (3 + 1) · 5 + 6 · 4 = 12 · 4 · 5 + 24 = 240 + 24 = 264\nf) 12 · (3 + 1) · (5 + 6) : 4 = 12 · 4 · 11 : 4 = 12 · 11 = 132 ≠ 92\ng) (23 - 2 + 1) · 5 · (2 - 1) = 22 · 5 · 1 ≠ 8\nh) 23 - (2 + 1) · 5 · 2 - 1 = 23 - 3 · 5 · 2 - 1 = 23 - 30 - 1 = -8\ni) (14 - 3 + 5) · 6 = 16 · 6 ≠ 36\nj) 14 - (3 + 5) · 6 = 14 - 8 · 6 = 14 - 48 = -34"
     },
@@ -321,20 +320,20 @@
       "type": "grid_input",
       "description": "Calculez avec la calculatrice. Donnez le résultat en arrondissant à 2 et 4 chiffres après la virgule :",
       "questions": [
-        { "label": "a) 3 · 4 - (2 · 4 : 2 - 3) + 7 : 5 · 2 - 3 : 7 (2 chiffres) =", "id": "ex7_a_2", "answer": "13.37", "placeholder": "ex: 12.34" },
-        { "label": "a) 3 · 4 - (2 · 4 : 2 - 3) + 7 : 5 · 2 - 3 : 7 (4 chiffres) =", "id": "ex7_a_4", "answer": "13.3714", "placeholder": "ex: 12.3456" },
-        { "label": "b) 3 · (2/3 + 4/5) - 4 · 3 - (2 - 1) : 4 (2 chiffres) =", "id": "ex7_b_2", "answer": "-7.85", "placeholder": "ex: 12.34" },
-        { "label": "b) 3 · (2/3 + 4/5) - 4 · 3 - (2 - 1) : 4 (4 chiffres) =", "id": "ex7_b_4", "answer": "-7.8500", "placeholder": "ex: 12.3456" },
-        { "label": "c) 4 · 7/6 - (3/4 - 4/5) · 0.512 (2 chiffres) =", "id": "ex7_c_2", "answer": "4.69", "placeholder": "ex: 12.34" },
-        { "label": "c) 4 · 7/6 - (3/4 - 4/5) · 0.512 (4 chiffres) =", "id": "ex7_c_4", "answer": "4.6923", "placeholder": "ex: 12.3456" },
-        { "label": "d) π - 1/3 + 3/7 - 3 (2 chiffres) =", "id": "ex7_d_2", "answer": "0.15", "placeholder": "ex: 12.34" },
-        { "label": "d) π - 1/3 + 3/7 - 3 (4 chiffres) =", "id": "ex7_d_4", "answer": "0.1511", "placeholder": "ex: 12.3456" },
-        { "label": "e) 2.31 + 1.324 : 4.221 - 32/35 (2 chiffres) =", "id": "ex7_e_2", "answer": "1.71", "placeholder": "ex: 12.34" },
-        { "label": "e) 2.31 + 1.324 : 4.221 - 32/35 (4 chiffres) =", "id": "ex7_e_4", "answer": "1.7094", "placeholder": "ex: 12.3456" },
-        { "label": "f) 0.54 · (7/3 - 1/5) : 0.134 (2 chiffres) =", "id": "ex7_f_2", "answer": "-1.11", "placeholder": "ex: 12.34" },
-        { "label": "f) 0.54 · (7/3 - 1/5) : 0.134 (4 chiffres) =", "id": "ex7_f_4", "answer": "-1.1119", "placeholder": "ex: 12.3456" }
+        { "label": "a) 3 × 4 - (2 × 4 ÷ 2 - 3) + 7 ÷ 5 × 2 - 3 ÷ 7 (2 chiffres)", "id": "ex7_a_2", "answer": "13.37", "placeholder": "ex: 12.34" },
+        { "label": "a) 3 × 4 - (2 × 4 ÷ 2 - 3) + 7 ÷ 5 × 2 - 3 ÷ 7 (4 chiffres)", "id": "ex7_a_4", "answer": "13.3714", "placeholder": "ex: 12.3456" },
+        { "label": "b) 3 × (⅔ + ⅘) - 4 × 3 - (2 - 1) ÷ 4 (2 chiffres)", "id": "ex7_b_2", "answer": "-7.85", "placeholder": "ex: 12.34" },
+        { "label": "b) 3 × (⅔ + ⅘) - 4 × 3 - (2 - 1) ÷ 4 (4 chiffres)", "id": "ex7_b_4", "answer": "-7.8500", "placeholder": "ex: 12.3456" },
+        { "label": "c) 4 × 7/6 - (¾ - ⅘) × 0.512 (2 chiffres)", "id": "ex7_c_2", "answer": "4.69", "placeholder": "ex: 12.34" },
+        { "label": "c) 4 × 7/6 - (¾ - ⅘) × 0.512 (4 chiffres)", "id": "ex7_c_4", "answer": "4.6923", "placeholder": "ex: 12.3456" },
+        { "label": "d) π - ⅓ + 3/7 - 3 (2 chiffres)", "id": "ex7_d_2", "answer": "0.15", "placeholder": "ex: 12.34" },
+        { "label": "d) π - ⅓ + 3/7 - 3 (4 chiffres)", "id": "ex7_d_4", "answer": "0.1511", "placeholder": "ex: 12.3456" },
+        { "label": "e) 2.31 + 1.324 ÷ 4.221 - 32/35 (2 chiffres)", "id": "ex7_e_2", "answer": "1.71", "placeholder": "ex: 12.34" },
+        { "label": "e) 2.31 + 1.324 ÷ 4.221 - 32/35 (4 chiffres)", "id": "ex7_e_4", "answer": "1.7094", "placeholder": "ex: 12.3456" },
+        { "label": "f) 0.54 × (7/3 - ⅕) ÷ 0.134 (2 chiffres)", "id": "ex7_f_2", "answer": "8.65", "placeholder": "ex: 12.34" },
+        { "label": "f) 0.54 × (7/3 - ⅕) ÷ 0.134 (4 chiffres)", "id": "ex7_f_4", "answer": "8.6493", "placeholder": "ex: 12.3456" }
       ],
-      "solution": "Solutions:\na) 13.37 resp. 13.3714\nb) -7.85 resp. -7.8500\nc) 4.69 resp. 4.6923\nd) 0.15 resp. 0.1511\ne) 1.71 resp. 1.7094\nf) -1.11 resp. -1.1119"
+      "solution": "Solutions:\na) 13.37 resp. 13.3714\nb) -7.85 resp. -7.8500\nc) 4.69 resp. 4.6923\nd) 0.15 resp. 0.1511\ne) 1.71 resp. 1.7094\nf) 8.65 resp. 8.6493"
     },
     {
       "id": 8,
@@ -343,9 +342,9 @@
       "type": "grid_input",
       "description": "Faites d'abord les trois calculs suivants et enregistrez les résultats. Calculez ensuite à 3 chiffres après la virgule :",
       "questions": [
-        { "label": "Calcul 1: 3 · 2 - (4 · 4 : 2 - 3) · 3 : 7 =", "id": "ex8_calc1", "answer": "7.736", "type": "text" },
-        { "label": "Calcul 2: 3 · (2/3 + 4/5) - 4 · (2 - 1) =", "id": "ex8_calc2", "answer": "5.367", "type": "text" },
-        { "label": "Calcul 3: 4 · 9/7 - (3/4 - 4/5) =", "id": "ex8_calc3", "answer": "1.224", "type": "text" },
+        { "label": "Calcul 1: 3 × 2 − (4 × 4 ÷ 2 − 3) × 3 ÷ 7", "id": "ex8_calc1", "answer": "7.736", "type": "text" },
+        { "label": "Calcul 2: 3 × (⅔ + ⅘) − 4 × (2 − 1)", "id": "ex8_calc2", "answer": "5.367", "type": "text" },
+        { "label": "Calcul 3: 4 × 9/7 − (¾ − ⅘)", "id": "ex8_calc3", "answer": "1.224", "type": "text" },
         { "label": "a) La somme des trois =", "id": "ex8_a", "answer": "14.327", "type": "text" },
         { "label": "b) Le produit des trois =", "id": "ex8_b", "answer": "50.876", "type": "text" },
         { "label": "c) La somme des deux premiers, divisée par le troisième =", "id": "ex8_c", "answer": "10.701", "type": "text" },
@@ -386,20 +385,20 @@
       "type": "grid_input",
       "description": "Décomposez les nombres suivants en facteurs premiers et écrivez-les dans leur forme normale :",
       "questions": [
-        { "label": "a) 12 =", "id": "ex10_a", "answer": "2² · 3", "placeholder": "ex: 2³ · 5" },
-        { "label": "b) 16 =", "id": "ex10_b", "answer": "2⁴", "placeholder": "ex: 2³ · 5" },
-        { "label": "c) 18 =", "id": "ex10_c", "answer": "2 · 3²", "placeholder": "ex: 2³ · 5" },
-        { "label": "d) 26 =", "id": "ex10_d", "answer": "2 · 13", "placeholder": "ex: 2³ · 5" },
-        { "label": "e) 38 =", "id": "ex10_e", "answer": "2 · 19", "placeholder": "ex: 2³ · 5" },
-        { "label": "f) 46 =", "id": "ex10_f", "answer": "2 · 23", "placeholder": "ex: 2³ · 5" },
-        { "label": "g) 56 =", "id": "ex10_g", "answer": "2³ · 7", "placeholder": "ex: 2³ · 5" },
-        { "label": "h) 88 =", "id": "ex10_h", "answer": "2³ · 11", "placeholder": "ex: 2³ · 5" },
-        { "label": "i) 124 =", "id": "ex10_i", "answer": "2² · 31", "placeholder": "ex: 2³ · 5" },
-        { "label": "j) 218 =", "id": "ex10_j", "answer": "2 · 109", "placeholder": "ex: 2³ · 5" },
-        { "label": "k) 312 =", "id": "ex10_k", "answer": "2³ · 3 · 13", "placeholder": "ex: 2³ · 5" },
-        { "label": "l) 432 =", "id": "ex10_l", "answer": "2⁴ · 3³", "placeholder": "ex: 2³ · 5" }
+        { "label": "a) 12", "id": "ex10_a", "answer": "2² × 3", "placeholder": "ex: 2³ × 5" },
+        { "label": "b) 16", "id": "ex10_b", "answer": "2⁴", "placeholder": "ex: 2³ × 5" },
+        { "label": "c) 18", "id": "ex10_c", "answer": "2 × 3²", "placeholder": "ex: 2³ × 5" },
+        { "label": "d) 26", "id": "ex10_d", "answer": "2 × 13", "placeholder": "ex: 2³ × 5" },
+        { "label": "e) 38", "id": "ex10_e", "answer": "2 × 19", "placeholder": "ex: 2³ × 5" },
+        { "label": "f) 46", "id": "ex10_f", "answer": "2 × 23", "placeholder": "ex: 2³ × 5" },
+        { "label": "g) 56", "id": "ex10_g", "answer": "2³ × 7", "placeholder": "ex: 2³ × 5" },
+        { "label": "h) 88", "id": "ex10_h", "answer": "2³ × 11", "placeholder": "ex: 2³ × 5" },
+        { "label": "i) 124", "id": "ex10_i", "answer": "2² × 31", "placeholder": "ex: 2³ × 5" },
+        { "label": "j) 218", "id": "ex10_j", "answer": "2 × 109", "placeholder": "ex: 2³ × 5" },
+        { "label": "k) 312", "id": "ex10_k", "answer": "2³ × 3 × 13", "placeholder": "ex: 2³ × 5" },
+        { "label": "l) 432", "id": "ex10_l", "answer": "2⁴ × 3³", "placeholder": "ex: 2³ × 5" }
       ],
-      "solution": "Solutions:\na) 12 = 2² · 3\nb) 16 = 2⁴\nc) 18 = 2 · 3²\nd) 26 = 2 · 13\ne) 38 = 2 · 19\nf) 46 = 2 · 23\ng) 56 = 2³ · 7\nh) 88 = 2³ · 11\ni) 124 = 2² · 31\nj) 218 = 2 · 109\nk) 312 = 2³ · 3 · 13\nl) 432 = 2⁴ · 3³"
+      "solution": "Solutions:\na) 12 = 2² × 3\nb) 16 = 2⁴\nc) 18 = 2 × 3²\nd) 26 = 2 × 13\ne) 38 = 2 × 19\nf) 46 = 2 × 23\ng) 56 = 2³ × 7\nh) 88 = 2³ × 11\ni) 124 = 2² × 31\nj) 218 = 2 × 109\nk) 312 = 2³ × 3 × 13\nl) 432 = 2⁴ × 3³"
     },
     {
       "id": 11,
