@@ -859,52 +859,52 @@ this.conversions = {
     }
 
     bindEvents() {
-        document.addEventListener('focusin', (e) => {
-            if (e.target.classList.contains('math-input')) {
-                this.showPalette(e.target);
-            }
-        });
-        
-        document.addEventListener('focusout', (e) => {
-            setTimeout(() => {
-                if (!this.palette.contains(document.activeElement)) {
-                    this.hidePalette();
-                }
-            }, 100);
-        });
-
-        // Gérer les événements pour contenteditable
-document.addEventListener('input', (e) => {
-    if (e.target.classList.contains('math-input')) {
-        this.handleInput(e.target);
-    }
-});
-
-document.addEventListener('keyup', (e) => {
-    if (e.target.classList.contains('math-input')) {
-        this.handleInput(e.target);
-    }
-});
-
-document.addEventListener('paste', (e) => {
-    if (e.target.classList.contains('math-input')) {
-        setTimeout(() => this.handleInput(e.target), 10);
-    }
-});
-        
-        this.palette.addEventListener('click', (e) => {
-            if (e.target.classList.contains('symbol-btn')) {
-                this.insertSymbol(e.target.textContent);
-            }
-        });
-        
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.math-palette') && 
-                !e.target.classList.contains('math-input')) {
+    // Événements pour afficher/masquer la palette
+    document.addEventListener('focusin', (e) => {
+        if (e.target.classList.contains('math-input')) {
+            this.showPalette(e.target);
+        }
+    });
+    
+    document.addEventListener('focusout', (e) => {
+        setTimeout(() => {
+            if (!this.palette || !this.palette.contains(document.activeElement)) {
                 this.hidePalette();
             }
-        });
-    }
+        }, 100);
+    });
+
+    // CORRECTION PRINCIPALE : Délégation d'événements avec capture
+    document.addEventListener('keyup', (e) => {
+        if (e.target.classList.contains('math-input')) {
+            setTimeout(() => this.handleInput(e.target), 10);
+        }
+    }, true);
+
+    document.addEventListener('input', (e) => {
+        if (e.target.classList.contains('math-input')) {
+            setTimeout(() => this.handleInput(e.target), 10);
+        }
+    }, true);
+
+    document.addEventListener('paste', (e) => {
+        if (e.target.classList.contains('math-input')) {
+            setTimeout(() => this.handleInput(e.target), 50);
+        }
+    }, true);
+
+    // Gestion des clics sur la palette
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('symbol-btn')) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.insertSymbol(e.target.textContent);
+        } else if (!e.target.closest('.math-palette') && 
+                  !e.target.classList.contains('math-input')) {
+            this.hidePalette();
+        }
+    });
+}
     
     showPalette(input) {
         this.activeInput = input;
