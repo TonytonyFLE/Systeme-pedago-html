@@ -1,6 +1,6 @@
 /**
  * ChapterManager.js - Système modulaire pour les cours de mathématiques
- * Permet de charger dynamiquement différents chapitres depuis des fichiers JSON
+ * Avec système de saisie mathématique intégré
  */
 
 class ChapterManager {
@@ -8,11 +8,151 @@ class ChapterManager {
         this.currentChapter = null;
         this.completedExercises = 0;
         this.correctAnswers = 0;
-        this.exerciseStates = new Map(); // Stocke l'état de chaque exercice
+        this.exerciseStates = new Map();
+        this.mathInputSystem = null;
         this.config = {
             baseUrl: '/Systeme-pedago-html/MaW/data/',
             defaultChapter: 1
         };
+        
+        // Initialiser le système de saisie mathématique
+        this.initMathInputSystem();
+    }
+
+    /**
+     * Initialise le système de saisie mathématique
+     */
+    initMathInputSystem() {
+        this.mathInputSystem = new MathInputSystem();
+        this.createHelpModal();
+    }
+
+    /**
+     * Crée la modale d'aide pour les instructions de saisie
+     */
+    createHelpModal() {
+        const modal = document.createElement('div');
+        modal.id = 'math-help-modal';
+        modal.innerHTML = `
+            <div class="modal-overlay" onclick="chapterManager.closeHelpModal()">
+                <div class="modal-content" onclick="event.stopPropagation()">
+                    <div class="modal-header">
+                        <h3>Instructions de saisie mathématique</h3>
+                        <button class="modal-close" onclick="chapterManager.closeHelpModal()">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="help-section">
+                            <h4>Conversions automatiques :</h4>
+                            <div class="conversion-grid">
+                                <div class="conversion-item">
+                                    <span class="input-example">*</span>
+                                    <span class="arrow">→</span>
+                                    <span class="output-example">×</span>
+                                </div>
+                                <div class="conversion-item">
+                                    <span class="input-example">.</span>
+                                    <span class="arrow">→</span>
+                                    <span class="output-example">·</span>
+                                </div>
+                                <div class="conversion-item">
+                                    <span class="input-example">/</span>
+                                    <span class="arrow">→</span>
+                                    <span class="output-example">÷</span>
+                                </div>
+                                <div class="conversion-item">
+                                    <span class="input-example">-</span>
+                                    <span class="arrow">→</span>
+                                    <span class="output-example">−</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="help-section">
+                            <h4>Exposants :</h4>
+                            <div class="conversion-grid">
+                                <div class="conversion-item">
+                                    <span class="input-example">^2</span>
+                                    <span class="arrow">→</span>
+                                    <span class="output-example">²</span>
+                                </div>
+                                <div class="conversion-item">
+                                    <span class="input-example">^3</span>
+                                    <span class="arrow">→</span>
+                                    <span class="output-example">³</span>
+                                </div>
+                                <div class="conversion-item">
+                                    <span class="input-example">^4</span>
+                                    <span class="arrow">→</span>
+                                    <span class="output-example">⁴</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="help-section">
+                            <h4>Fractions courantes :</h4>
+                            <div class="conversion-grid">
+                                <div class="conversion-item">
+                                    <span class="input-example">1/2</span>
+                                    <span class="arrow">→</span>
+                                    <span class="output-example">½</span>
+                                </div>
+                                <div class="conversion-item">
+                                    <span class="input-example">1/3</span>
+                                    <span class="arrow">→</span>
+                                    <span class="output-example">⅓</span>
+                                </div>
+                                <div class="conversion-item">
+                                    <span class="input-example">2/3</span>
+                                    <span class="arrow">→</span>
+                                    <span class="output-example">⅔</span>
+                                </div>
+                                <div class="conversion-item">
+                                    <span class="input-example">3/4</span>
+                                    <span class="arrow">→</span>
+                                    <span class="output-example">¾</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="help-section">
+                            <h4>Constantes :</h4>
+                            <div class="conversion-grid">
+                                <div class="conversion-item">
+                                    <span class="input-example">pi</span>
+                                    <span class="arrow">→</span>
+                                    <span class="output-example">π</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="help-section">
+                            <h4>Utilisation :</h4>
+                            <ul>
+                                <li>Cliquez dans un champ de saisie pour voir la palette de symboles</li>
+                                <li>Les conversions se font automatiquement pendant que vous tapez</li>
+                                <li>Plusieurs formats sont acceptés : 2*3*5 = 2×3×5 = 2·3·5</li>
+                                <li>Sur mobile, la palette apparaît en bas de l'écran</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    /**
+     * Affiche la modale d'aide
+     */
+    showHelpModal() {
+        document.getElementById('math-help-modal').style.display = 'flex';
+    }
+
+    /**
+     * Ferme la modale d'aide
+     */
+    closeHelpModal() {
+        document.getElementById('math-help-modal').style.display = 'none';
     }
 
     /**
@@ -126,6 +266,7 @@ class ChapterManager {
         this.generateNavigation(data.sections);
         this.generateContent(data);
         this.initializeEventListeners();
+        this.mathInputSystem.reinitialize(); // Réinitialiser le système math après génération du contenu
     }
 
     /**
@@ -161,7 +302,7 @@ class ChapterManager {
         const nav = document.getElementById('navigation');
         if (!nav) return;
         
-        let navHTML = '';
+        let navHTML = '<button class="nav-btn help-btn" onclick="chapterManager.showHelpModal()">❓ Aide saisie</button>';
         sections.forEach(section => {
             navHTML += `<a href="#${section.id}" class="nav-btn">${section.icon} ${section.title}</a>`;
         });
@@ -322,16 +463,43 @@ class ChapterManager {
     }
 
     /**
+     * Détecte le type d'exercice mathématique pour la palette de symboles
+     * @param {Object} exercise - Données de l'exercice
+     */
+    detectMathType(exercise) {
+        if (!exercise.questions) return 'basic';
+        
+        const allAnswers = exercise.questions.map(q => q.answer.toString()).join(' ');
+        
+        if (allAnswers.includes('²') || allAnswers.includes('³') || allAnswers.includes('π') || allAnswers.includes('½')) {
+            return 'advanced';
+        }
+        if (allAnswers.includes('×') && allAnswers.includes('÷')) {
+            return 'multiplication';
+        }
+        if (allAnswers.includes('÷')) {
+            return 'simple';
+        }
+        if (allAnswers.includes('×') || allAnswers.includes('·')) {
+            return 'multiplication';
+        }
+        
+        return 'basic';
+    }
+
+    /**
      * Génère un exercice
      * @param {Object} exercise - Données de l'exercice
      */
     generateExercise(exercise) {
+        const mathType = this.detectMathType(exercise);
+        
         let html = `<div class="exercise">
             <div class="exercise-title">${exercise.icon} Exercice ${exercise.id}: ${exercise.title}</div>
             <div class="question">
                 <div class="question-text">${exercise.description}</div>`;
         
-        html += this.generateExerciseInputs(exercise);
+        html += this.generateExerciseInputs(exercise, mathType);
         
         html += `
                 <button class="btn btn-check" onclick="chapterManager.checkExercise(${exercise.id})">Vérifier</button>
@@ -348,38 +516,42 @@ class ChapterManager {
     /**
      * Génère les inputs d'un exercice selon son type
      * @param {Object} exercise - Données de l'exercice
+     * @param {string} mathType - Type mathématique détecté
      */
-    generateExerciseInputs(exercise) {
+    generateExerciseInputs(exercise, mathType) {
         let html = '';
         
         switch (exercise.type) {
-case 'grid_input':
-    html += '<div class="grid-answers">';
-    // Trier les questions par ordre alphabétique des labels
-    const sortedQuestions = [...exercise.questions].sort((a, b) => {
-        const labelA = a.label.match(/^([a-z])\)/)?.[1] || '';
-        const labelB = b.label.match(/^([a-z])\)/)?.[1] || '';
-        return labelA.localeCompare(labelB);
-    });
-    
-    sortedQuestions.forEach(q => {
-        const inputType = q.type === 'number' ? 'number' : 'text';
-        html += `<div>
-            <label><strong>${q.label}</strong></label>
-            <input type="${inputType}" class="answer-input" id="${q.id}" 
-                   placeholder="${q.placeholder || ''}" ${inputType === 'number' ? 'step="any"' : ''}>
-        </div>`;
-    });
-    html += '</div>';
-    break;
+            case 'grid_input':
+                html += '<div class="grid-answers">';
+                const sortedQuestions = [...exercise.questions].sort((a, b) => {
+                    const labelA = a.label.match(/^([a-z])\)/)?.[1] || '';
+                    const labelB = b.label.match(/^([a-z])\)/)?.[1] || '';
+                    return labelA.localeCompare(labelB);
+                });
+                
+                sortedQuestions.forEach(q => {
+                    const inputType = q.type === 'number' ? 'number' : 'text';
+                    html += `<div>
+                        <label><strong>${q.label}</strong></label>
+                        <input type="${inputType}" class="answer-input math-input" id="${q.id}" 
+                               placeholder="${q.placeholder || ''}" 
+                               data-exercise-type="${mathType}"
+                               ${inputType === 'number' ? 'step="any"' : ''}>
+                    </div>`;
+                });
+                html += '</div>';
+                break;
                 
             case 'single_input':
                 const q = exercise.questions[0];
                 const inputType = q.type === 'number' ? 'number' : 'text';
                 html += `<div>
                     <label><strong>${q.label}</strong></label>
-                    <input type="${inputType}" class="answer-input" id="${q.id}" 
-                           placeholder="${q.placeholder || ''}" style="width: 300px;" ${inputType === 'number' ? 'step="any"' : ''}>
+                    <input type="${inputType}" class="answer-input math-input" id="${q.id}" 
+                           placeholder="${q.placeholder || ''}" 
+                           data-exercise-type="${mathType}"
+                           style="width: 300px;" ${inputType === 'number' ? 'step="any"' : ''}>
                 </div>`;
                 break;
                 
@@ -412,31 +584,30 @@ case 'grid_input':
                 totalQuestions = exercise.questions.length;
                 
                 exercise.questions.forEach(question => {
-    const userAnswer = document.getElementById(question.id).value.trim();
-    const correctAnswer = question.answer.toString().trim();
-    const inputElement = document.getElementById(question.id);
-    
-    let isQuestionCorrect = false;
-    
-    if (question.type === 'number') {
-        const userNum = parseFloat(userAnswer);
-        const correctNum = parseFloat(correctAnswer);
-        if (!isNaN(userNum) && Math.abs(userNum - correctNum) < 0.001) {
-            correctCount++;
-            isQuestionCorrect = true;
-        }
-    } else {
-        // Gestion flexible des réponses textuelles
-        if (this.compareTextAnswers(userAnswer, correctAnswer)) {
-            correctCount++;
-            isQuestionCorrect = true;
-        }
-    }
-    
-    // Ajouter la classe visuelle
-    inputElement.classList.remove('correct', 'incorrect');
-    inputElement.classList.add(isQuestionCorrect ? 'correct' : 'incorrect');
-});
+                    const userAnswer = document.getElementById(question.id).value.trim();
+                    const correctAnswer = question.answer.toString().trim();
+                    const inputElement = document.getElementById(question.id);
+                    
+                    let isQuestionCorrect = false;
+                    
+                    if (question.type === 'number') {
+                        const userNum = parseFloat(userAnswer);
+                        const correctNum = parseFloat(correctAnswer);
+                        if (!isNaN(userNum) && Math.abs(userNum - correctNum) < 0.001) {
+                            correctCount++;
+                            isQuestionCorrect = true;
+                        }
+                    } else {
+                        // Utiliser la comparaison flexible du système mathématique
+                        if (this.mathInputSystem.compareAnswers(userAnswer, correctAnswer)) {
+                            correctCount++;
+                            isQuestionCorrect = true;
+                        }
+                    }
+                    
+                    inputElement.classList.remove('correct', 'incorrect');
+                    inputElement.classList.add(isQuestionCorrect ? 'correct' : 'incorrect');
+                });
                 
                 isCorrect = correctCount === totalQuestions;
                 feedback = totalQuestions === 1 ? 
@@ -457,32 +628,6 @@ case 'grid_input':
         this.showFeedback(exerciseId, feedback, isCorrect ? 'correct' : 'incorrect');
         this.updateExerciseState(exerciseId, isCorrect);
         this.updateStats();
-    }
-
-    /**
-     * Compare deux réponses textuelles de manière flexible
-     * @param {string} userAnswer - Réponse de l'utilisateur
-     * @param {string} correctAnswer - Réponse correcte
-     */
-    compareTextAnswers(userAnswer, correctAnswer) {
-        const normalize = (str) => str.toLowerCase()
-            .replace(/\s/g, '')
-            .replace(/[,;]/g, ',')
-            .split(',')
-            .map(s => s.trim())
-            .filter(s => s.length > 0)
-            .sort()
-            .join(',');
-        
-        const userNormalized = normalize(userAnswer);
-        const correctNormalized = normalize(correctAnswer);
-        
-        // Cas spéciaux
-        if (correctAnswer === 'aucun' && (userAnswer === '' || userAnswer.toLowerCase() === 'aucun')) {
-            return true;
-        }
-        
-        return userNormalized === correctNormalized;
     }
 
     /**
@@ -519,34 +664,33 @@ case 'grid_input':
      * Remet à zéro un exercice
      * @param {number} exerciseId - ID de l'exercice
      */
-resetExercise(exerciseId) {
-    const exercise = this.currentChapter.exercises.find(ex => ex.id === exerciseId);
-    if (!exercise) return;
+    resetExercise(exerciseId) {
+        const exercise = this.currentChapter.exercises.find(ex => ex.id === exerciseId);
+        if (!exercise) return;
 
-    // Réinitialiser les champs de saisie
-    switch (exercise.type) {
-        case 'grid_input':
-        case 'single_input':
-            exercise.questions.forEach(question => {
-                const element = document.getElementById(question.id);
+        switch (exercise.type) {
+            case 'grid_input':
+            case 'single_input':
+                exercise.questions.forEach(question => {
+                    const element = document.getElementById(question.id);
+                    if (element) {
+                        element.value = '';
+                        element.classList.remove('correct', 'incorrect');
+                    }
+                });
+                break;
+                
+            case 'textarea':
+                const element = document.getElementById(`ex${exerciseId}_text`);
                 if (element) {
                     element.value = '';
                     element.classList.remove('correct', 'incorrect');
                 }
-            });
-            break;
-            
-        case 'textarea':
-            const element = document.getElementById(`ex${exerciseId}_text`);
-            if (element) {
-                element.value = '';
-                element.classList.remove('correct', 'incorrect');
-            }
-            break;
+                break;
+        }
+        
+        this.resetFeedback(exerciseId);
     }
-    
-    this.resetFeedback(exerciseId);
-}
 
     /**
      * Affiche un feedback
@@ -588,7 +732,6 @@ resetExercise(exerciseId) {
             if (element) element.textContent = value;
         });
 
-        // Mise à jour de la barre de progression
         const totalExercises = this.currentChapter?.chapter?.totalExercises || 1;
         const progress = (this.completedExercises / totalExercises) * 100;
         const progressFill = document.getElementById('progressFill');
@@ -601,19 +744,20 @@ resetExercise(exerciseId) {
      * Initialise les événements
      */
     initializeEventListeners() {
-        // Navigation fluide
         document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({ 
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
+            if (!btn.classList.contains('help-btn')) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            }
         });
     }
 
@@ -659,6 +803,194 @@ resetExercise(exerciseId) {
         this.completedExercises = state.completedExercises || 0;
         this.correctAnswers = state.correctAnswers || 0;
         this.updateStats();
+    }
+}
+
+/**
+ * Système de saisie mathématique intégré
+ */
+class MathInputSystem {
+    constructor() {
+        this.palette = null;
+        this.activeInput = null;
+        this.symbolSets = {
+            basic: ['×', '÷', '+', '−'],
+            multiplication: ['×', '·', '²', '³'],
+            fractions: ['½', '⅓', '¼', '⅔', '¾', '⅘'],
+            advanced: ['×', '÷', '²', '³', '⁴', 'π', '½', '⅓', '¼'],
+            simple: ['÷', '×']
+        };
+        
+        this.conversions = {
+            '*': '×', '.': '·', '/': '÷', '-': '−',
+            '^2': '²', '^3': '³', '^4': '⁴', '^5': '⁵',
+            '1/2': '½', '1/3': '⅓', '2/3': '⅔', '1/4': '¼', '3/4': '¾',
+            '1/5': '⅕', '2/5': '⅖', '3/5': '⅗', '4/5': '⅘', '1/6': '⅙', '5/6': '⅚',
+            '1/8': '⅛', '3/8': '⅜', '5/8': '⅝', '7/8': '⅞',
+            'pi': 'π', 'Pi': 'π', 'PI': 'π'
+        };
+        
+        this.createPalette();
+        this.init();
+    }
+
+    createPalette() {
+        this.palette = document.createElement('div');
+        this.palette.id = 'mathPalette';
+        this.palette.className = 'math-palette';
+        document.body.appendChild(this.palette);
+    }
+
+    init() {
+        this.bindEvents();
+    }
+
+    bindEvents() {
+        document.addEventListener('focusin', (e) => {
+            if (e.target.classList.contains('math-input')) {
+                this.showPalette(e.target);
+            }
+        });
+        
+        document.addEventListener('focusout', (e) => {
+            setTimeout(() => {
+                if (!this.palette.contains(document.activeElement)) {
+                    this.hidePalette();
+                }
+            }, 100);
+        });
+        
+        document.addEventListener('input', (e) => {
+            if (e.target.classList.contains('math-input')) {
+                this.handleInput(e.target);
+            }
+        });
+        
+        this.palette.addEventListener('click', (e) => {
+            if (e.target.classList.contains('symbol-btn')) {
+                this.insertSymbol(e.target.textContent);
+            }
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.math-palette') && 
+                !e.target.classList.contains('math-input')) {
+                this.hidePalette();
+            }
+        });
+    }
+    
+    showPalette(input) {
+        this.activeInput = input;
+        const exerciseType = input.dataset.exerciseType || 'basic';
+        const symbols = this.symbolSets[exerciseType] || this.symbolSets.basic;
+        
+        this.createPaletteButtons(symbols);
+        this.positionPalette(input);
+        this.palette.classList.add('active');
+    }
+    
+    hidePalette() {
+        this.palette.classList.remove('active');
+        this.activeInput = null;
+    }
+    
+    createPaletteButtons(symbols) {
+        this.palette.innerHTML = symbols
+            .map(symbol => `<button class="symbol-btn" type="button">${symbol}</button>`)
+            .join('');
+    }
+    
+    positionPalette(input) {
+        const rect = input.getBoundingClientRect();
+        const paletteHeight = 60;
+        
+        if (window.innerWidth <= 768) {
+            return;
+        }
+        
+        let top = rect.bottom + 5;
+        let left = rect.left;
+        
+        if (top + paletteHeight > window.innerHeight) {
+            top = rect.top - paletteHeight - 5;
+        }
+        
+        if (left + 300 > window.innerWidth) {
+            left = window.innerWidth - 300 - 10;
+        }
+        
+        this.palette.style.top = top + 'px';
+        this.palette.style.left = Math.max(10, left) + 'px';
+    }
+    
+    handleInput(input) {
+        let value = input.value;
+        let converted = value;
+        
+        const sortedConversions = Object.entries(this.conversions)
+            .sort(([a], [b]) => b.length - a.length);
+        
+        for (const [from, to] of sortedConversions) {
+            const regex = new RegExp(from.replace(/[.*+?^${}()|[\]\\]/g, '\\        this.conversions = {
+            '*': '×', '.': '·', '/': '÷', '-': '−',
+            '^2': '²', '^3': '³', '^4': '⁴', '^5': ''), 'g');
+            converted = converted.replace(regex, to);
+        }
+        
+        if (converted !== value) {
+            const selectionStart = input.selectionStart;
+            input.value = converted;
+            
+            const lengthDiff = converted.length - value.length;
+            input.setSelectionRange(
+                selectionStart + lengthDiff, 
+                selectionStart + lengthDiff
+            );
+        }
+    }
+    
+    insertSymbol(symbol) {
+        if (!this.activeInput) return;
+        
+        const start = this.activeInput.selectionStart;
+        const end = this.activeInput.selectionEnd;
+        const value = this.activeInput.value;
+        
+        this.activeInput.value = value.substring(0, start) + symbol + value.substring(end);
+        this.activeInput.focus();
+        this.activeInput.setSelectionRange(start + symbol.length, start + symbol.length);
+    }
+    
+    normalizeAnswer(answer) {
+        let normalized = answer.trim();
+        
+        const comparisonMap = {
+            '×': '*', '·': '*', '÷': '/', '−': '-',
+            '²': '^2', '³': '^3', '⁴': '^4',
+            '½': '1/2', '⅓': '1/3', '⅔': '2/3', '¼': '1/4', '¾': '3/4',
+            'π': 'pi'
+        };
+        
+        for (const [from, to] of Object.entries(comparisonMap)) {
+            normalized = normalized.replace(new RegExp(from, 'g'), to);
+        }
+        
+        return normalized.toLowerCase().replace(/\s+/g, '');
+    }
+    
+    compareAnswers(userAnswer, correctAnswer) {
+        const userNorm = this.normalizeAnswer(userAnswer);
+        const correctNorm = this.normalizeAnswer(correctAnswer);
+        
+        return userNorm === correctNorm;
+    }
+
+    reinitialize() {
+        // Réinitialise les événements après génération du contenu
+        setTimeout(() => {
+            this.bindEvents();
+        }, 100);
     }
 }
 
