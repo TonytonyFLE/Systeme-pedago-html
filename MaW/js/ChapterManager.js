@@ -947,7 +947,7 @@ class MathInputSystem {
             );
         }
     }
-
+    
     insertSymbol(symbol) {
         if (!this.activeInput) return;
         
