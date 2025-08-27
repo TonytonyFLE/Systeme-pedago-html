@@ -932,9 +932,21 @@ class MathInputSystem {
             .sort(([a], [b]) => b.length - a.length);
         
         for (const [from, to] of sortedConversions) {
-            const regex = new RegExp(from.replace(/[.*+?^${}()|[\]\\]/g, '\\        this.conversions = {
-            '*': '×', '.': '·', '/': '÷', '-': '−',
-            '^2': '²', '^3': '³', '^4': '⁴', '^5': ''), 'g');
+            const regex = new RegExp(from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+            converted = converted.replace(regex, to);
+        }
+        
+        if (converted !== value) {
+            const selectionStart = input.selectionStart;
+            input.value = converted;
+            
+            const lengthDiff = converted.length - value.length;
+            input.setSelectionRange(
+                selectionStart + lengthDiff, 
+                selectionStart + lengthDiff
+            );
+        }
+    }
             converted = converted.replace(regex, to);
         }
         
