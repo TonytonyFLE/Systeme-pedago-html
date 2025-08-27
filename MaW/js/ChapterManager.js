@@ -584,7 +584,8 @@ html += `<div>
                 totalQuestions = exercise.questions.length;
                 
                 exercise.questions.forEach(question => {
-                    const userAnswer = document.getElementById(question.id).value.trim();
+const element = document.getElementById(question.id);
+const userAnswer = (element.textContent || element.innerText || '').trim();
                     const correctAnswer = question.answer.toString().trim();
                     const inputElement = document.getElementById(question.id);
                     
