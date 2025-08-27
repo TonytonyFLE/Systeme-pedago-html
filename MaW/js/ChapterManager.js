@@ -353,18 +353,25 @@ class ChapterManager {
         let html = '';
         
         switch (exercise.type) {
-            case 'grid_input':
-                html += '<div class="grid-answers">';
-                exercise.questions.forEach(q => {
-                    const inputType = q.type === 'number' ? 'number' : 'text';
-                    html += `<div>
-                        <label><strong>${q.label}</strong></label>
-                        <input type="${inputType}" class="answer-input" id="${q.id}" 
-                               placeholder="${q.placeholder || ''}" ${inputType === 'number' ? 'step="any"' : ''}>
-                    </div>`;
-                });
-                html += '</div>';
-                break;
+case 'grid_input':
+    html += '<div class="grid-answers">';
+    // Trier les questions par ordre alphabétique des labels
+    const sortedQuestions = [...exercise.questions].sort((a, b) => {
+        const labelA = a.label.match(/^([a-z])\)/)?.[1] || '';
+        const labelB = b.label.match(/^([a-z])\)/)?.[1] || '';
+        return labelA.localeCompare(labelB);
+    });
+    
+    sortedQuestions.forEach(q => {
+        const inputType = q.type === 'number' ? 'number' : 'text';
+        html += `<div>
+            <label><strong>${q.label}</strong></label>
+            <input type="${inputType}" class="answer-input" id="${q.id}" 
+                   placeholder="${q.placeholder || ''}" ${inputType === 'number' ? 'step="any"' : ''}>
+        </div>`;
+    });
+    html += '</div>';
+    break;
                 
             case 'single_input':
                 const q = exercise.questions[0];
