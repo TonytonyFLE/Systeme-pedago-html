@@ -675,7 +675,7 @@ const userAnswer = (element.textContent || element.innerText || '').trim();
                 exercise.questions.forEach(question => {
                     const element = document.getElementById(question.id);
                     if (element) {
-                        element.value = '';
+                        element.innerHTML = '';
                         element.classList.remove('correct', 'incorrect');
                     }
                 });
@@ -684,7 +684,7 @@ const userAnswer = (element.textContent || element.innerText || '').trim();
             case 'textarea':
                 const element = document.getElementById(`ex${exerciseId}_text`);
                 if (element) {
-                    element.value = '';
+                    element.innerHTML = '';
                     element.classList.remove('correct', 'incorrect');
                 }
                 break;
