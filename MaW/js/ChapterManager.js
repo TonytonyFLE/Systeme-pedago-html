@@ -534,7 +534,7 @@ class ChapterManager {
                     const inputType = q.type === 'number' ? 'number' : 'text';
                     html += `<div>
                         <label><strong>${q.label}</strong></label>
-                        <div contenteditable="true" class="answer-input math-input" id="${q.id}" 
+                        html += `<div contenteditable="true" class="answer-input math-input" id="${q.id}" 
          data-placeholder="${q.placeholder || ''}" 
          data-exercise-type="${mathType}"
          data-input-type="${inputType}"></div>`;
@@ -548,7 +548,7 @@ class ChapterManager {
                 const inputType = q.type === 'number' ? 'number' : 'text';
                 html += `<div>
                     <label><strong>${q.label}</strong></label>
-                    <div contenteditable="true" class="answer-input math-input" id="${q.id}" 
+                    html += `<div contenteditable="true" class="answer-input math-input" id="${q.id}" 
          data-placeholder="${q.placeholder || ''}" 
          data-exercise-type="${mathType}"
          data-input-type="${inputType}"></div>`;
