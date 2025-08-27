@@ -947,21 +947,7 @@ class MathInputSystem {
             );
         }
     }
-            converted = converted.replace(regex, to);
-        }
-        
-        if (converted !== value) {
-            const selectionStart = input.selectionStart;
-            input.value = converted;
-            
-            const lengthDiff = converted.length - value.length;
-            input.setSelectionRange(
-                selectionStart + lengthDiff, 
-                selectionStart + lengthDiff
-            );
-        }
-    }
-    
+
     insertSymbol(symbol) {
         if (!this.activeInput) return;
         
