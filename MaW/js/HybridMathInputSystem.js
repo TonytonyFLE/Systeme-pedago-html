@@ -201,8 +201,31 @@ document.addEventListener('mousedown', (e) => {
                 range.collapse(false);
                 selection.removeAllRanges();
                 selection.addRange(range);
-            }
+ this.enablePaletteInFractions(input);
         }
+    }
+    }
+
+    /**
+     * Active la palette mathématique dans les fractions créées
+     */
+    enablePaletteInFractions(parentInput) {
+        const fractions = parentInput.querySelectorAll('.fraction .numerator, .fraction .denominator, .complex-fraction .numerator, .complex-fraction .denominator');
+        
+        fractions.forEach(fractionPart => {
+            // Rendre les parties de fractions éditables
+            fractionPart.contentEditable = true;
+            fractionPart.classList.add('math-input');
+            
+            // Ajouter les événements pour la palette
+            fractionPart.addEventListener('focus', (e) => {
+                this.showPrimaryPalette(e.target);
+            });
+            
+            fractionPart.addEventListener('input', (e) => {
+                setTimeout(() => this.handleAutoConversion(e.target), 10);
+            });
+        });
     }
     
     /**
