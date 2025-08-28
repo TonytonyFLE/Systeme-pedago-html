@@ -17,15 +17,10 @@ constructor() {
 }
 
 initHybridMathSystem() {
-    // Attendre que les deux classes soient disponibles
-    if (typeof HybridMathInputSystem !== 'undefined' && typeof MathValidator !== 'undefined') {
-        this.hybridMathSystem = new HybridMathInputSystem();
-        this.mathValidator = new MathValidator(); // Déplacé ici
-        this.createHelpModal();
-    } else {
-        // Réessayer après un délai
-        setTimeout(() => this.initHybridMathSystem(), 100);
-    }
+    // Plus besoin d'attendre - les dépendances sont déjà vérifiées
+    this.hybridMathSystem = new HybridMathInputSystem();
+    this.mathValidator = new MathValidator();
+    this.createHelpModal();
 }
 
     createHelpModal() {
