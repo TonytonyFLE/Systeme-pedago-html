@@ -367,20 +367,20 @@ initializePage(data) {
                     
                     let isQuestionCorrect = false;
                     
-                    if (question.type === 'number') {
-                        const userNum = parseFloat(userAnswer);
-                        const correctNum = parseFloat(correctAnswer);
-                        if (!isNaN(userNum) && Math.abs(userNum - correctNum) < 0.001) {
-                            correctCount++;
-                            isQuestionCorrect = true;
-                        }
-                    } else {
-                        // Utiliser la comparaison flexible du système hybride
-                        if (this.hybridMathSystem.compareAnswers(userAnswer, correctAnswer)) {
-                            correctCount++;
-                            isQuestionCorrect = true;
-                        }
-                    }
+if (question.type === 'number') {
+    const userNum = parseFloat(userAnswer);
+    const correctNum = parseFloat(correctAnswer);
+    if (!isNaN(userNum) && Math.abs(userNum - correctNum) < 0.001) {
+        correctCount++;
+        isQuestionCorrect = true;
+    }
+} else {
+    // Utiliser désormais le validateur mathématique avancé
+    if (this.mathValidator.compareAnswers(userAnswer, correctAnswer)) {
+        correctCount++;
+        isQuestionCorrect = true;
+    }
+}
                     
                     inputElement.classList.remove('correct', 'incorrect');
                     inputElement.classList.add(isQuestionCorrect ? 'correct' : 'incorrect');
