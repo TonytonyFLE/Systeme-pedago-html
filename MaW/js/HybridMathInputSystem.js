@@ -91,68 +91,71 @@ class HybridMathInputSystem {
     }
     
     bindEvents() {
-        // Focus sur les champs math
-        document.addEventListener('focusin', (e) => {
-            if (e.target.classList.contains('math-input')) {
-                this.showPrimaryPalette(e.target);
-            }
-        });
+    // Focus sur les champs math
+    document.addEventListener('focusin', (e) => {
+        if (e.target.classList.contains('math-input')) {
+            this.showPrimaryPalette(e.target);
+        }
+    });
+    
+    // Clic pour fermer les palettes - VERSION SIMPLIFIÉE
+    document.addEventListener('click', (e) => {
+        // Si on clique sur un bouton de palette, ne pas fermer
+        if (e.target.classList.contains('symbol-btn')) {
+            return;
+        }
         
-// Clic en dehors pour fermer
-document.addEventListener('click', (e) => {
-    if (!e.target.closest('.math-palette') && 
-        !e.target.classList.contains('math-input') &&
-        !e.target.closest('.fraction')) {
+        // Si on clique sur une palette, ne pas fermer
+        if (e.target.closest('.math-palette')) {
+            return;
+        }
+        
+        // Sinon, fermer les palettes
         this.hideAllPalettes();
-    }
-});
-        
-        // Gestion des clics sur les boutons de palette
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('symbol-btn')) {
-                e.preventDefault();
-                e.stopPropagation();
-                this.handleSymbolClick(e.target);
-                return false;
-            }
-        });
-        
-// Empêcher la fermeture lors du clic sur les palettes mais permettre la navigation
-document.addEventListener('mousedown', (e) => {
-    if (e.target.closest('.math-palette') && !e.target.classList.contains('symbol-btn')) {
-        e.preventDefault();
-    }
-});
-        
-        // NOUVEAU : Gestion de la conversion automatique des fractions
-        document.addEventListener('keyup', (e) => {
-            if (e.target.classList.contains('math-input')) {
-                setTimeout(() => this.handleAutoConversion(e.target), 10);
-            }
-        }, true);
+    });
+    
+    // Gestion des clics sur les boutons de palette
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('symbol-btn')) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.handleSymbolClick(e.target);
+        }
+    });
+    
+    // SUPPRIMER l'événement mousedown qui pose problème
+    // (commenté pour que vous voyez ce qu'il faut enlever)
+    // document.addEventListener('mousedown', (e) => { ... });
+    
+    // Conversion automatique des fractions
+    document.addEventListener('keyup', (e) => {
+        if (e.target.classList.contains('math-input')) {
+            setTimeout(() => this.handleAutoConversion(e.target), 10);
+        }
+    }, true);
 
-        document.addEventListener('input', (e) => {
-            if (e.target.classList.contains('math-input')) {
-                setTimeout(() => this.handleAutoConversion(e.target), 10);
-            }
-        }, true);
+    document.addEventListener('input', (e) => {
+        if (e.target.classList.contains('math-input')) {
+            setTimeout(() => this.handleAutoConversion(e.target), 10);
+        }
+    }, true);
 
-        document.addEventListener('paste', (e) => {
-            if (e.target.classList.contains('math-input')) {
-                setTimeout(() => this.handleAutoConversion(e.target), 50);
+    document.addEventListener('paste', (e) => {
+        if (e.target.classList.contains('math-input')) {
+            setTimeout(() => this.handleAutoConversion(e.target), 50);
+        }
+    }, true);
+    
+    // Gestion du redimensionnement
+    window.addEventListener('resize', () => {
+        if (this.activeInput && this.primaryPalette.classList.contains('active')) {
+            this.positionPalette(this.primaryPalette, this.activeInput);
+            if (this.secondaryPalette.classList.contains('active')) {
+                this.positionSecondaryPalette();
             }
-        }, true);
-        
-        // Gestion du redimensionnement
-        window.addEventListener('resize', () => {
-            if (this.activeInput && this.primaryPalette.classList.contains('active')) {
-                this.positionPalette(this.primaryPalette, this.activeInput);
-                if (this.secondaryPalette.classList.contains('active')) {
-                    this.positionSecondaryPalette();
-                }
-            }
-        });
-    }
+        }
+    });
+}
     
     /**
      * Gestion de la conversion automatique des fractions uniquement
@@ -292,11 +295,12 @@ hideSecondaryPalette() {
     }
 }
     
-    hideAllPalettes() {
-        this.primaryPalette.classList.remove('active');
-        this.hideSecondaryPalette();
-        this.activeInput = null;
-    }
+hideAllPalettes() {
+    this.primaryPalette.classList.remove('active');
+    this.hideSecondaryPalette();
+    // NE PAS mettre this.activeInput = null ici
+    // pour permettre la navigation
+}
     
     getSecondaryTitle(type) {
         const titles = {
