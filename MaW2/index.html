@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">Cours Interactif</title>
-<link rel="stylesheet" href="/Systeme-pedago-html/MaW2/css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <div class="navigation" id="navigation">
@@ -46,17 +46,26 @@
         </div>
     </div>
 
-<script src="js/utils/DOMSanitizer.js"></script>
-<script src="js/HybridMathInputSystem.js"></script>
-<script src="js/ChapterManager.js"></script>
-<script>
-// Instance globale du gestionnaire
-const chapterManager = new ChapterManager();
+    <!-- Scripts dans le bon ordre -->
+    <script src="js/utils/DOMSanitizer.js"></script>
+    <script src="js/core/MathValidator.js"></script>
+    <script src="js/core/HybridMathInputSystem.js"></script>
+    <script src="js/core/ChapterManager.js"></script>
+    
+    <script>
+    // Instance globale du gestionnaire
+    const chapterManager = new ChapterManager();
 
-// Initialisation automatique au chargement de la page
-document.addEventListener('DOMContentLoaded', function() {
-    chapterManager.loadChapter();
-});
-</script>
+    // Configuration adaptée à la structure locale
+    chapterManager.configure({
+        baseUrl: 'data/',
+        defaultChapter: 1
+    });
+
+    // Initialisation automatique au chargement de la page
+    document.addEventListener('DOMContentLoaded', function() {
+        chapterManager.loadChapter();
+    });
+    </script>
 </body>
 </html>
