@@ -1,33 +1,32 @@
 class ChapterManager {
-    constructor() {
-        this.currentChapter = null;
-        this.completedExercises = 0;
-        this.correctAnswers = 0;
-        this.exerciseStates = new Map();
-        this.hybridMathSystem = null;
-        
-        // Nouveau : système de validation avancé
-        this.mathValidator = new MathValidator();
-        
-        this.config = {
-            baseUrl: 'data/',
-            defaultChapter: 1
-        };
-        
-        // Initialiser le système hybride
-        this.initHybridMathSystem();
-    }
+constructor() {
+    this.currentChapter = null;
+    this.completedExercises = 0;
+    this.correctAnswers = 0;
+    this.exerciseStates = new Map();
+    this.hybridMathSystem = null;
+    this.mathValidator = null; // Changé : ne plus instancier immédiatement
+    
+    this.config = {
+        baseUrl: 'data/',
+        defaultChapter: 1
+    };
+    
+    // Initialiser le système hybride
+    this.initHybridMathSystem();
+}
 
-    initHybridMathSystem() {
-        // Attendre que HybridMathInputSystem soit disponible
-        if (typeof HybridMathInputSystem !== 'undefined') {
-            this.hybridMathSystem = new HybridMathInputSystem();
-            this.createHelpModal();
-        } else {
-            // Réessayer après un délai
-            setTimeout(() => this.initHybridMathSystem(), 100);
-        }
+initHybridMathSystem() {
+    // Attendre que les deux classes soient disponibles
+    if (typeof HybridMathInputSystem !== 'undefined' && typeof MathValidator !== 'undefined') {
+        this.hybridMathSystem = new HybridMathInputSystem();
+        this.mathValidator = new MathValidator(); // Déplacé ici
+        this.createHelpModal();
+    } else {
+        // Réessayer après un délai
+        setTimeout(() => this.initHybridMathSystem(), 100);
     }
+}
 
     createHelpModal() {
         const modal = document.createElement('div');
@@ -654,6 +653,12 @@ class ChapterManager {
         const exercise = this.currentChapter.exercises.find(ex => ex.id === exerciseId);
         if (!exercise) return;
 
+         // AJOUTEZ CETTE VÉRIFICATION ICI
+    if (!this.mathValidator) {
+        console.warn('MathValidator pas encore initialisé');
+        return;
+    }
+        
         let isCorrect = false;
         let feedback = '';
         let correctCount = 0;
