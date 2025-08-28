@@ -90,71 +90,69 @@ class HybridMathInputSystem {
         ).join('');
     }
     
-    bindEvents() {
-    // Focus sur les champs math
-    document.addEventListener('focusin', (e) => {
-        if (e.target.classList.contains('math-input')) {
-            this.showPrimaryPalette(e.target);
-        }
-    });
-    
-    // Clic pour fermer les palettes - VERSION SIMPLIFIÉE
-    document.addEventListener('click', (e) => {
-        // Si on clique sur un bouton de palette, ne pas fermer
-        if (e.target.classList.contains('symbol-btn')) {
-            return;
-        }
+bindEvents() {
+    // Stocker les références des fonctions pour pouvoir les supprimer
+    this.boundEvents = {
+        focusin: (e) => {
+            if (e.target.classList.contains('math-input')) {
+                this.showPrimaryPalette(e.target);
+            }
+        },
         
-        // Si on clique sur une palette, ne pas fermer
-        if (e.target.closest('.math-palette')) {
-            return;
-        }
+        click: (e) => {
+            // Si on clique sur un bouton de palette, ne pas fermer
+            if (e.target.classList.contains('symbol-btn')) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.handleSymbolClick(e.target);
+                return;
+            }
+            
+            // Si on clique sur une palette, ne pas fermer
+            if (e.target.closest('.math-palette')) {
+                return;
+            }
+            
+            // Sinon, fermer les palettes
+            this.hideAllPalettes();
+        },
         
-        // Sinon, fermer les palettes
-        this.hideAllPalettes();
-    });
-    
-    // Gestion des clics sur les boutons de palette
-    document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('symbol-btn')) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.handleSymbolClick(e.target);
-        }
-    });
-    
-    // SUPPRIMER l'événement mousedown qui pose problème
-    // (commenté pour que vous voyez ce qu'il faut enlever)
-    // document.addEventListener('mousedown', (e) => { ... });
-    
-    // Conversion automatique des fractions
-    document.addEventListener('keyup', (e) => {
-        if (e.target.classList.contains('math-input')) {
-            setTimeout(() => this.handleAutoConversion(e.target), 10);
-        }
-    }, true);
-
-    document.addEventListener('input', (e) => {
-        if (e.target.classList.contains('math-input')) {
-            setTimeout(() => this.handleAutoConversion(e.target), 10);
-        }
-    }, true);
-
-    document.addEventListener('paste', (e) => {
-        if (e.target.classList.contains('math-input')) {
-            setTimeout(() => this.handleAutoConversion(e.target), 50);
-        }
-    }, true);
-    
-    // Gestion du redimensionnement
-    window.addEventListener('resize', () => {
-        if (this.activeInput && this.primaryPalette.classList.contains('active')) {
-            this.positionPalette(this.primaryPalette, this.activeInput);
-            if (this.secondaryPalette.classList.contains('active')) {
-                this.positionSecondaryPalette();
+        keyup: (e) => {
+            if (e.target.classList.contains('math-input')) {
+                setTimeout(() => this.handleAutoConversion(e.target), 10);
+            }
+        },
+        
+        input: (e) => {
+            if (e.target.classList.contains('math-input')) {
+                setTimeout(() => this.handleAutoConversion(e.target), 10);
+            }
+        },
+        
+        paste: (e) => {
+            if (e.target.classList.contains('math-input')) {
+                setTimeout(() => this.handleAutoConversion(e.target), 50);
+            }
+        },
+        
+        resize: () => {
+            if (this.activeInput && this.primaryPalette.classList.contains('active')) {
+                this.positionPalette(this.primaryPalette, this.activeInput);
+                if (this.secondaryPalette.classList.contains('active')) {
+                    this.positionSecondaryPalette();
+                }
             }
         }
-    });
+    };
+    
+    // Attacher les événements
+    document.addEventListener('focusin', this.boundEvents.focusin);
+    document.addEventListener('click', this.boundEvents.click);
+    document.addEventListener('keyup', this.boundEvents.keyup, true);
+    document.addEventListener('input', this.boundEvents.input, true);
+    document.addEventListener('paste', this.boundEvents.paste, true);
+    window.addEventListener('resize', this.boundEvents.resize);
+}
 }
     
     /**
@@ -469,23 +467,28 @@ hideAllPalettes() {
         return normalize(userAnswer) === normalize(correctAnswer);
     }
     
-reinitialize() {
-    // Ne pas re-bind les événements car ils sont déjà globaux
-    // Cette méthode existe pour la compatibilité mais ne fait rien
-    setTimeout(() => {
-        // Juste s'assurer que les palettes sont masquées
-        this.hideAllPalettes();
-    }, 100);
-}
-    
-    destroy() {
-        if (this.primaryPalette) {
-            this.primaryPalette.remove();
-        }
-        if (this.secondaryPalette) {
-            this.secondaryPalette.remove();
-        }
-        this.activeInput = null;
-        this.savedRange = null;
+destroy() {
+    // Supprimer les événements globaux
+    if (this.boundEvents) {
+        document.removeEventListener('focusin', this.boundEvents.focusin);
+        document.removeEventListener('click', this.boundEvents.click);
+        document.removeEventListener('keyup', this.boundEvents.keyup);
+        document.removeEventListener('input', this.boundEvents.input);
+        document.removeEventListener('paste', this.boundEvents.paste);
+        window.removeEventListener('resize', this.boundEvents.resize);
     }
+    
+    // Supprimer les palettes du DOM
+    if (this.primaryPalette) {
+        this.primaryPalette.remove();
+    }
+    if (this.secondaryPalette) {
+        this.secondaryPalette.remove();
+    }
+    
+    // Nettoyer les références
+    this.activeInput = null;
+    this.savedRange = null;
+    this.boundEvents = null;
+}
 }
