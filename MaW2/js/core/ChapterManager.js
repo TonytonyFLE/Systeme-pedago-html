@@ -5,6 +5,10 @@ class ChapterManager {
         this.correctAnswers = 0;
         this.exerciseStates = new Map();
         this.hybridMathSystem = null;
+        
+        // Nouveau : système de validation avancé
+        this.mathValidator = new MathValidator();
+        
         this.config = {
             baseUrl: '/Systeme-pedago-html/MaW/data/',
             defaultChapter: 1
