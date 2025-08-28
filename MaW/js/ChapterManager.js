@@ -55,7 +55,7 @@ class ChapterManager {
                                     <span class="output-example">·</span>
                                 </div>
                                 <div class="conversion-item">
-                                    <span class="input-example">/</span>
+                                    <span class="input-example">:</span>
                                     <span class="arrow">→</span>
                                     <span class="output-example">÷</span>
                                 </div>
