@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Cours Interactif</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="navigation" id="navigation">
+        <!-- Navigation dynamique générée par JS -->
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 id="chapter-title">📚 Cours Interactif</h1>
+            <div class="quote" id="chapter-quote">
+                <!-- Citation générée dynamiquement -->
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalExercises">0</div>
+                    <div class="stat-label">Exercices</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="completedExercises">0</div>
+                    <div class="stat-label">Complétés</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="correctAnswers">0</div>
+                    <div class="stat-label">Corrects</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- Contenu dynamique généré par JS -->
+            <div id="dynamic-content">
+                <!-- Les sections et exercices seront générés ici -->
+            </div>
+        </div>
+    </div>
+
+<script src="js/utils/DOMSanitizer.js"></script>
+<script src="js/HybridMathInputSystem.js"></script>
+<script src="js/ChapterManager.js"></script>
+<script>
+// Instance globale du gestionnaire
+const chapterManager = new ChapterManager();
+
+// Initialisation automatique au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    chapterManager.loadChapter();
+});
+</script>
+</body>
+</html>
