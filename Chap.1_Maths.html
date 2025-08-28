@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bases Générales - Cours Interactif</title>
+    <title id="page-title">Cours Interactif</title>
     <style>
         * {
             margin: 0;
@@ -149,11 +149,6 @@
             margin: 20px 0;
         }
 
-        .calculator-steps h4 {
-            color: #0066cc;
-            margin-bottom: 15px;
-        }
-
         .calculator-steps ol {
             margin-left: 20px;
         }
@@ -197,11 +192,10 @@
             color: #333;
         }
 
-        .input-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
+        .grid-answers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
         }
 
         .answer-input {
@@ -211,12 +205,31 @@
             font-size: 1rem;
             transition: border-color 0.3s;
             min-width: 80px;
+            min-height: 25px;
+            outline: none;
+            background: white;
+            cursor: text;
         }
 
         .answer-input:focus {
-            outline: none;
             border-color: #3498db;
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .answer-input:empty:before {
+            content: attr(data-placeholder);
+            color: #999;
+            font-style: italic;
+        }
+
+        .answer-input.correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+        }
+
+        .answer-input.incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
         }
 
         .btn {
@@ -237,7 +250,6 @@
 
         .btn-check:hover {
             background: #229954;
-            transform: translateY(-1px);
         }
 
         .btn-solution {
@@ -245,18 +257,9 @@
             color: white;
         }
 
-        .btn-solution:hover {
-            background: #e67e22;
-            transform: translateY(-1px);
-        }
-
         .btn-reset {
             background: #95a5a6;
             color: white;
-        }
-
-        .btn-reset:hover {
-            background: #7f8c8d;
         }
 
         .feedback {
@@ -286,22 +289,6 @@
             border: 1px solid #ffeaa7;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #ecf0f1;
-            border-radius: 4px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #27ae60, #2ecc71);
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
         .stats {
             display: flex;
             justify-content: space-around;
@@ -326,10 +313,20 @@
             font-size: 0.9rem;
         }
 
-        .grid-answers {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            width: 0%;
+            transition: width 0.5s ease;
         }
 
         .navigation {
@@ -351,40 +348,114 @@
             border-radius: 5px;
             transition: background 0.3s;
             font-size: 0.9rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
         }
 
         .nav-btn:hover {
             background: rgba(255,255,255,0.2);
         }
 
-        .formula {
-            background: #e8f4f8;
-            border: 1px solid #b8daff;
-            border-radius: 6px;
-            padding: 15px;
-            margin: 15px 0;
-            font-family: 'Courier New', monospace;
+        /* Fractions */
+        .fraction {
+            display: inline-block;
+            vertical-align: middle;
             text-align: center;
+            position: relative;
+            margin: 0 0.1em;
         }
 
-        .highlight {
-            background: #fff3cd;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-weight: bold;
+        .fraction .numerator {
+            display: block;
+            font-size: 0.85em;
+            line-height: 1.1;
+            border-bottom: 1px solid black;
+            padding: 1px 3px;
         }
 
-        .number-sets {
+        .fraction .denominator {
+            display: block;
+            font-size: 0.85em;
+            line-height: 1.1;
+            padding: 1px 3px;
+        }
+
+        /* Palette mathématique */
+        .math-palette {
+            position: absolute;
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: none;
+            flex-wrap: wrap;
+            gap: 6px;
+            max-width: 400px;
+        }
+
+        .math-palette.active {
             display: flex;
-            justify-content: center;
-            margin: 30px 0;
         }
 
-        .number-sets img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .symbol-btn {
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #f8f9fa;
+            cursor: pointer;
+            font-size: 16px;
+            min-width: 44px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .symbol-btn:hover {
+            background: #e9ecef;
+            border-color: #3498db;
+        }
+
+        /* Modal */
+        #math-help-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px;
         }
 
         @media (max-width: 768px) {
@@ -397,10 +468,6 @@
                 padding: 20px;
             }
             
-            .header h1 {
-                font-size: 2rem;
-            }
-
             .navigation {
                 position: relative;
                 top: 0;
@@ -415,25 +482,16 @@
     </style>
 </head>
 <body>
-    <div class="navigation">
-        <a href="#regles-divisibilite" class="nav-btn">🔍 Règles de divisibilité</a>
-        <a href="#priorite-operations" class="nav-btn">⚡ Priorité des opérations</a>
-        <a href="#calculatrice" class="nav-btn">🧮 Calculatrice TI-30X II</a>
-        <a href="#facteurs-premiers" class="nav-btn">🔢 Facteurs premiers</a>
-        <a href="#ppmc-pgdc" class="nav-btn">📊 PPMC et PGDC</a>
-        <a href="#ensembles" class="nav-btn">🌐 Ensembles de nombres</a>
-        <a href="#exercices" class="nav-btn">📝 Exercices</a>
+    <div class="navigation" id="navigation">
+        <!-- Navigation dynamique -->
     </div>
-
     <div class="container">
         <div class="header">
-            <h1>📚 1 Bases générales</h1>
-            <div class="quote">
-                "Le grand livre de l'univers est écrit en langage mathématique."<br>
-                <em>— Galileo Galilei</em>
+            <h1 id="chapter-title">📚 Cours Interactif</h1>
+            <div class="quote" id="chapter-quote">
+                <!-- Citation générée dynamiquement -->
             </div>
         </div>
-
         <div class="content">
             <div class="stats">
                 <div class="stat-item">
@@ -449,2331 +507,1051 @@
                     <div class="stat-label">Corrects</div>
                 </div>
             </div>
-
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
-
-            <!-- Section 1.1: Règles de divisibilité -->
-            <div class="section" id="regles-divisibilite">
-                <h2 class="section-title">1.1 Règles de divisibilité</h2>
-                
-                <div class="theory-box">
-                    <p>En mathématiques, les règles de divisibilité permettent de savoir si un nombre est divisible par un autre nombre. Pour les petits nombres, on peut tout à fait essayer rapidement la division.</p>
-                    
-                    <p>Mais cela va encore plus vite si l'on prend en considération les règles suivantes :</p>
-                    
-                    <table class="divisibility-table">
-                        <thead>
-                            <tr>
-                                <th>Diviseur</th>
-                                <th>Test</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td><strong>2</strong></td><td>Le dernier chiffre est pair.</td></tr>
-                            <tr><td><strong>3</strong></td><td>La somme est divisible par 3.</td></tr>
-                            <tr><td><strong>4</strong></td><td>Le nombre composé des deux derniers chiffres est divisible par 4.</td></tr>
-                            <tr><td><strong>5</strong></td><td>Le dernier chiffre est 5 ou 0.</td></tr>
-                            <tr><td><strong>6</strong></td><td>Le nombre est divisible par 2 et par 3.</td></tr>
-                            <tr><td><strong>7</strong></td><td>Enlever le dernier chiffre, le multiplier par 9 et soustraire ce produit des chiffres restants. Le résultat doit être divisible par 7.</td></tr>
-                            <tr><td><strong>8</strong></td><td>Le nombre composé par les trois derniers chiffres est divisible par 8.</td></tr>
-                            <tr><td><strong>9</strong></td><td>La somme des chiffres est divisible par 9.</td></tr>
-                            <tr><td><strong>10</strong></td><td>Le dernier chiffre est 0.</td></tr>
-                            <tr><td><strong>11</strong></td><td>La somme alternée des chiffres est 0 ou un multiple de 11.</td></tr>
-                            <tr><td><strong>12</strong></td><td>Le nombre est divisible par 3 et par 4.</td></tr>
-                            <tr><td><strong>13</strong></td><td>Supprimer le dernier chiffre, le multiplier par 9 et soustraire ce produit des chiffres restants. Le résultat doit être divisible par 13.</td></tr>
-                            <tr><td><strong>14</strong></td><td>Le nombre est divisible par 2 et par 7.</td></tr>
-                            <tr><td><strong>15</strong></td><td>Le nombre est divisible par 3 et par 5.</td></tr>
-                        </tbody>
-                    </table>
-
-                    <div style="background: #fff3cd; padding: 15px; border-radius: 6px; margin-top: 20px;">
-                        <strong>💡 Note :</strong> Les règles concernant le 7, 11 et 13 sont plus compliquées. Elles fonctionnent de la manière suivante :
-                    </div>
-                </div>
-
-                <div class="example-box">
-                    <div class="example-title">Exemple 1.1</div>
-                    <ul>
-                        <li><strong>Prenons l'exemple du nombre 1771.</strong> On supprime le 1 final puis on calcule 177 - 9 = 168. Si l'on ne sait pas que 24 × 7 = 168, on refait la même chose et obtient 16 - 72 = -56. Donc, comme -8 × 7 = -56, 1771 est aussi divisible par 7.</li>
-                        <li><strong>Si l'on remarque que 168 n'est pas divisible par 13,</strong> car 13 × 13 = 169, on sait que 1771 ne l'est pas non plus.</li>
-                        <li><strong>La somme alternée de 1771 est 1 - 7 + 7 - 1 = 0,</strong> donc ce nombre est divisible par 11.</li>
-                    </ul>
-                </div>
-
-                <div class="theory-box">
-                    <p>Ces règles seront utiles dans les calculs de fractions, car elles vous permettent de remarquer rapidement si une fraction peut encore être simplifiée ou pas.</p>
-                </div>
-            </div>
-
-            <!-- Section 1.2: Priorité des opérations -->
-            <div class="section" id="priorite-operations">
-                <h2 class="section-title">1.2 Priorité des opérations</h2>
-                
-                <div class="theory-box">
-                    <div class="priority-list">
-                        <h3>💡 Les calculs sont toujours à faire dans cet ordre :</h3>
-                        <ol>
-                            <li><strong>parenthèses</strong> (de l'intérieur à l'extérieur)</li>
-                            <li><strong>puissances</strong></li>
-                            <li><strong>multiplications et divisions</strong></li>
-                            <li><strong>additions et soustractions</strong></li>
-                        </ol>
-                    </div>
-                    
-                    <div style="background: #fff3cd; padding: 15px; border-radius: 6px; margin-top: 15px;">
-                        <strong>⚠️ Attention avec vos calculatrices :</strong> certaines ne prennent pas en compte cette règle. Essayez simplement de calculer 1 + 2 × 3. Si vous obtenez 7, tout va bien ; si par contre vous obtenez 9, changez de calculatrice.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 1.3: La calculatrice TI-30X II -->
-            <div class="section" id="calculatrice">
-                <h2 class="section-title">1.3 La calculatrice TI-30X II</h2>
-                
-                <div class="theory-box">
-                    <p>Le mode d'emploi suivant correspond à la calculatrice TI-30X II, mais peut également être utilisé pour d'autres modèles. Si vous avez des questions concernant le fonctionnement de votre calculatrice, votre enseignant pourra vous aider. Et peut-être lirez-vous une nouvelle fois le mode d'emploi de votre calculatrice...</p>
-                </div>
-
-                <div class="subsection-title">1.3.1 Arrondir</div>
-                <div class="calculator-steps">
-                    <p>La calculatrice peut arrondir à tant de chiffres donnés après la virgule.</p>
-                    <ol>
-                        <li>Appuyez sur <span class="highlight">2nd</span> puis sur <span class="highlight">.</span> pour la fonction <em>fix</em> (en anglais = fixé).</li>
-                        <li>Choisissez le nombre de chiffres après la virgule moyennant les touches sur lesquelles sont inscrites des flèches. L'option F (float en anglais = flotter, mais aussi nombre à virgule flottante) vous réactive l'affichage en virgule flottante.</li>
-                        <li>Pressez <span class="highlight">ENTER</span>.</li>
-                    </ol>
-                    
-                    <div style="background: #e8f4f8; padding: 15px; border-radius: 6px; margin-top: 15px;">
-                        <strong>💡 Important :</strong> Aucun arrondissement n'est véritablement fait. Le nombre est seulement affiché différemment. La calculatrice continue à utiliser le nombre exact pour les calculs suivants.
-                    </div>
-                </div>
-
-                <div class="subsection-title">1.3.2 Enregistrer</div>
-                <div class="calculator-steps">
-                    <p>Pour les calculs compliqués, on a parfois besoin de résultats intermédiaires. Pour ne pas fausser le résultat final et pour gagner du temps, il vaut mieux enregistrer les résultats intermédiaires dans la calculatrice au lieu de les écrire quelque part puis de les retaper à la calculatrice.</p>
-                    
-                    <h4>Pour enregistrer :</h4>
-                    <ol>
-                        <li>Appuyez sur <span class="highlight">STO</span> (store en anglais = enregistrer).</li>
-                        <li>Choisissez l'une des cases mémoire grâce aux touches fléchées.</li>
-                        <li>Appuyez sur <span class="highlight">ENTER</span> pour confirmer votre choix.</li>
-                        <li>Appuyez à nouveau sur <span class="highlight">ENTER</span> afin d'enregistrer le nombre.</li>
-                    </ol>
-                    
-                    <h4>Pour retrouver un nombre enregistré :</h4>
-                    <ol>
-                        <li>Appuyez sur <span class="highlight">2nd</span> puis sur <span class="highlight">STO</span> (RCL, recall en anglais = récupérer)</li>
-                        <li>Choisissez la case mémoire voulue avec les touches fléchées. Le nombre enregistré sera affiché.</li>
-                        <li>Confirmez votre choix avec <span class="highlight">ENTER</span>. Continuez votre calcul comme d'habitude.</li>
-                    </ol>
-                </div>
-
-                <div class="theory-box">
-                    <p>La TI-30X II a une case mémoire spéciale qui peut donner le dernier résultat. Vous pouvez y accéder grâce à la touche <span class="highlight">2nd</span> et <span class="highlight">Ans</span> (answer en anglais = réponse).</p>
-                    
-                    <p>Pour éviter les malentendus lors des examens, vous pouvez écrire vos calculs comme suit :</p>
-                </div>
-
-                <div class="example-box">
-                    <div class="example-title">Exemple 1.2</div>
-                    <div class="formula">
-                        1 ÷ 9 = 0.11... → STO A<br>
-                        RCL A → 0.11... × 9 = 1
-                    </div>
-                    
-                    <div style="background: #f0f8ff; padding: 15px; border-radius: 6px; margin-top: 15px;">
-                        <strong>💡 Saviez-vous que</strong> la calculatrice utilise plus de chiffres décimales à l'interne qu'elle n'affiche ? Sur la TI-30X II, cette différence est de trois. Une fois que vous effacez le résultat d'un calcul qui n'est pas "tombé juste", vous ne pourrez plus le remettre dans la calculatrice simplement en le tapant.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 1.4: Facteurs premiers, PPMC et PGDC -->
-            <div class="section" id="facteurs-premiers">
-                <h2 class="section-title">1.4 Facteurs premiers, PPMC et PGDC</h2>
-                
-                <div class="subsection-title">1.4.1 Nombres premiers et décomposition en facteurs premiers</div>
-                
-                <div class="theory-box">
-                    <p>Par <span class="highlight">nombre premier</span> on entend chaque nombre naturel qui n'est divisible que par 1 et par lui-même sans restes. Donc, par définition, 1 n'est pas un nombre premier. Vous remarquerez que 2 est le seul nombre premier qui est pair (tous les autres nombres pairs sont divisibles par 2).</p>
-                </div>
-
-                <div class="example-box">
-                    <div class="example-title">Exemple 1.3</div>
-                    <p><strong>Le nombre 367 est-il un nombre premier ?</strong></p>
-                    <ul>
-                        <li><strong>Nous savons que :</strong> 20 × 20 > 367, nous devons donc essayer jusqu'au 19, car le 20 ne peut visiblement pas être un diviseur. Et chaque nombre plus élevé ne peut être un diviseur que s'il possède un "partenaire" plus petit.</li>
-                        <li><strong>Le nombre 367 est impair,</strong> il n'est donc pas divisible par un nombre pair.</li>
-                        <li><strong>La somme de ses chiffres 3 + 6 + 7 = 16</strong> n'est pas divisible par 3. Donc tous les multiples de 3 sont éliminés.</li>
-                        <li><strong>Le dernier chiffre étant 7,</strong> nous éliminons également 5 et ses multiples.</li>
-                        <li><strong>Du fait que 3 - 6 + 7 = 4,</strong> 367 n'est pas divisible par 11 et du fait que 36 - 63 = -27, il n'est pas non plus divisible par 7 ou 13.</li>
-                        <li><strong>Il ne reste donc plus que le 17 et le 19.</strong> Mais du fait que 20 × 17 = 340 resp. 20 × 19 = 380, eux non plus ne sont pas des diviseurs de 367.</li>
-                    </ul>
-                    <p><strong>Il est donc clair que 367 est un nombre premier.</strong></p>
-                </div>
-
-                <div class="theory-box">
-                    <p>Afin de savoir si un chiffre donné est un nombre premier ou pas, il suffit de rechercher ses diviseurs. Et comme la liste des diviseurs d'un nombre est symétrique (le premier va avec le dernier, le deuxième avec l'avant-dernier etc.), cela réduit considérablement les nombres à tester.</p>
-                </div>
-
-                <div class="theory-box">
-                    <p>Le mot <span class="highlight">facteur premier</span> est un mélange entre nombre premier et facteur. La décomposition d'un nombre en facteurs premiers signifie de l'écrire comme produit (multiplication) formé par des nombres premiers.</p>
-                </div>
-
-                <div class="example-box">
-                    <div class="example-title">Exemple 1.4</div>
-                    <div class="formula">
-                        138 = 2 × 3 × 23<br>
-                        224 = 2 × 2 × 2 × 2 × 2 × 7
-                    </div>
-                </div>
-
-                <div class="theory-box">
-                    <p>La décomposition en facteurs premiers d'un nombre naturel est unique, sauf pour les permutations des facteurs.</p>
-                    
-                    <p>Pour les grands nombres, il peut être judicieux d'appliquer le principe "diviser pour régner", au lieu de tester les nombres premiers les uns après les autres. Cela implique que l'on décompose le nombre progressivement en ses diviseurs que l'on connaît ou que l'on peut facilement deviner :</p>
-                </div>
-
-                <div class="example-box">
-                    <div class="example-title">Exemple 1.5</div>
-                    <div class="formula">
-                        1080 = 10 × 108<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2×5 &nbsp;&nbsp;12×9<br>
-                        = 2 × 5 × 2 × 2 × 3 × 3 × 3<br><br>
-                        5125 = 25 × 205<br>
-                        = 5 × 5 × 5 × 41
-                    </div>
-                    
-                    <p>Afin d'être certain que 41 est un nombre premier, il suffit de tester les chiffres de 2 à 6. (Voir l'exemple 1.3 à la page 8)</p>
-                </div>
-
-                <div class="theory-box">
-                    <p>Pour le travail, il est pratique de ne pas écrire la décomposition n'importe comment. Dans ce que l'on appelle communément la <span class="highlight">forme normale</span>, les facteurs premiers sont écrits dans l'ordre croissant et les facteurs identiques sont rassemblés en puissances. Les décompositions susmentionnées sont écrites de la manière suivante dans leur forme normale :</p>
-                </div>
-
-                <div class="example-box">
-                    <div class="example-title">Exemple 1.6</div>
-                    <div class="formula">
-                        1080 = 2³ × 3³ × 5<br>
-                        5125 = 5³ × 41
-                    </div>
-                </div>
-
-<div class="subsection-title">1.4.2 Le plus petit multiple commun</div>
-                
-                <div class="theory-box">
-                    <p>Un groupe de nombres naturels a toujours infiniment de multiples communs. Il est intéressant et surtout utile dans la pratique de savoir lequel de ces multiples est le plus petit.</p>
-                    
-                    <p>Le <span class="highlight">plus petit multiple commun (PPMC)</span> est utilisé par exemple pour réduire les fractions au même dénominateur, le dénominateur commun. Certains problèmes peuvent être résolus directement grâce au PPMC.</p>
-                    
-                    <div class="priority-list">
-                        <h4>💡 Afin de déterminer le PPMC de nombres naturels, faites comme suit :</h4>
-                        <ol>
-                            <li><strong>Décomposez</strong> les nombres donnés en leur facteurs premiers.</li>
-                            <li><strong>Retenez</strong> la puissance la <em>plus élevée</em> de chaque facteur premier.</li>
-                            <li><strong>Multipliez</strong> ces puissances.</li>
-                        </ol>
-                    </div>
-                </div>
-
-                <div class="example-box">
-                    <div class="example-title">Exemple 1.7</div>
-                    <p><strong>Nous cherchons à connaître le PPMC des nombres 20, 35 et 40.</strong></p>
-                    <div class="formula">
-                        20 = 2² × 5<br>
-                        35 = 5 × 7<br>
-                        40 = 2³ × 5<br><br>
-                        PPMC(20, 35, 40) = 2³ × 5 × 7 = 280
-                    </div>
-                    
-                    <div style="background: #e8f4f8; padding: 15px; border-radius: 6px; margin-top: 15px;">
-                        <strong>💡 Aide :</strong> Dans chaque colonne, un facteur doit être retenu.
-                    </div>
-                </div>
-
-                <div class="subsection-title">1.4.3 Le plus grand diviseur commun</div>
-                
-                <div class="theory-box">
-                    <p>Souvent, des nombres naturels n'ont que le 1 comme diviseur commun. Dans le cas où il en existe d'autres, nous nous intéressons forcément au plus grand d'entre eux. Nous utilisons le <span class="highlight">plus grand diviseur commun (PGDC)</span> p. ex. pour simplifier les fractions ou pour résoudre des problèmes spécifiques.</p>
-                    
-                    <p>La démarche pour trouver le PGDC ressemble à celle pour le PPMC, il faut donc faire attention à ne pas les confondre :</p>
-                    
-                    <div class="priority-list">
-                        <ol>
-                            <li><strong>Décomposez</strong> les nombres donnés en facteurs premiers. Mettez-les dans l'ordre croissant, mais sans les grouper en puissances.</li>
-                            <li><strong>Retenez</strong> les facteurs qui apparaissent dans chaque décomposition.</li>
-                            <li><strong>Multipliez</strong> les facteurs retenus.</li>
-                        </ol>
-                    </div>
-                </div>
-
-                <div class="example-box">
-                    <div class="example-title">Exemple 1.8</div>
-                    <p><strong>Nous cherchons à connaître le PGDC des nombres 18, 24 et 36.</strong></p>
-                    <div class="formula">
-                        18 = 2 × 3 × 3<br>
-                        24 = 2 × 2 × 2 × 3<br>
-                        36 = 2 × 2 × 3 × 3<br><br>
-                        PGDC(18, 24, 36) = 2 × 3 = 6
-                    </div>
-                    
-                    <div style="background: #e8f4f8; padding: 15px; border-radius: 6px; margin-top: 15px;">
-                        <strong>💡 Important :</strong> Retenez uniquement des colonnes <em>complètement remplies</em> !
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 1.5: Ensembles de nombres -->
-            <div class="section" id="ensembles">
-                <h2 class="section-title">1.5 Ensembles de nombres</h2>
-                
-                <div class="theory-box">
-                    <p>Afin de résoudre des problèmes mathématiques, il faut toujours d'abord savoir quels chiffres sont à disposition ; <span class="highlight">l'ensemble de référence</span> doit être défini. Pour ce faire il existe les ensembles de nombres qui sont représentés dans la figure 1.1.</p>
-                </div>
-
-                <div class="number-sets">
-                    <svg width="600" height="400" viewBox="0 0 600 400">
-                        <!-- Ensemble R (plus grand) -->
-                        <ellipse cx="300" cy="200" rx="280" ry="180" fill="none" stroke="#2c3e50" stroke-width="2"/>
-                        <text x="520" y="100" font-family="Arial" font-size="16" font-weight="bold">ℝ</text>
-                        
-                        <!-- Ensemble Q -->
-                        <ellipse cx="280" cy="200" rx="220" ry="140" fill="none" stroke="#3498db" stroke-width="2"/>
-                        <text x="460" y="130" font-family="Arial" font-size="14">ℚ</text>
-                        
-                        <!-- Ensemble Z -->
-                        <ellipse cx="260" cy="200" rx="160" ry="100" fill="none" stroke="#e74c3c" stroke-width="2"/>
-                        <text x="380" y="160" font-family="Arial" font-size="14">ℤ</text>
-                        
-                        <!-- Ensemble N -->
-                        <ellipse cx="240" cy="200" rx="100" ry="60" fill="none" stroke="#27ae60" stroke-width="2"/>
-                        <text x="310" y="190" font-family="Arial" font-size="14">ℕ</text>
-                        
-                        <!-- Nombres dans N -->
-                        <text x="200" y="200" font-family="Arial" font-size="12">0, 1, 2, 3,</text>
-                        <text x="200" y="215" font-family="Arial" font-size="12">4, 5, ...</text>
-                        
-                        <!-- Nombres dans Z mais pas N -->
-                        <text x="150" y="180" font-family="Arial" font-size="12">-1</text>
-                        <text x="150" y="200" font-family="Arial" font-size="12">-2</text>
-                        <text x="150" y="220" font-family="Arial" font-size="12">-3</text>
-                        <text x="160" y="240" font-family="Arial" font-size="12">...</text>
-                        
-                        <!-- Nombres dans Q mais pas Z -->
-                        <text x="100" y="160" font-family="Arial" font-size="11">π/3</text>
-                        <text x="80" y="180" font-family="Arial" font-size="11">-2/3</text>
-                        <text x="100" y="260" font-family="Arial" font-size="11">0.8</text>
-                        <text x="80" y="280" font-family="Arial" font-size="11">...</text>
-                        
-                        <!-- Nombres dans R mais pas Q -->
-                        <text x="40" y="120" font-family="Arial" font-size="11">π</text>
-                        <text x="50" y="140" font-family="Arial" font-size="11">√2</text>
-                        <text x="480" y="180" font-family="Arial" font-size="11">-1.32</text>
-                        <text x="500" y="200" font-family="Arial" font-size="11">√7</text>
-                        <text x="480" y="260" font-family="Arial" font-size="11">³√7</text>
-                        <text x="50" y="320" font-family="Arial" font-size="11">...</text>
-                        <text x="480" y="320" font-family="Arial" font-size="11">...</text>
-                    </svg>
-                </div>
-                
-                <div class="theory-box">
-                    <h4>Quelques remarques à ce sujet :</h4>
-                    <ul>
-                        <li><strong>Chacun de ces ensembles de nombres comprend une quantité infinie d'éléments.</strong> Ce qui est étonnant au premier abord : les ensembles ℕ, ℤ et ℚ comprennent le même nombre d'éléments, mais moins que l'ensemble ℝ.</li>
-                        
-                        <li><strong>Nous comptons le zéro parmi les nombres naturels.</strong> Dans certains livres, il en est fait autrement et, effectivement, cela peut aussi se justifier. Pour l'ensemble des nombres naturels <em>sans</em> le zéro, nous écrivons ℕ*.</li>
-                        
-                        <li><strong>Tous les éléments de l'ensemble ℚ (les nombres <em>rationnels</em>) peuvent s'écrire sous forme de fraction.</strong> C'est pourquoi on utilise la lettre Q, qui fait référence au terme <em>quotient</em>.</li>
-                        
-                        <li><strong>L'ensemble ℝ (les nombres <em>réels</em>) représente, pour vous, la clôture de l'espace des nombres.</strong> Si vous faites un jour une maturité professionnelle technique, vous découvrirez plus tard encore d'autres nombres.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- EXERCICES -->
-            <div class="section" id="exercices">
-                <h2 class="section-title">📝 Exercices</h2>
-
-                <!-- Exercice 1: Règles de divisibilité -->
-                <div class="exercise">
-                    <div class="exercise-title">🔍 Exercice 1: Règles de divisibilité</div>
-                    <div class="question">
-                        <div class="question-text">Trouvez les diviseurs de 2 à 15 pour les nombres suivants :</div>
-                        
-                        <div class="grid-answers">
-                            <div>
-                                <label><strong>a) 149 :</strong></label>
-                                <input type="text" class="answer-input" id="ex1_149" placeholder="ex: 2,3,5">
-                            </div>
-                            <div>
-                                <label><strong>e) 272 :</strong></label>
-                                <input type="text" class="answer-input" id="ex1_272" placeholder="ex: 2,3,5">
-                            </div>
-                            <div>
-                                <label><strong>i) 208 :</strong></label>
-                                <input type="text" class="answer-input" id="ex1_208" placeholder="ex: 2,3,5">
-                            </div>
-                            <div>
-                                <label><strong>m) 232 :</strong></label>
-                                <input type="text" class="answer-input" id="ex1_232" placeholder="ex: 2,3,5">
-                            </div>
-                            <div>
-                                <label><strong>b) 184 :</strong></label>
-                                <input type="text" class="answer-input" id="ex1_184" placeholder="ex: 2,3,5">
-                            </div>
-                            <div>
-                                <label><strong>f) 264 :</strong></label>
-                                <input type="text" class="answer-input" id="ex1_264" placeholder="ex: 2,3,5">
-                            </div>
-                            <div>
-                                <label><strong>j) 133 :</strong></label>
-                                <input type="text" class="answer-input" id="ex1_133" placeholder="ex: 2,3,5">
-                            </div>
-                            <div>
-                                <label><strong>n) 119 :</strong></label>
-                                <input type="text" class="answer-input" id="ex1_119" placeholder="ex: 2,3,5">
-                            </div>
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise1()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution1()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise1()">Reset</button>
-                        
-                        <div class="feedback" id="feedback1"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 2: Explication divisibilité par 9 -->
-                <div class="exercise">
-                    <div class="exercise-title">🤔 Exercice 2: Pourquoi la règle pour la divisibilité par 9 ?</div>
-                    <div class="question">
-                        <div class="question-text">
-                            <strong>Exercice difficile pour les intéressés :</strong> pourquoi la règle pour la divisibilité par 3 respectivement par 9 fonctionne-t-elle ? Essayez de l'expliquer. 
-                            <br><br><strong>Conseil :</strong> pensez, p. ex. que 123 = 1 × 100 + 2 × 10 + 3.
-                        </div>
-                        
-                        <textarea class="answer-input" id="ex2_explanation" placeholder="Expliquez pourquoi cette règle fonctionne..." style="width: 100%; height: 120px; resize: vertical;"></textarea>
-
-                        <button class="btn btn-check" onclick="checkExercise2()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution2()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise2()">Reset</button>
-                        
-                        <div class="feedback" id="feedback2"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 3: Calculs mentaux -->
-                <div class="exercise">
-                    <div class="exercise-title">🧠 Exercice 3: Calculs mentaux avec priorités</div>
-                    <div class="question">
-                        <div class="question-text">Calculez mentalement en tenant compte de la priorité des opérations :</div>
-                        
-                        <div class="grid-answers">
-                            <div>
-                                <label>a) 10 + 9 - [8 - (7 - 6)] =</label>
-                                <input type="number" class="answer-input" id="ex3_a">
-                            </div>
-                            <div>
-                                <label>f) 13 + [(14 + 15) - (16 + 12)] =</label>
-                                <input type="number" class="answer-input" id="ex3_f">
-                            </div>
-                            <div>
-                                <label>b) (12 + 8) - (15 - 7) =</label>
-                                <input type="number" class="answer-input" id="ex3_b">
-                            </div>
-                            <div>
-                                <label>g) 18 - [12 - (2 + 4)] - 4 =</label>
-                                <input type="number" class="answer-input" id="ex3_g">
-                            </div>
-                            <div>
-                                <label>c) [1 + (4 - 2)] - [5 - (3 + 1)] =</label>
-                                <input type="number" class="answer-input" id="ex3_c">
-                            </div>
-                            <div>
-                                <label>h) 45 - (17 + 8) + 20 =</label>
-                                <input type="number" class="answer-input" id="ex3_h">
-                            </div>
-                            <div>
-                                <label>d) 28 - 12 + (14 - 8) =</label>
-                                <input type="number" class="answer-input" id="ex3_d">
-                            </div>
-                            <div>
-                                <label>i) 21 - [49 - (40 + 2)] =</label>
-                                <input type="number" class="answer-input" id="ex3_i">
-                            </div>
-                            <div>
-                                <label>e) 15 + (16 - 6) - 8 =</label>
-                                <input type="number" class="answer-input" id="ex3_e">
-                            </div>
-                            <div>
-                                <label>j) 36 + (18 - 16 - 2) =</label>
-                                <input type="number" class="answer-input" id="ex3_j">
-                            </div>
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise3()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution3()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise3()">Reset</button>
-                        
-                        <div class="feedback" id="feedback3"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 4: Parenthèses -->
-                <div class="exercise">
-                    <div class="exercise-title">📐 Exercice 4: Mettez des parenthèses</div>
-                    <div class="question">
-                        <div class="question-text">Mettez des parenthèses sur les calculs suivants afin que le résultat soit correct :</div>
-                        
-                        <div class="grid-answers">
-                            <div>
-                                <label>a) 6 - 5 × 7 + 3 = 10</label>
-                                <input type="text" class="answer-input" id="ex4_a" placeholder="(6-5)×(7+3)" style="width: 100%;">
-                            </div>
-                            <div>
-                                <label>f) 12 × 3 + 1 × 5 + 6 × 4 = 92</label>
-                                <input type="text" class="answer-input" id="ex4_f" placeholder="Expression avec parenthèses" style="width: 100%;">
-                            </div>
-                            <div>
-                                <label>b) 6 - 5 × 7 + 3 = -32</label>
-                                <input type="text" class="answer-input" id="ex4_b" placeholder="Expression avec parenthèses" style="width: 100%;">
-                            </div>
-                            <div>
-                                <label>g) 23 - 2 + 1 × 5 × 2 - 1 = 8</label>
-                                <input type="text" class="answer-input" id="ex4_g" placeholder="Expression avec parenthèses" style="width: 100%;">
-                            </div>
-                            <div>
-                                <label>c) 3 + 8 - 7 × 5 = 20</label>
-                                <input type="text" class="answer-input" id="ex4_c" placeholder="Expression avec parenthèses" style="width: 100%;">
-                            </div>
-                            <div>
-                                <label>h) 23 - 2 + 1 × 5 × 2 - 1 = -8</label>
-                                <input type="text" class="answer-input" id="ex4_h" placeholder="Expression avec parenthèses" style="width: 100%;">
-                            </div>
-                            <div>
-                                <label>d) 3 + 8 - 7 × 5 = 8</label>
-                                <input type="text" class="answer-input" id="ex4_d" placeholder="Expression avec parenthèses" style="width: 100%;">
-                            </div>
-                            <div>
-                                <label>i) 14 - 3 + 5 × 6 = 36</label>
-                                <input type="text" class="answer-input" id="ex4_i" placeholder="Expression avec parenthèses" style="width: 100%;">
-                            </div>
-                            <div>
-                                <label>e) 12 × 3 + 1 × 5 + 6 × 4 = 264</label>
-                                <input type="text" class="answer-input" id="ex4_e" placeholder="Expression avec parenthèses" style="width: 100%;">
-                            </div>
-                            <div>
-                                <label>j) 14 - 3 + 5 × 6 = -34</label>
-                                <input type="text" class="answer-input" id="ex4_j" placeholder="Expression avec parenthèses" style="width: 100%;">
-                            </div>
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise4()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution4()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise4()">Reset</button>
-                        
-                        <div class="feedback" id="feedback4"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 5: Combinaisons 1,3,5,7,9 -->
-                <div class="exercise">
-                    <div class="exercise-title">🎯 Exercice 5: Combinaisons avec 1,3,5,7,9</div>
-                    <div class="question">
-                        <div class="question-text">
-                            On vous donne les chiffres 1, 3, 5, 7 et 9 dans l'ordre. Combinez ces chiffres moyennant les opérations de base et des parenthèses afin d'obtenir les résultats de 0 à 9. L'ordre des chiffres doit être maintenu. Notez qu'il y a parfois plusieurs possibilités.
-                        </div>
-                        
-                        <div class="grid-answers">
-                            <div>
-                                <label><strong>0 = </strong></label>
-                                <input type="text" class="answer-input" id="ex5_0" placeholder="1...3...5...7...9" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>5 = </strong></label>
-                                <input type="text" class="answer-input" id="ex5_5" placeholder="1...3...5...7...9" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>1 = </strong></label>
-                                <input type="text" class="answer-input" id="ex5_1" placeholder="1...3...5...7...9" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>6 = </strong></label>
-                                <input type="text" class="answer-input" id="ex5_6" placeholder="1...3...5...7...9" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>2 = </strong></label>
-                                <input type="text" class="answer-input" id="ex5_2" placeholder="1...3...5...7...9" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>7 = </strong></label>
-                                <input type="text" class="answer-input" id="ex5_7" placeholder="1...3...5...7...9" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>3 = </strong></label>
-                                <input type="text" class="answer-input" id="ex5_3" placeholder="1...3...5...7...9" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>8 = </strong></label>
-                                <input type="text" class="answer-input" id="ex5_8" placeholder="1...3...5...7...9" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>4 = </strong></label>
-                                <input type="text" class="answer-input" id="ex5_4" placeholder="1...3...5...7...9" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>9 = </strong></label>
-                                <input type="text" class="answer-input" id="ex5_9" placeholder="1...3...5...7...9" style="width: 200px;">
-                            </div>
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise5()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution5()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise5()">Reset</button>
-                        
-                        <div class="feedback" id="feedback5"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 6: Combinaisons 1,2,3,4 -->
-                <div class="exercise">
-                    <div class="exercise-title">🎲 Exercice 6: Combinaisons avec 1,2,3,4</div>
-                    <div class="question">
-                        <div class="question-text">
-                            On vous donne les chiffres de 1 à 4 dans l'ordre. Combinez ces chiffres moyennant les opérations de base et des parenthèses afin d'obtenir les résultats de 0 à 9. L'ordre des chiffres doit être maintenu. Notez qu'il y a parfois plusieurs possibilités.
-                        </div>
-                        
-                        <div class="grid-answers">
-                            <div>
-                                <label><strong>0 = </strong></label>
-                                <input type="text" class="answer-input" id="ex6_0" placeholder="1...2...3...4" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>5 = </strong></label>
-                                <input type="text" class="answer-input" id="ex6_5" placeholder="1...2...3...4" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>1 = </strong></label>
-                                <input type="text" class="answer-input" id="ex6_1" placeholder="1...2...3...4" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>6 = </strong></label>
-                                <input type="text" class="answer-input" id="ex6_6" placeholder="1...2...3...4" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>2 = </strong></label>
-                                <input type="text" class="answer-input" id="ex6_2" placeholder="1...2...3...4" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>7 = </strong></label>
-                                <input type="text" class="answer-input" id="ex6_7" placeholder="1...2...3...4" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>3 = </strong></label>
-                                <input type="text" class="answer-input" id="ex6_3" placeholder="1...2...3...4" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>8 = </strong></label>
-                                <input type="text" class="answer-input" id="ex6_8" placeholder="1...2...3...4" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>4 = </strong></label>
-                                <input type="text" class="answer-input" id="ex6_4" placeholder="1...2...3...4" style="width: 200px;">
-                            </div>
-                            <div>
-                                <label><strong>9 = </strong></label>
-                                <input type="text" class="answer-input" id="ex6_9" placeholder="1...2...3...4" style="width: 200px;">
-                            </div>
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise6()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution6()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise6()">Reset</button>
-                        
-                        <div class="feedback" id="feedback6"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 7: Calculatrice -->
-                <div class="exercise">
-                    <div class="exercise-title">🧮 Exercice 7: Calculatrice - Arrondissement</div>
-                    <div class="question">
-                        <div class="question-text">Calculez avec la calculatrice. Donnez le résultat en arrondissant à 2 et 4 chiffres après la virgule :</div>
-                        
-                        <div style="margin-bottom: 20px;">
-                            <div style="margin-bottom: 10px;">
-                                <strong>a) 3 × 4 - (2 × 4 ÷ 2 - 3) + 7 ÷ 5 × 2 - 3 ÷ 7</strong>
-                            </div>
-                            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                                <div>
-                                    <label>Arrondi à 2 décimales :</label>
-                                    <input type="number" step="0.01" class="answer-input" id="ex7_a_2" style="width: 120px;">
-                                </div>
-                                <div>
-                                    <label>Arrondi à 4 décimales :</label>
-                                    <input type="number" step="0.0001" class
-="answer-input" id="ex7_a_4" style="width: 120px;">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style="margin-bottom: 20px;">
-                            <div style="margin-bottom: 10px;">
-                                <strong>b) 3 × (2/3 + 4/5) - 4 × 3 - (2 - 1) ÷ 4</strong>
-                            </div>
-                            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                                <div>
-                                    <label>Arrondi à 2 décimales :</label>
-                                    <input type="number" step="0.01" class="answer-input" id="ex7_b_2" style="width: 120px;">
-                                </div>
-                                <div>
-                                    <label>Arrondi à 4 décimales :</label>
-                                    <input type="number" step="0.0001" class="answer-input" id="ex7_b_4" style="width: 120px;">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style="margin-bottom: 20px;">
-                            <div style="margin-bottom: 10px;">
-                                <strong>c) 4 × 7/6 - (3/4 - 4/5) × 0.512</strong>
-                            </div>
-                            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                                <div>
-                                    <label>Arrondi à 2 décimales :</label>
-                                    <input type="number" step="0.01" class="answer-input" id="ex7_c_2" style="width: 120px;">
-                                </div>
-                                <div>
-                                    <label>Arrondi à 4 décimales :</label>
-                                    <input type="number" step="0.0001" class="answer-input" id="ex7_c_4" style="width: 120px;">
-                                </div>
-                            </div>
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise7()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution7()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise7()">Reset</button>
-                        
-                        <div class="feedback" id="feedback7"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 8: Calculatrice - Enregistrement -->
-                <div class="exercise">
-                    <div class="exercise-title">💾 Exercice 8: Calculatrice - Enregistrement</div>
-                    <div class="question">
-                        <div class="question-text">
-                            Faites d'abord les trois calculs suivants et enregistrez les résultats :
-                            <br><strong>• 3 × 2 - (4 × 4 ÷ 2 - 3) × 3 ÷ 7</strong>
-                            <br><strong>• 3 × (2/3 + 4/5) - 4 × (2 - 1)</strong>
-                            <br><strong>• 4 × 9/6 - (3/4 - 4/5)</strong>
-                            <br><br>Calculez ensuite à 3 chiffres après la virgule :
-                        </div>
-                        
-                        <div class="grid-answers">
-                            <div>
-                                <label>a) la somme des trois :</label>
-                                <input type="number" step="0.001" class="answer-input" id="ex8_a">
-                            </div>
-                            <div>
-                                <label>c) la somme des deux premiers, divisée par le troisième :</label>
-                                <input type="number" step="0.001" class="answer-input" id="ex8_c">
-                            </div>
-                            <div>
-                                <label>b) le produit des trois :</label>
-                                <input type="number" step="0.001" class="answer-input" id="ex8_b">
-                            </div>
-                            <div>
-                                <label>d) la somme des deux derniers, moins le premier :</label>
-                                <input type="number" step="0.001" class="answer-input" id="ex8_d">
-                            </div>
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise8()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution8()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise8()">Reset</button>
-                        
-                        <div class="feedback" id="feedback8"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 9: Nombres premiers -->
-                <div class="exercise">
-                    <div class="exercise-title">🔢 Exercice 9: Nombres premiers</div>
-                    <div class="question">
-                        <div class="question-text">
-                            Parmi les nombres suivants, lesquels sont des nombres premiers ? Calculez sans calculatrice. 
-                            <br><strong>Astuce :</strong> 16² = 256, 17² = 289 et 18² = 324.
-                            <br><br><strong>153, 179, 161, 159, 163, 217, 186, 223, 271, 123</strong>
-                        </div>
-                        
-                        <div style="margin-bottom: 20px;">
-                            <label><strong>Nombres premiers (séparez par des virgules) :</strong></label>
-                            <input type="text" class="answer-input" id="ex9_primes" placeholder="ex: 179,163,223" style="width: 300px;">
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise9()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution9()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise9()">Reset</button>
-                        
-                        <div class="feedback" id="feedback9"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 10: Décomposition en facteurs premiers -->
-                <div class="exercise">
-                    <div class="exercise-title">⚡ Exercice 10: Décomposition en facteurs premiers</div>
-                    <div class="question">
-                        <div class="question-text">Décomposez les nombres suivants en facteurs premiers et écrivez-les dans leur forme normale :</div>
-                        
-                        <div class="grid-answers">
-                            <div>
-                                <label><strong>a) 12 = </strong></label>
-                                <input type="text" class="answer-input" id="ex10_12" placeholder="2²×3">
-                            </div>
-                            <div>
-                                <label><strong>g) 56 = </strong></label>
-                                <input type="text" class="answer-input" id="ex10_56" placeholder="2³×7">
-                            </div>
-                            <div>
-                                <label><strong>b) 16 = </strong></label>
-                                <input type="text" class="answer-input" id="ex10_16" placeholder="2⁴">
-                            </div>
-                            <div>
-                                <label><strong>h) 88 = </strong></label>
-                                <input type="text" class="answer-input" id="ex10_88" placeholder="2³×11">
-                            </div>
-                            <div>
-                                <label><strong>c) 18 = </strong></label>
-                                <input type="text" class="answer-input" id="ex10_18" placeholder="2×3²">
-                            </div>
-                            <div>
-                                <label><strong>i) 124 = </strong></label>
-                                <input type="text" class="answer-input" id="ex10_124" placeholder="2²×31">
-                            </div>
-                            <div>
-                                <label><strong>d) 26 = </strong></label>
-                                <input type="text" class="answer-input" id="ex10_26" placeholder="2×13">
-                            </div>
-                            <div>
-                                <label><strong>j) 218 = </strong></label>
-                                <input type="text" class="answer-input" id="ex10_218" placeholder="2×109">
-                            </div>
-                            <div>
-                                <label><strong>e) 38 = </strong></label>
-                                <input type="text" class="answer-input" id="ex10_38" placeholder="2×19">
-                            </div>
-                            <div>
-                                <label><strong>k) 312 = </strong></label>
-                                <input type="text" class="answer-input" id="ex10_312" placeholder="2³×3×13">
-                            </div>
-                            <div>
-                                <label><strong>f) 46 = </strong></label>
-                                <input type="text" class="answer-input" id="ex10_46" placeholder="2×23">
-                            </div>
-                            <div>
-                                <label><strong>l) 432 = </strong></label>
-                                <input type="text" class="answer-input" id="ex10_432" placeholder="2⁴×3³">
-                            </div>
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise10()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution10()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise10()">Reset</button>
-                        
-                        <div class="feedback" id="feedback10"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 11: Diviseur commun -->
-                <div class="exercise">
-                    <div class="exercise-title">🔗 Exercice 11: Diviseur commun</div>
-                    <div class="question">
-                        <div class="question-text">
-                            Les nombres 56, 88 et 124 ont-ils un diviseur commun ? Si oui, lequel ? Argumentez grâce à la décomposition en facteurs premiers. Pour ce faire, vous pouvez laisser de côté le 1.
-                        </div>
-                        
-                        <div style="margin-bottom: 15px;">
-                            <label><strong>Diviseur commun (autre que 1) :</strong></label>
-                            <input type="number" class="answer-input" id="ex11_divisor" placeholder="Entrez le diviseur">
-                        </div>
-
-                        <div style="margin-bottom: 15px;">
-                            <label><strong>Justification :</strong></label>
-                            <textarea class="answer-input" id="ex11_justification" placeholder="Expliquez votre raisonnement..." style="width: 100%; height: 80px; resize: vertical;"></textarea>
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise11()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution11()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise11()">Reset</button>
-                        
-                        <div class="feedback" id="feedback11"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 12: PPMC -->
-                <div class="exercise">
-                    <div class="exercise-title">📊 Exercice 12: Plus Petit Multiple Commun (PPMC)</div>
-                    <div class="question">
-                        <div class="question-text">Déterminez le PPMC des nombres suivants sans calculatrice :</div>
-                        
-                        <div class="grid-answers">
-                            <div>
-                                <label>a) PPMC(4, 7, 12) =</label>
-                                <input type="number" class="answer-input" id="ex12_a">
-                            </div>
-                            <div>
-                                <label>c) PPMC(5, 9, 14) =</label>
-                                <input type="number" class="answer-input" id="ex12_c">
-                            </div>
-                            <div>
-                                <label>e) PPMC(24, 60, 125) =</label>
-                                <input type="number" class="answer-input" id="ex12_e">
-                            </div>
-                            <div>
-                                <label>b) PPMC(3, 10, 13) =</label>
-                                <input type="number" class="answer-input" id="ex12_b">
-                            </div>
-                            <div>
-                                <label>d) PPMC(20, 32, 56) =</label>
-                                <input type="number" class="answer-input" id="ex12_d">
-                            </div>
-                            <div>
-                                <label>f) PPMC(128, 150, 180, 220) =</label>
-                                <input type="number" class="answer-input" id="ex12_f">
-                            </div>
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise12()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution12()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise12()">Reset</button>
-                        
-                        <div class="feedback" id="feedback12"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 13: PGDC -->
-                <div class="exercise">
-                    <div class="exercise-title">📈 Exercice 13: Plus Grand Diviseur Commun (PGDC)</div>
-                    <div class="question">
-                        <div class="question-text">Déterminez ici aussi le PGDC :</div>
-                        
-                        <div class="grid-answers">
-                            <div>
-                                <label>a) PGDC(35, 8, 15) =</label>
-                                <input type="number" class="answer-input" id="ex13_a">
-                            </div>
-                            <div>
-                                <label>c) PGDC(64, 8, 24) =</label>
-                                <input type="number" class="answer-input" id="ex13_c">
-                            </div>
-                            <div>
-                                <label>e) PGDC(91, 28, 65) =</label>
-                                <input type="number" class="answer-input" id="ex13_e">
-                            </div>
-                            <div>
-                                <label>b) PGDC(26, 48, 10) =</label>
-                                <input type="number" class="answer-input" id="ex13_b">
-                            </div>
-                            <div>
-                                <label>d) PGDC(82, 15, 25) =</label>
-                                <input type="number" class="answer-input" id="ex13_d">
-                            </div>
-                            <div>
-                                <label>f) PGDC(108, 24, 56) =</label>
-                                <input type="number" class="answer-input" id="ex13_f">
-                            </div>
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise13()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution13()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise13()">Reset</button>
-                        
-                        <div class="feedback" id="feedback13"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 14: Famille Bachmann -->
-                <div class="exercise">
-                    <div class="exercise-title">🚶 Exercice 14: Famille Bachmann</div>
-                    <div class="question">
-                        <div class="question-text">
-                            La famille Bachmann part en promenade. Le père a une longueur de pas de 90 cm, et son fils de 65 cm. Le chien laisse son empreinte par terre tous les 25 cm. Après quelle distance aura-t-on les empreintes de deux pieds et d'une patte à la même hauteur ?
-                        </div>
-                        
-                        <div style="margin-bottom: 15px;">
-                            <label><strong>Distance (en cm) :</strong></label>
-                            <input type="number" class="answer-input" id="ex14_distance" placeholder="Distance en cm">
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise14()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution14()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise14()">Reset</button>
-                        
-                        <div class="feedback" id="feedback14"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 15: Patricia et Stéphanie -->
-                <div class="exercise">
-                    <div class="exercise-title">🚴 Exercice 15: Patricia et Stéphanie à vélo</div>
-                    <div class="question">
-                        <div class="question-text">
-                            Patricia et Stéphanie partent se balader à vélo. La roue avant de Patricia est un peu voilée tant et si bien que l'on entend deux bruits à chaque fois que sa roue fait un tour. Le vélo de Stéphanie fait aussi du bruit : il cliquette une fois à chaque tour. La roue de Patricia fait 20 tours par minute et celle de Stéphanie 24. Combien de secondes faut-il pour que le bruit des deux roues se fasse au même moment ?
-                        </div>
-                        
-                        <div style="margin-bottom: 15px;">
-                            <label><strong>Temps (en secondes) :</strong></label>
-                            <input type="number" step="0.1" class="answer-input" id="ex15_time" placeholder="Temps en secondes">
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise15()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution15()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise15()">Reset</button>
-                        
-                        <div class="feedback" id="feedback15"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 16: Gobelets -->
-                <div class="exercise">
-                    <div class="exercise-title">🥤 Exercice 16: Problème des gobelets</div>
-                    <div class="question">
-                        <div class="question-text">
-                            Une certaine quantité de jus d'orange doit être mise dans des gobelets. Si l'on utilise des gobelets de 3 dl, il restera 1 dl à la fin. Si par contre on utilise des gobelets de 5 dl, il restera 2 dl. Avec des gobelets de 4 dl, il restera également un surplus de 1 dl. Combien y a-t-il de jus d'orange, sachant qu'il y en a plus de 5, mais moins de 10 litres ?
-                        </div>
-                        
-                        <div style="margin-bottom: 15px;">
-                            <label><strong>Quantité de jus (en dl) :</strong></label>
-                            <input type="number" class="answer-input" id="ex16_quantity" placeholder="Quantité en dl">
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise16()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution16()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise16()">Reset</button>
-                        
-                        <div class="feedback" id="feedback16"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 17: Rayon laser -->
-                <div class="exercise">
-                    <div class="exercise-title">🔆 Exercice 17: Rayon laser</div>
-                    <div class="question">
-                        <div class="question-text">
-                            Un rayon laser est projeté contre un écran de projection. Il y a deux disques entre le projecteur et l'écran. Le disque A a un trou et tourne cinq fois par minute. Le disque B a deux trous juxtaposés et tourne 1.25 fois plus vite. Le rayon laser n'est visible sur l'écran de projection que si les trous des deux disques sont alignés. Combien de fois est-ce le cas en 10 minutes ?
-                        </div>
-                        
-                        <div style="margin-bottom: 15px;">
-                            <label><strong>Nombre de fois en 10 minutes :</strong></label>
-                            <input type="number" class="answer-input" id="ex17_count" placeholder="Nombre de fois">
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise17()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution17()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise17()">Reset</button>
-                        
-                        <div class="feedback" id="feedback17"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 18: PGDC sans calculatrice -->
-                <div class="exercise">
-                    <div class="exercise-title">🔢 Exercice 18: PGDC sans calculatrice</div>
-                    <div class="question">
-                        <div class="question-text">Déterminez le PGDC des nombres suivants sans utiliser la calculatrice :</div>
-                        
-                        <div class="grid-answers">
-                            <div>
-                                <label>a) PGDC(4, 7, 12) =</label>
-                                <input type="number" class="answer-input" id="ex18_a">
-                            </div>
-                            <div>
-                                <label>c) PGDC(5, 9, 14) =</label>
-                                <input type="number" class="answer-input" id="ex18_c">
-                            </div>
-                            <div>
-                                <label>e) PGDC(24, 60, 125) =</label>
-                                <input type="number" class="answer-input" id="ex18_e">
-                            </div>
-                            <div>
-                                <label>b) PGDC(3, 10, 13) =</label>
-                                <input type="number" class="answer-input" id="ex18_b">
-                            </div>
-                            <div>
-                                <label>d) PGDC(20, 32, 56) =</label>
-                                <input type="number" class="answer-input" id="ex18_d">
-                            </div>
-                            <div>
-                                <label>f) PGDC(128, 150, 180, 220) =</label>
-                                <input type="number" class="answer-input" id="ex18_f">
-                            </div>
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise18()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution18()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise18()">Reset</button>
-                        
-                        <div class="feedback" id="feedback18"></div>
-                    </div>
-                </div>
-
-                <!-- Exercice 19: Problème de carrelage -->
-                <div class="exercise">
-                    <div class="exercise-title">🏠 Exercice 19: Problème de carrelage</div>
-                    <div class="question">
-                        <div class="question-text">
-                            Un bassin fait 8.1 m de long, 4.5 m de large et 1.8 m de profondeur. Les parois doivent être recouvertes de carrelages carrés. Quelle est la grandeur maximale de l'un de ces carrelages si aucun d'entre eux ne doit être découpé ?
-                        </div>
-                        
-                        <div style="margin-bottom: 15px;">
-                            <label><strong>Taille du carrelage (en m) :</strong></label>
-                            <input type="number" step="0.1" class="answer-input" id="ex19_taille" placeholder="Taille en m">
-                        </div>
-
-                        <button class="btn btn-check" onclick="checkExercise19()">Vérifier</button>
-                        <button class="btn btn-solution" onclick="showSolution19()">Voir la solution</button>
-                        <button class="btn btn-reset" onclick="resetExercise19()">Reset</button>
-                        
-                        <div class="feedback" id="feedback19"></div>
-                    </div>
-                </div>
+            <div id="dynamic-content">
+                <!-- Contenu généré par JavaScript -->
             </div>
         </div>
     </div>
 
     <script>
-        let completedExercises = 0;
-        let correctAnswers = 0;
-
-        function updateStats() {
-            document.getElementById('completedExercises').textContent = completedExercises;
-            document.getElementById('correctAnswers').textContent = correctAnswers;
-            const progress = (completedExercises / 19) * 100;
-            document.getElementById('progressFill').style.width = progress + '%';
+    /**
+     * Utilitaires pour sécuriser l'injection de contenu dans le DOM
+     */
+    class DOMSanitizer {
+        static sanitizeText(text) {
+            if (typeof text !== 'string') return '';
+            
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#x27;');
         }
-
-        function showFeedback(feedbackId, message, type) {
-            const feedback = document.getElementById(feedbackId);
-            feedback.textContent = message;
-            feedback.className = `feedback ${type}`;
-            feedback.style.display = 'block';
+        
+        static createTextElement(tagName, textContent, className = '') {
+            const element = document.createElement(tagName);
+            element.textContent = textContent;
+            if (className) {
+                element.className = className;
+            }
+            return element;
         }
-
-        function resetFeedback(feedbackId) {
-            const feedback = document.getElementById(feedbackId);
-            feedback.style.display = 'none';
+        
+        static isTextSafe(text) {
+            const dangerousPatterns = [
+                /<script/i,
+                /<iframe/i,
+                /<object/i,
+                /<embed/i,
+                /javascript:/i,
+                /on\w+\s*=/i
+            ];
+            
+            return !dangerousPatterns.some(pattern => pattern.test(text));
         }
+    }
 
-        // Exercice 1: Règles de divisibilité
-        function checkExercise1() {
-            const answers = {
-                149: document.getElementById('ex1_149').value.trim().toLowerCase(),
-                272: document.getElementById('ex1_272').value.trim(),
-                208: document.getElementById('ex1_208').value.trim(),
-                232: document.getElementById('ex1_232').value.trim(),
-                184: document.getElementById('ex1_184').value.trim(),
-                264: document.getElementById('ex1_264').value.trim(),
-                133: document.getElementById('ex1_133').value.trim(),
-                119: document.getElementById('ex1_119').value.trim()
-            };
+    // Données JSON complètes intégrées
+    const chapterData = {
+        "chapter": {
+            "number": 1,
+            "title": "Bases générales",
+            "quote": {
+                "text": "Le grand livre de l'univers est écrit en langage mathématique.",
+                "author": "Galileo Galilei"
+            },
+            "totalExercises": 19
+        },
+        "sections": [
+            {
+                "id": "regles-divisibilite",
+                "title": "1.1 Règles de divisibilité",
+                "icon": "🔍",
+                "theory": [
+                    {
+                        "type": "text",
+                        "content": "En mathématiques, les règles de divisibilité permettent de savoir si un nombre est divisible par un autre nombre. Pour les petits nombres, on peut tout à fait essayer rapidement la division. Mais cela va encore plus vite si l'on prend en considération les règles suivantes :"
+                    },
+                    {
+                        "type": "table",
+                        "title": "Règles de divisibilité",
+                        "headers": ["Diviseur", "Test"],
+                        "data": [
+                            ["2", "Le dernier chiffre est pair."],
+                            ["3", "La somme est divisible par 3."],
+                            ["4", "Le nombre composé des deux derniers chiffres est divisible par 4."],
+                            ["5", "Le dernier chiffre est 5 ou 0."],
+                            ["6", "Le nombre est divisible par 2 et par 3."],
+                            ["7", "Enlever le dernier chiffre, le multiplier par 9 et soustraire ce produit des chiffres restants. Le résultat doit être divisible par 7."],
+                            ["8", "Le nombre composé par les trois derniers chiffres est divisible par 8."],
+                            ["9", "La somme des chiffres est divisible par 9."],
+                            ["10", "Le dernier chiffre est 0."],
+                            ["11", "La somme alternée des chiffres est 0 ou un multiple de 11."],
+                            ["12", "Le nombre est divisible par 3 et par 4."],
+                            ["13", "Supprimer le dernier chiffre, le multiplier par 9 et soustraire ce produit des chiffres restants. Le résultat doit être divisible par 13."],
+                            ["14", "Le nombre est divisible par 2 et par 7."],
+                            ["15", "Le nombre est divisible par 3 et par 5."]
+                        ]
+                    }
+                ],
+                "examples": [
+                    {
+                        "title": "Exemple 1.1",
+                        "content": "Prenons l'exemple du nombre 1771. On supprime le 1 final puis on calcule 177 - 9 = 168. Si l'on ne sait pas que 24 × 7 = 168, on refait la même chose et obtient 16 - 72 = -56. Donc, comme -8 × 7 = -56, 1771 est aussi divisible par 7."
+                    }
+                ]
+            },
+            {
+                "id": "priorite-operations",
+                "title": "1.2 Priorité des opérations",
+                "icon": "⚡",
+                "theory": [
+                    {
+                        "type": "ordered_list",
+                        "title": "💡 Les calculs sont toujours à faire dans cet ordre :",
+                        "items": [
+                            "parenthèses (de l'intérieur à l'extérieur)",
+                            "puissances",
+                            "multiplications et divisions",
+                            "additions et soustractions"
+                        ]
+                    },
+                    {
+                        "type": "text",
+                        "content": "⚠️ Attention avec vos calculatrices : certaines ne prennent pas en compte cette règle. Essayez simplement de calculer 1 + 2 × 3. Si vous obtenez 7, tout va bien ; si par contre vous obtenez 9, changez de calculatrice."
+                    }
+                ]
+            },
+            {
+                "id": "calculatrice",
+                "title": "1.3 La calculatrice TI-30X II",
+                "icon": "🧮",
+                "theory": [
+                    {
+                        "type": "text",
+                        "content": "Le mode d'emploi suivant correspond à la calculatrice TI-30X II, mais peut également être utilisé pour d'autres modèles."
+                    }
+                ],
+                "subsections": [
+                    {
+                        "title": "1.3.1 Arrondir",
+                        "content": [
+                            {
+                                "type": "steps",
+                                "items": [
+                                    "Appuyez sur 2nd puis sur . pour la fonction fix (en anglais = fixé).",
+                                    "Choisissez le nombre de chiffres après la virgule moyennant les touches sur lesquelles sont inscrites des flèches.",
+                                    "Pressez ENTER."
+                                ]
+                            },
+                            {
+                                "type": "text",
+                                "content": "Aucun arrondissement n'est véritablement fait. Le nombre est seulement affiché différemment. La calculatrice continue à utiliser le nombre exact pour les calculs suivants."
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "facteurs-premiers",
+                "title": "1.4 Facteurs premiers, PPMC et PGDC",
+                "icon": "🔢",
+                "theory": [
+                    {
+                        "type": "text",
+                        "content": "Par nombre premier on entend chaque nombre naturel qui n'est divisible que par 1 et par lui-même sans restes. Donc, par définition, 1 n'est pas un nombre premier."
+                    }
+                ]
+            },
+            {
+                "id": "ensembles",
+                "title": "1.5 Ensembles de nombres",
+                "icon": "🌍",
+                "theory": [
+                    {
+                        "type": "text",
+                        "content": "Afin de résoudre des problèmes mathématiques, il faut toujours d'abord savoir quels chiffres sont à disposition ; l'ensemble de référence doit être défini."
+                    }
+                ]
+            }
+        ],
+        "exercises": [
+            {
+                "id": 1,
+                "title": "Règles de divisibilité",
+                "icon": "🔍",
+                "type": "grid_input",
+                "description": "Trouvez les diviseurs de 2 à 15 pour les nombres suivants :",
+                "questions": [
+                    { "label": "a) 149 :", "id": "ex1_149", "answer": "aucun", "placeholder": "ex: 2,3,5" },
+                    { "label": "b) 184 :", "id": "ex1_184", "answer": "2,4,8", "placeholder": "ex: 2,3,5" },
+                    { "label": "c) 205 :", "id": "ex1_205", "answer": "5", "placeholder": "ex: 2,3,5" },
+                    { "label": "d) 148 :", "id": "ex1_148", "answer": "2,4", "placeholder": "ex: 2,3,5" },
+                    { "label": "e) 272 :", "id": "ex1_272", "answer": "2,4,8", "placeholder": "ex: 2,3,5" },
+                    { "label": "f) 264 :", "id": "ex1_264", "answer": "2,3,4,6,8,11,12", "placeholder": "ex: 2,3,5" },
+                    { "label": "g) 121 :", "id": "ex1_121", "answer": "11", "placeholder": "ex: 2,3,5" },
+                    { "label": "h) 275 :", "id": "ex1_275", "answer": "5,11", "placeholder": "ex: 2,3,5" },
+                    { "label": "i) 208 :", "id": "ex1_208", "answer": "2,4,8,13", "placeholder": "ex: 2,3,5" },
+                    { "label": "j) 133 :", "id": "ex1_133", "answer": "7", "placeholder": "ex: 2,3,5" },
+                    { "label": "k) 103 :", "id": "ex1_103", "answer": "aucun", "placeholder": "ex: 2,3,5" },
+                    { "label": "l) 148 :", "id": "ex1_148b", "answer": "2,4", "placeholder": "ex: 2,3,5" },
+                    { "label": "m) 232 :", "id": "ex1_232", "answer": "2,4,8", "placeholder": "ex: 2,3,5" },
+                    { "label": "n) 119 :", "id": "ex1_119", "answer": "7", "placeholder": "ex: 2,3,5" },
+                    { "label": "o) 195 :", "id": "ex1_195", "answer": "3,5,13,15", "placeholder": "ex: 2,3,5" },
+                    { "label": "p) 155 :", "id": "ex1_155", "answer": "5", "placeholder": "ex: 2,3,5" }
+                ],
+                "solution": "Solutions:\na) 149: Aucun diviseur (nombre premier)\nb) 184: Divisible par 2, 4, 8\nc) 205: Divisible par 5\nd) 148: Divisible par 2, 4\ne) 272: Divisible par 2, 4, 8\nf) 264: Divisible par 2, 3, 4, 6, 8, 11, 12\ng) 121: Divisible par 11\nh) 275: Divisible par 5, 11\ni) 208: Divisible par 2, 4, 8, 13\nj) 133: Divisible par 7\nk) 103: Aucun diviseur (nombre premier)\nl) 148: Divisible par 2, 4\nm) 232: Divisible par 2, 4, 8\nn) 119: Divisible par 7\no) 195: Divisible par 3, 5, 13, 15\np) 155: Divisible par 5"
+            },
+            {
+                "id": 2,
+                "title": "Pourquoi la règle pour la divisibilité par 9 ?",
+                "icon": "🤔",
+                "type": "textarea",
+                "description": "Exercice difficile pour les intéressés : pourquoi la règle pour la divisibilité par 3 respectivement par 9 fonctionne-t-elle ? Essayez de l'expliquer.",
+                "hint": "Conseil : pensez, p. ex. que 123 = 1 × 100 + 2 × 10 + 3.",
+                "minLength": 50,
+                "solution": "Solution:\nSi on développe les parenthèses, les produits 1 × 99 et 2 × 9 sont forcément divisibles par 9 resp. 3. Il reste donc seulement la somme 1 + 2 + 3 qui est la somme des chiffres.\n\nExplication détaillée:\n123 = 1 × 100 + 2 × 10 + 3 = 1 × (99 + 1) + 2 × (9 + 1) + 3\n= 1 × 99 + 1 + 2 × 9 + 2 + 3 = (1 × 99 + 2 × 9) + (1 + 2 + 3)"
+            },
+            {
+                "id": 3,
+                "title": "Calculs mentaux avec priorités",
+                "icon": "🧠",
+                "type": "grid_input",
+                "description": "Calculez mentalement en tenant compte de la priorité des opérations :",
+                "questions": [
+                    { "label": "a) 10 + 9 − [8 − (7 − 6)]", "id": "ex3_a", "answer": 12, "type": "number" },
+                    { "label": "b) (12 + 8) − (15 − 7)", "id": "ex3_b", "answer": 12, "type": "number" },
+                    { "label": "c) [1 + (4 − 2)] − [5 − (3 + 1)]", "id": "ex3_c", "answer": 2, "type": "number" },
+                    { "label": "d) 28 − 12 + (14 − 8)", "id": "ex3_d", "answer": 22, "type": "number" },
+                    { "label": "e) 15 + (16 − 6) − 8", "id": "ex3_e", "answer": 17, "type": "number" },
+                    { "label": "f) 13 + [(14 + 15) − (16 + 12)]", "id": "ex3_f", "answer": 14, "type": "number" },
+                    { "label": "g) 18 − [12 − (2 + 4)] − 4", "id": "ex3_g", "answer": 8, "type": "number" },
+                    { "label": "h) 45 − (17 + 8) + 20", "id": "ex3_h", "answer": 40, "type": "number" },
+                    { "label": "i) 21 − [49 − (40 + 2)]", "id": "ex3_i", "answer": 14, "type": "number" },
+                    { "label": "j) 36 + (18 − 16 − 2)", "id": "ex3_j", "answer": 36, "type": "number" }
+                ],
+                "solution": "Solutions détaillées:\na) 10 + 9 - [8 - (7 - 6)] = 10 + 9 - [8 - 1] = 10 + 9 - 7 = 12\nb) (12 + 8) - (15 - 7) = 20 - 8 = 12\nc) [1 + (4 - 2)] - [5 - (3 + 1)] = [1 + 2] - [5 - 4] = 3 - 1 = 2\nd) 28 - 12 + (14 - 8) = 28 - 12 + 6 = 22\ne) 15 + (16 - 6) - 8 = 15 + 10 - 8 = 17\nf) 13 + [(14 + 15) - (16 + 12)] = 13 + [29 - 28] = 13 + 1 = 14\ng) 18 - [12 - (2 + 4)] - 4 = 18 - [12 - 6] - 4 = 18 - 6 - 4 = 8\nh) 45 - (17 + 8) + 20 = 45 - 25 + 20 = 40\ni) 21 - [49 - (40 + 2)] = 21 - [49 - 42] = 21 - 7 = 14\nj) 36 + (18 - 16 - 2) = 36 + 0 = 36"
+            },
+            {
+                "id": 4,
+                "title": "Parenthèses pour calculs corrects",
+                "icon": "📐",
+                "type": "grid_input",
+                "description": "Mettez des parenthèses sur les calculs suivants afin que le résultat soit correct :",
+                "questions": [
+                    { "label": "a) 6 − 5 × 7 + 3 = 10", "id": "ex4_a", "answer": "(6 − 5) × (7 + 3) = 10", "placeholder": "Placez les parenthèses" },
+                    { "label": "b) 6 − 5 × 7 + 3 = −32", "id": "ex4_b", "answer": "6 − (5 × 7 + 3) = −32", "placeholder": "Placez les parenthèses" },
+                    { "label": "c) 3 + 8 − 7 × 5 = 20", "id": "ex4_c", "answer": "(3 + 8 − 7) × 5 = 20", "placeholder": "Placez les parenthèses" },
+                    { "label": "d) 3 + 8 − 7 × 5 = 8", "id": "ex4_d", "answer": "3 + (8 − 7) × 5 = 8", "placeholder": "Placez les parenthèses" },
+                    { "label": "e) 12 × 3 + 1 × 5 + 6 × 4 = 264", "id": "ex4_e", "answer": "12 × (3 + 1) × 5 + 6 × 4 = 264", "placeholder": "Placez les parenthèses" },
+                    { "label": "f) 12 × 3 + 1 × 5 + 6 × 4 = 92", "id": "ex4_f", "answer": "12 × (3 + 1) × (5 + 6) ÷ 4 = 92", "placeholder": "Placez les parenthèses" },
+                    { "label": "g) 23 − 2 + 1 × 5 × 2 − 1 = 8", "id": "ex4_g", "answer": "(23 − 2 + 1) × 5 × (2 − 1) = 8", "placeholder": "Placez les parenthèses" },
+                    { "label": "h) 23 − 2 + 1 × 5 × 2 − 1 = −8", "id": "ex4_h", "answer": "23 − (2 + 1) × 5 × 2 − 1 = −8", "placeholder": "Placez les parenthèses" },
+                    { "label": "i) 14 − 3 + 5 × 6 = 36", "id": "ex4_i", "answer": "(14 − 3 + 5) × 6 = 36", "placeholder": "Placez les parenthèses" },
+                    { "label": "j) 14 − 3 + 5 × 6 = −34", "id": "ex4_j", "answer": "14 − (3 + 5) × 6 = −34", "placeholder": "Placez les parenthèses" }
+                ],
+                "solution": "Solutions:\na) (6 - 5) · (7 + 3) = 1 · 10 = 10\nb) 6 - (5 · 7 + 3) = 6 - (35 + 3) = 6 - 38 = -32\nc) (3 + 8 - 7) · 5 = 4 · 5 = 20\nd) 3 + (8 - 7) · 5 = 3 + 1 · 5 = 3 + 5 = 8\ne) 12 · (3 + 1) · 5 + 6 · 4 = 12 · 4 · 5 + 24 = 240 + 24 = 264\nf) 12 · (3 + 1) · (5 + 6) : 4 = 12 · 4 · 11 : 4 = 12 · 11 = 132 ≠ 92\ng) (23 - 2 + 1) · 5 · (2 - 1) = 22 · 5 · 1 ≠ 8\nh) 23 - (2 + 1) · 5 · 2 - 1 = 23 - 3 · 5 · 2 - 1 = 23 - 30 - 1 = -8\ni) (14 - 3 + 5) · 6 = 16 · 6 ≠ 36\nj) 14 - (3 + 5) · 6 = 14 - 8 · 6 = 14 - 48 = -34"
+            },
+            {
+                "id": 5,
+                "title": "Combinaisons avec 1, 3, 5, 7, 9",
+                "icon": "🔢",
+                "type": "textarea",
+                "description": "On vous donne les chiffres 1, 3, 5, 7 et 9 dans l'ordre. Combinez ces chiffres moyennant les opérations de base et des parenthèses afin d'obtenir les résultats de 0 à 9. L'ordre des chiffres doit être maintenu. Notez qu'il y a parfois plusieurs possibilités.",
+                "minLength": 100,
+                "solution": "Exemples de solutions:\n0 = 1 + 3 · 5 - 7 - 9\n1 = 1 + 3 - 5 - 7 + 9\n2 = 1 - 3 · 5 + 7 + 9\n3 = ((1 + 3) · 5 + 7) : 9\n4 = 1 · 3(5 + 7) : 9\n5 = 1 - 3 + 5 - 7 + 9\n6 = 1 · 3 + 5 + 7 - 9\n7 = 1 + 3 + 5 + 7 - 9\n8 = (1 - 3 - 5) : 7 + 9\n9 = 1 - 3 - 5 + 7 + 9"
+            },
+            {
+                "id": 6,
+                "title": "Combinaisons avec 1, 2, 3, 4",
+                "icon": "🔢",
+                "type": "textarea",
+                "description": "On vous donne les chiffres de 1 à 4 dans l'ordre. Combinez ces chiffres moyennant les opérations de base et des parenthèses afin d'obtenir les résultats de 0 à 9. L'ordre des chiffres doit être maintenu. Notez qu'il y a parfois plusieurs possibilités.",
+                "minLength": 100,
+                "solution": "Exemples de solutions:\n0 = (1 + 2 - 3) · 4\n1 = (1 - 2) · (3 - 4)\n2 = -(1 - 2) - (3 - 4)\n3 = 1 · 2 - (3 - 4)\n4 = 1 + 2 - (3 - 4)\n5 = (1 + 2) · 3 - 4\n6 = 1 - (2 - 3) + 4\n7 = -(1 - 2) · 3 + 4\n8 = -(1 - 2 - 3) + 4\n9 = 1 · 2 + 3 + 4"
+            },
+            {
+                "id": 7,
+                "title": "Calculs avec calculatrice - Arrondissement",
+                "icon": "🧮",
+                "type": "grid_input",
+                "description": "Calculez avec la calculatrice. Donnez le résultat en arrondissant à 2 et 4 chiffres après la virgule :",
+                "questions": [
+                    { "label": "a) 3 × 4 - (2 × 4 ÷ 2 - 3) + 7 ÷ 5 × 2 - 3 ÷ 7 (2 chiffres)", "id": "ex7_a_2", "answer": "13.37", "placeholder": "ex: 12.34" },
+                    { "label": "a) 3 × 4 - (2 × 4 ÷ 2 - 3) + 7 ÷ 5 × 2 - 3 ÷ 7 (4 chiffres)", "id": "ex7_a_4", "answer": "13.3714", "placeholder": "ex: 12.3456" },
+                    { "label": "b) 3 × (⅔ + ⅘) - 4 × 3 - (2 - 1) ÷ 4 (2 chiffres)", "id": "ex7_b_2", "answer": "-7.85", "placeholder": "ex: 12.34" },
+                    { "label": "b) 3 × (⅔ + ⅘) - 4 × 3 - (2 - 1) ÷ 4 (4 chiffres)", "id": "ex7_b_4", "answer": "-7.8500", "placeholder": "ex: 12.3456" },
+                    { "label": "c) 4 × 7/6 - (¾ - ⅘) × 0.512 (2 chiffres)", "id": "ex7_c_2", "answer": "4.69", "placeholder": "ex: 12.34" },
+                    { "label": "c) 4 × 7/6 - (¾ - ⅘) × 0.512 (4 chiffres)", "id": "ex7_c_4", "answer": "4.6923", "placeholder": "ex: 12.3456" },
+                    { "label": "d) π - ⅓ + 3/7 - 3 (2 chiffres)", "id": "ex7_d_2", "answer": "0.15", "placeholder": "ex: 12.34" },
+                    { "label": "d) π - ⅓ + 3/7 - 3 (4 chiffres)", "id": "ex7_d_4", "answer": "0.1511", "placeholder": "ex: 12.3456" },
+                    { "label": "e) 2.31 + 1.324 ÷ 4.221 - 32/35 (2 chiffres)", "id": "ex7_e_2", "answer": "1.71", "placeholder": "ex: 12.34" },
+                    { "label": "e) 2.31 + 1.324 ÷ 4.221 - 32/35 (4 chiffres)", "id": "ex7_e_4", "answer": "1.7094", "placeholder": "ex: 12.3456" },
+                    { "label": "f) 0.54 × (7/3 - ⅕) ÷ 0.134 (2 chiffres)", "id": "ex7_f_2", "answer": "8.65", "placeholder": "ex: 12.34" },
+                    { "label": "f) 0.54 × (7/3 - ⅕) ÷ 0.134 (4 chiffres)", "id": "ex7_f_4", "answer": "8.6493", "placeholder": "ex: 12.3456" }
+                ],
+                "solution": "Solutions:\na) 13.37 resp. 13.3714\nb) -7.85 resp. -7.8500\nc) 4.69 resp. 4.6923\nd) 0.15 resp. 0.1511\ne) 1.71 resp. 1.7094\nf) 8.65 resp. 8.6493"
+            },
+            {
+                "id": 8,
+                "title": "Calculs avec enregistrement",
+                "icon": "💾",
+                "type": "grid_input",
+                "description": "Faites d'abord les trois calculs suivants et enregistrez les résultats. Calculez ensuite à 3 chiffres après la virgule :",
+                "questions": [
+                    { "label": "Calcul 1: 3 × 2 − (4 × 4 ÷ 2 − 3) × 3 ÷ 7", "id": "ex8_calc1", "answer": "7.736", "type": "text" },
+                    { "label": "Calcul 2: 3 × (⅔ + ⅘) − 4 × (2 − 1)", "id": "ex8_calc2", "answer": "5.367", "type": "text" },
+                    { "label": "Calcul 3: 4 × 9/7 − (¾ − ⅘)", "id": "ex8_calc3", "answer": "1.224", "type": "text" },
+                    { "label": "a) La somme des trois =", "id": "ex8_a", "answer": "14.327", "type": "text" },
+                    { "label": "b) Le produit des trois =", "id": "ex8_b", "answer": "50.876", "type": "text" },
+                    { "label": "c) La somme des deux premiers, divisée par le troisième =", "id": "ex8_c", "answer": "10.701", "type": "text" },
+                    { "label": "d) La somme des deux derniers, moins le premier =", "id": "ex8_d", "answer": "-1.145", "type": "text" }
+                ],
+                "solution": "Solutions:\nCalcul 1: 7.736\nCalcul 2: 5.367\nCalcul 3: 1.224\na) 7.736 + 5.367 + 1.224 = 14.327\nb) 7.736 × 5.367 × 1.224 = 50.876\nc) (7.736 + 5.367) ÷ 1.224 = 10.701\nd) (5.367 + 1.224) - 7.736 = -1.145"
+            },
+            {
+                "id": 9,
+                "title": "Nombres premiers",
+                "icon": "🔢",
+                "type": "grid_input",
+                "description": "Parmi les nombres suivants, lesquels sont des nombres premiers ? Calculez sans calculatrice. Astuce : 16² = 256, 17² = 289 et 18² = 324.",
+                "questions": [
+                    { "label": "a) 153", "id": "ex9_153", "answer": "non", "placeholder": "oui/non" },
+                    { "label": "b) 179", "id": "ex9_179", "answer": "oui", "placeholder": "oui/non" },
+                    { "label": "c) 161", "id": "ex9_161", "answer": "non", "placeholder": "oui/non" },
+                    { "label": "d) 221", "id": "ex9_221", "answer": "non", "placeholder": "oui/non" },
+                    { "label": "e) 159", "id": "ex9_159", "answer": "non", "placeholder": "oui/non" },
+                    { "label": "f) 163", "id": "ex9_163", "answer": "oui", "placeholder": "oui/non" },
+                    { "label": "g) 217", "id": "ex9_217", "answer": "non", "placeholder": "oui/non" },
+                    { "label": "h) 116", "id": "ex9_116", "answer": "non", "placeholder": "oui/non" },
+                    { "label": "i) 265", "id": "ex9_265", "answer": "non", "placeholder": "oui/non" },
+                    { "label": "j) 186", "id": "ex9_186", "answer": "non", "placeholder": "oui/non" },
+                    { "label": "k) 173", "id": "ex9_173", "answer": "oui", "placeholder": "oui/non" },
+                    { "label": "l) 273", "id": "ex9_273", "answer": "non", "placeholder": "oui/non" },
+                    { "label": "m) 291", "id": "ex9_291", "answer": "non", "placeholder": "oui/non" },
+                    { "label": "n) 223", "id": "ex9_223", "answer": "oui", "placeholder": "oui/non" },
+                    { "label": "o) 271", "id": "ex9_271", "answer": "oui", "placeholder": "oui/non" },
+                    { "label": "p) 123", "id": "ex9_123", "answer": "non", "placeholder": "oui/non" }
+                ],
+                "solution": "Nombres premiers: 179, 163, 173, 223 et 271.\n\nVérifications:\n- 153 = 3² × 17 (pas premier)\n- 179 est premier ✓\n- 161 = 7 × 23 (pas premier)\n- 221 = 13 × 17 (pas premier)\n- 159 = 3 × 53 (pas premier)\n- 163 est premier ✓\n- 217 = 7 × 31 (pas premier)\n- 116 = 4 × 29 (pas premier)\n- 265 = 5 × 53 (pas premier)\n- 186 = 2 × 3 × 31 (pas premier)\n- 173 est premier ✓\n- 273 = 3 × 7 × 13 (pas premier)\n- 291 = 3 × 97 (pas premier)\n- 223 est premier ✓\n- 271 est premier ✓\n- 123 = 3 × 41 (pas premier)"
+            },
+            {
+                "id": 10,
+                "title": "Décomposition en facteurs premiers",
+                "icon": "🔍",
+                "type": "grid_input",
+                "description": "Décomposez les nombres suivants en facteurs premiers et écrivez-les dans leur forme normale :",
+                "questions": [
+                    { "label": "a) 12", "id": "ex10_a", "answer": "2² × 3", "placeholder": "ex: 2³ × 5" },
+                    { "label": "b) 16", "id": "ex10_b", "answer": "2⁴", "placeholder": "ex: 2³ × 5" },
+                    { "label": "c) 18", "id": "ex10_c", "answer": "2 × 3²", "placeholder": "ex: 2³ × 5" },
+                    { "label": "d) 26", "id": "ex10_d", "answer": "2 × 13", "placeholder": "ex: 2³ × 5" },
+                    { "label": "e) 38", "id": "ex10_e", "answer": "2 × 19", "placeholder": "ex: 2³ × 5" },
+                    { "label": "f) 46", "id": "ex10_f", "answer": "2 × 23", "placeholder": "ex: 2³ × 5" },
+                    { "label": "g) 56", "id": "ex10_g", "answer": "2³ × 7", "placeholder": "ex: 2³ × 5" },
+                    { "label": "h) 88", "id": "ex10_h", "answer": "2³ × 11", "placeholder": "ex: 2³ × 5" },
+                    { "label": "i) 124", "id": "ex10_i", "answer": "2² × 31", "placeholder": "ex: 2³ × 5" },
+                    { "label": "j) 218", "id": "ex10_j", "answer": "2 × 109", "placeholder": "ex: 2³ × 5" },
+                    { "label": "k) 312", "id": "ex10_k", "answer": "2³ × 3 × 13", "placeholder": "ex: 2³ × 5" },
+                    { "label": "l) 432", "id": "ex10_l", "answer": "2⁴ × 3³", "placeholder": "ex: 2³ × 5" }
+                ],
+                "solution": "Solutions:\na) 12 = 2² × 3\nb) 16 = 2⁴\nc) 18 = 2 × 3²\nd) 26 = 2 × 13\ne) 38 = 2 × 19\nf) 46 = 2 × 23\ng) 56 = 2³ × 7\nh) 88 = 2³ × 11\ni) 124 = 2² × 31\nj) 218 = 2 × 109\nk) 312 = 2³ × 3 × 13\nl) 432 = 2⁴ × 3³"
+            },
+            {
+                "id": 11,
+                "title": "Diviseur commun",
+                "icon": "🔗",
+                "type": "single_input",
+                "description": "Les nombres 56, 88 et 124 ont-ils un diviseur commun ? Si oui, lequel ? Argumentez grâce à la décomposition en facteurs premiers. Pour ce faire, vous pouvez laisser de côté le 1.",
+                "questions": [
+                    { "label": "Diviseur commun :", "id": "ex11_answer", "answer": "4", "type": "number" }
+                ],
+                "solution": "Solution: Oui, les trois sont divisibles par 4, et donc aussi par 2.\n\n56 = 2³ · 7\n88 = 2³ · 11\n124 = 2² · 31\n\nLe facteur commun est 2², donc le diviseur commun est 4."
+            },
+            {
+                "id": 12,
+                "title": "Plus Petit Multiple Commun (PPMC)",
+                "icon": "📊",
+                "type": "grid_input",
+                "description": "Déterminez le PPMC des nombres suivants sans calculatrice :",
+                "questions": [
+                    { "label": "a) PPMC(4, 7, 12) =", "id": "ex12_a", "answer": 84, "type": "number" },
+                    { "label": "b) PPMC(3, 10, 13) =", "id": "ex12_b", "answer": 390, "type": "number" },
+                    { "label": "c) PPMC(5, 9, 14) =", "id": "ex12_c", "answer": 630, "type": "number" },
+                    { "label": "d) PPMC(20, 32, 56) =", "id": "ex12_d", "answer": 1120, "type": "number" },
+                    { "label": "e) PPMC(24, 60, 125) =", "id": "ex12_e", "answer": 3000, "type": "number" },
+                    { "label": "f) PPMC(128, 150, 180, 220) =", "id": "ex12_f", "answer": 316800, "type": "number" }
+                ],
+                "solution": "Solutions:\na) PPMC(4,7,12) = 84\nb) PPMC(3,10,13) = 390\nc) PPMC(5,9,14) = 630\nd) PPMC(20,32,56) = 1120\ne) PPMC(24,60,125) = 3000\nf) PPMC(128,150,180,220) = 316800"
+            },
+            {
+                "id": 13,
+                "title": "PPMC - Exercices supplémentaires",
+                "icon": "📈",
+                "type": "grid_input",
+                "description": "Déterminez ici aussi le PPMC :",
+                "questions": [
+                    { "label": "a) PPMC(35, 8, 15) =", "id": "ex13_a", "answer": 840, "type": "number" },
+                    { "label": "b) PPMC(26, 48, 10) =", "id": "ex13_b", "answer": 3120, "type": "number" },
+                    { "label": "c) PPMC(64, 8, 24) =", "id": "ex13_c", "answer": 192, "type": "number" },
+                    { "label": "d) PPMC(82, 15, 25) =", "id": "ex13_d", "answer": 6150, "type": "number" },
+                    { "label": "e) PPMC(91, 28, 65) =", "id": "ex13_e", "answer": 1820, "type": "number" },
+                    { "label": "f) PPMC(108, 24, 56) =", "id": "ex13_f", "answer": 1512, "type": "number" }
+                ],
+                "solution": "Solutions:\na) PPMC(35,8,15) = 840\nb) PPMC(26,48,10) = 3120\nc) PPMC(64,8,24) = 192\nd) PPMC(82,15,25) = 6150\ne) PPMC(91,28,65) = 1820\nf) PPMC(108,24,56) = 1512"
+            },
+            {
+                "id": 14,
+                "title": "Famille Bachmann",
+                "icon": "🚶",
+                "type": "single_input",
+                "description": "La famille Bachmann part en promenade. Le père a une longueur de pas de 90 cm, et son fils de 65 cm. Le chien laisse son empreinte par terre tous les 25 cm. Après quelle distance aura-t-on les empreintes de deux pieds et d'une patte à la même hauteur ?",
+                "questions": [
+                    { "label": "Distance (en cm) :", "id": "ex14_distance", "answer": 5850, "type": "number" }
+                ],
+                "solution": "Solution: 5850 cm (58.5 m)\n\nCalcul:\nIl faut trouver le PPMC de 90, 65 et 25.\n90 = 2 × 3² × 5\n65 = 5 × 13\n25 = 5²\n\nPPMC(90,65,25) = 2 × 3² × 5² × 13 = 2 × 9 × 25 × 13 = 5850 cm"
+            },
+            {
+                "id": 15,
+                "title": "Patricia et Stéphanie à vélo",
+                "icon": "🚴",
+                "type": "single_input",
+                "description": "Patricia et Stéphanie partent se balader à vélo. La roue avant de Patricia est un peu voilée tant et si bien que l'on entend deux bruits à chaque fois que sa roue fait un tour. Le vélo de Stéphanie fait aussi du bruit : il cliquette une fois à chaque tour. La roue de Patricia fait 20 tours par minute et celle de Stéphanie 24. Combien de secondes faut-il pour que le bruit des deux roues se fasse au même moment ?",
+                "questions": [
+                    { "label": "Temps (en secondes) :", "id": "ex15_time", "answer": 7.5, "type": "number" }
+                ],
+                "solution": "Solution: 7.5 secondes\n\nCalcul:\nPatricia: 20 tours/min = 40 bruits/min (2 bruits par tour)\nStéphanie: 24 tours/min = 24 bruits/min\n\nPPMC(40, 24) = 120 bruits/min\n120 bruits correspondent à 1 minute = 60 secondes\n1 bruit correspond à 60/120 = 0.5 seconde\n\nLe premier bruit simultané après le départ : 7.5 secondes"
+            },
+            {
+                "id": 16,
+                "title": "Gobelets de jus d'orange",
+                "icon": "🥤",
+                "type": "single_input",
+                "description": "Une certaine quantité de jus d'orange doit être mise dans des gobelets. Si l'on utilise des gobelets de 3 dl, il restera 1 dl à la fin. Si par contre on utilise des gobelets de 5 dl, il restera 2 dl. Avec des gobelets de 4 dl, il restera également un surplus de 1 dl. Combien y a-t-il de jus d'orange, sachant qu'il y en a plus de 5, mais moins de 10 litres ?",
+                "questions": [
+                    { "label": "Quantité de jus (en dl) :", "id": "ex16_quantity", "answer": 97, "type": "number" }
+                ],
+                "solution": "Solution: 97 dl\n\nCalcul:\n- Déterminer le PPMC de 3 dl et de 4 dl : 12 dl\n- puis inclure le 1 dl restant : 13 dl\n- les quantités possibles sont donc : 61 dl, 73 dl, 85 dl et 97 dl\n- parmi ces quantités, seule 97 dl donne le reste souhaité avec des gobelets de 5 dl"
+            },
+            {
+                "id": 17,
+                "title": "Rayon laser et disques",
+                "icon": "💿",
+                "type": "single_input",
+                "description": "Un rayon laser est projeté contre un écran de projection. Il y a deux disques entre le projecteur et l'écran. Le disque A a un trou et tourne cinq fois par minute. Le disque B a deux trous juxtaposés et tourne 1.25 fois plus vite. Le rayon laser n'est visible sur l'écran de projection que si les trous des deux disques sont alignés. Combien de fois est-ce le cas en 10 minutes ?",
+                "questions": [
+                    { "label": "Nombre de fois :", "id": "ex17_count", "answer": 25, "type": "number" }
+                ],
+                "solution": "Solution: 25 fois\n\nCalcul:\nLe disque A laisse passer le rayon toutes les 12 s, le disque B toutes les 4.8 s.\nEn tout, le rayon passe à travers les deux disques toutes les 24 s, donc 25 fois en 10 min."
+            },
+            {
+                "id": 18,
+                "title": "Plus Grand Diviseur Commun (PGDC)",
+                "icon": "🔽",
+                "type": "grid_input",
+                "description": "Déterminez le PGDC des nombres suivants sans utiliser la calculatrice :",
+                "questions": [
+                    { "label": "a) PGDC(4, 7, 12) =", "id": "ex18_a", "answer": 1, "type": "number" },
+                    { "label": "b) PGDC(3, 10, 13) =", "id": "ex18_b", "answer": 1, "type": "number" },
+                    { "label": "c) PGDC(5, 9, 14) =", "id": "ex18_c", "answer": 1, "type": "number" },
+                    { "label": "d) PGDC(20, 32, 56) =", "id": "ex18_d", "answer": 4, "type": "number" },
+                    { "label": "e) PGDC(24, 60, 125) =", "id": "ex18_e", "answer": 1, "type": "number" },
+                    { "label": "f) PGDC(128, 150, 180, 220) =", "id": "ex18_f", "answer": 2, "type": "number" }
+                ],
+                "solution": "Solutions:\na) PGDC(4,7,12) = 1\nb) PGDC(3,10,13) = 1\nc) PGDC(5,9,14) = 1\nd) PGDC(20,32,56) = 4\ne) PGDC(24,60,125) = 1\nf) PGDC(128,150,180,220) = 2"
+            },
+            {
+                "id": 19,
+                "title": "Bassin et carrelages",
+                "icon": "🏊",
+                "type": "single_input",
+                "description": "Un bassin fait 8.1 m de long, 4.5 m de large et 1.8 m de profondeur. Les parois doivent être recouvertes de carrelages carrés. Quelle est la grandeur maximale de l'un de ces carrelages si aucun d'entre eux ne doit être découpé ?",
+                "questions": [
+                    { "label": "Taille du carrelage (en m) :", "id": "ex19_size", "answer": 0.9, "type": "number" }
+                ],
+                "solution": "Solution: 0.9 m\n\nCalcul:\nDimensions en dm: 81 dm × 45 dm × 18 dm\nPGDC(81, 45, 18) = 9 dm = 0.9 m"
+            }
+        ]
+    };
 
-            const correct = {
-                149: 'aucun',
-                272: '2,4,8',
-                208: '2,4,8,13',
-                232: '2,4,8',
-                184: '2,4,8',
-                264: '2,3,4,6,8,11,12',
-                133: '7',
-                119: '7'
-            };
-
-            let correctCount = 0;
-            let feedback = '';
-
-            Object.keys(correct).forEach(num => {
-                const userAnswer = answers[num];
-                let isCorrect = false;
-
-                if (num === '149') {
-                    isCorrect = userAnswer === 'aucun' || userAnswer === '';
-                } else {
-                    const userDivs = userAnswer.split(',').map(x => x.trim()).sort().join(',');
-                    const correctDivs = correct[num].split(',').sort().join(',');
-                    isCorrect = userDivs === correctDivs;
-                }
-
-                if (isCorrect) {
-                    correctCount++;
-                    feedback += `✓ ${num}: Correct\n`;
-                } else {
-                    feedback += `✗ ${num}: Incorrect\n`;
+    /**
+     * Système mathématique hybride
+     */
+    class HybridMathInputSystem {
+        constructor() {
+            this.activeInput = null;
+            this.palette = null;
+            this.createPalette();
+            this.bindEvents();
+        }
+        
+        createPalette() {
+            this.palette = document.createElement('div');
+            this.palette.className = 'math-palette';
+            this.palette.innerHTML = `
+                <button class="symbol-btn" data-symbol="+">+</button>
+                <button class="symbol-btn" data-symbol="−">−</button>
+                <button class="symbol-btn" data-symbol="×">×</button>
+                <button class="symbol-btn" data-symbol="÷">÷</button>
+                <button class="symbol-btn" data-symbol="(">(</button>
+                <button class="symbol-btn" data-symbol=")">)</button>
+                <button class="symbol-btn" data-symbol="π">π</button>
+                <button class="symbol-btn" data-symbol="²">²</button>
+                <button class="symbol-btn" data-symbol="³">³</button>
+                <button class="symbol-btn" data-symbol="⁴">⁴</button>
+            `;
+            document.body.appendChild(this.palette);
+        }
+        
+        bindEvents() {
+            document.addEventListener('focusin', (e) => {
+                if (e.target.classList.contains('math-input')) {
+                    this.showPalette(e.target);
                 }
             });
-
-            if (correctCount === 8) {
-                showFeedback('feedback1', '🎉 Parfait ! Toutes les réponses sont correctes !', 'correct');
-                if (!document.getElementById('ex1_completed')) {
-                    completedExercises++;
-                    correctAnswers++;
-                    const marker = document.createElement('span');
-                    marker.id = 'ex1_completed';
-                    marker.style.display = 'none';
-                    document.body.appendChild(marker);
+            
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('symbol-btn')) {
+                    e.preventDefault();
+                    this.insertSymbol(e.target.dataset.symbol);
+                } else if (!e.target.closest('.math-palette') && !e.target.classList.contains('math-input')) {
+                    this.hidePalette();
                 }
-            } else {
-                showFeedback('feedback1', feedback, 'incorrect');
-                if (!document.getElementById('ex1_completed')) {
-                    completedExercises++;
-                    const marker = document.createElement('span');
-                    marker.id = 'ex1_completed';
-                    marker.style.display = 'none';
-                    document.body.appendChild(marker);
+            });
+            
+            document.addEventListener('input', (e) => {
+                if (e.target.classList.contains('math-input')) {
+                    setTimeout(() => this.handleAutoConversion(e.target), 10);
+                }
+            });
+        }
+        
+        showPalette(input) {
+            this.activeInput = input;
+            const rect = input.getBoundingClientRect();
+            this.palette.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+            this.palette.style.left = rect.left + 'px';
+            this.palette.classList.add('active');
+        }
+        
+        hidePalette() {
+            this.palette.classList.remove('active');
+        }
+        
+        insertSymbol(symbol) {
+            if (!this.activeInput) return;
+            
+            const selection = window.getSelection();
+            const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+            
+            if (range) {
+                range.deleteContents();
+                range.insertNode(document.createTextNode(symbol));
+                range.collapse(false);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+        }
+        
+        handleAutoConversion(input) {
+            let content = input.textContent || '';
+            let converted = content;
+            
+            // Conversion des fractions
+            converted = converted.replace(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/g, (match, num, den) => {
+                return `<span class="fraction"><span class="numerator">${num}</span><span class="denominator">${den}</span></span>`;
+            });
+            
+            // Fractions complexes avec parenthèses
+            converted = converted.replace(/\(([^)]+)\)\/\(([^)]+)\)/g, (match, num, den) => {
+                return `<span class="fraction"><span class="numerator">${num}</span><span class="denominator">${den}</span></span>`;
+            });
+            
+            if (converted !== content) {
+                const selection = window.getSelection();
+                const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+                const cursorOffset = range ? range.startOffset : content.length;
+                
+                input.innerHTML = converted;
+                
+                // Restaurer le curseur
+                try {
+                    const newRange = document.createRange();
+                    const textNodes = this.getTextNodes(input);
+                    let currentOffset = 0;
+                    
+                    for (let node of textNodes) {
+                        if (currentOffset + node.textContent.length >= cursorOffset) {
+                            newRange.setStart(node, Math.min(cursorOffset - currentOffset, node.textContent.length));
+                            newRange.setEnd(node, Math.min(cursorOffset - currentOffset, node.textContent.length));
+                            break;
+                        }
+                        currentOffset += node.textContent.length;
+                    }
+                    
+                    selection.removeAllRanges();
+                    selection.addRange(newRange);
+                } catch (e) {
+                    // En cas d'erreur, placer le curseur à la fin
+                    const range = document.createRange();
+                    range.selectNodeContents(input);
+                    range.collapse(false);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
                 }
             }
-            updateStats();
         }
-
-        function showSolution1() {
-            const solution = `Solutions:
-a) 149: Aucun diviseur (nombre premier)
-e) 272: Divisible par 2, 4, 8
-i) 208: Divisible par 2, 4, 8, 13
-m) 232: Divisible par 2, 4, 8
-b) 184: Divisible par 2, 4, 8
-f) 264: Divisible par 2, 3, 4, 6, 8, 11, 12
-j) 133: Divisible par 7
-n) 119: Divisible par 7`;
-            showFeedback('feedback1', solution, 'solution');
-        }
-
-        function resetExercise1() {
-            ['ex1_149', 'ex1_272', 'ex1_208', 'ex1_232', 'ex1_184', 'ex1_264', 'ex1_133', 'ex1_119'].forEach(id => {
-                document.getElementById(id).value = '';
-            });
-            resetFeedback('feedback1');
-        }
-
-        // Exercice 2: Explication divisibilité par 9
-        function checkExercise2() {
-            const explanation = document.getElementById('ex2_explanation').value.trim();
+        
+        getTextNodes(element) {
+            const textNodes = [];
+            const walker = document.createTreeWalker(
+                element,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
             
-            if (explanation.length > 50) {
-                showFeedback('feedback2', '✓ Explication fournie ! Consultez la solution pour comparer.', 'correct');
-                if (!document.getElementById('ex2_completed')) {
-                    completedExercises++;
-                    correctAnswers++;
-                    const marker = document.createElement('span');
-                    marker.id = 'ex2_completed';
-                    marker.style.display = 'none';
-                    document.body.appendChild(marker);
-                }
-            } else {
-                showFeedback('feedback2', 'Veuillez fournir une explication plus détaillée.', 'incorrect');
-                if (!document.getElementById('ex2_completed')) {
-                    completedExercises++;
-                    const marker = document.createElement('
-marker.id = 'ex2_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution2() {
-           const solution = `Solution:
-Si on développe les parenthèses, les produits 1 × 99 et 2 × 9 sont forcément divisibles par 9 resp. 3. Il reste donc seulement la somme 1 + 2 + 3 qui est la somme des chiffres.
-
-Explication détaillée:
-123 = 1 × 100 + 2 × 10 + 3 = 1 × (99 + 1) + 2 × (9 + 1) + 3
-= 1 × 99 + 1 + 2 × 9 + 2 + 3 = (1 × 99 + 2 × 9) + (1 + 2 + 3)
-
-Puisque 99 et 9 sont divisibles par 9, le premier terme est divisible par 9. 
-Donc 123 est divisible par 9 si et seulement si (1 + 2 + 3) est divisible par 9.`;
-           showFeedback('feedback2', solution, 'solution');
-       }
-
-       function resetExercise2() {
-           document.getElementById('ex2_explanation').value = '';
-           resetFeedback('feedback2');
-       }
-
-       // Exercice 3: Calculs mentaux
-       function checkExercise3() {
-           const answers = {
-               a: parseInt(document.getElementById('ex3_a').value),
-               b: parseInt(document.getElementById('ex3_b').value),
-               c: parseInt(document.getElementById('ex3_c').value),
-               d: parseInt(document.getElementById('ex3_d').value),
-               e: parseInt(document.getElementById('ex3_e').value),
-               f: parseInt(document.getElementById('ex3_f').value),
-               g: parseInt(document.getElementById('ex3_g').value),
-               h: parseInt(document.getElementById('ex3_h').value),
-               i: parseInt(document.getElementById('ex3_i').value),
-               j: parseInt(document.getElementById('ex3_j').value)
-           };
-
-           const correct = { a: 12, b: 12, c: 2, d: 22, e: 17, f: 14, g: 8, h: 40, i: 14, j: 36 };
-           
-           let correctCount = 0;
-           let feedback = '';
-
-           Object.keys(correct).forEach(key => {
-               if (answers[key] === correct[key]) {
-                   correctCount++;
-                   feedback += `✓ ${key.toUpperCase()}: ${correct[key]} - Correct\n`;
-               } else {
-                   feedback += `✗ ${key.toUpperCase()}: Votre réponse ${answers[key]} ≠ ${correct[key]}\n`;
-               }
-           });
-
-           if (correctCount === 10) {
-               showFeedback('feedback3', '🎉 Excellent ! Tous les calculs sont corrects !', 'correct');
-               if (!document.getElementById('ex3_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex3_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback3', feedback, 'incorrect');
-               if (!document.getElementById('ex3_completed')) {
-                   completedExercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex3_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution3() {
-           const solution = `Solutions détaillées:
-a) 10 + 9 - [8 - (7 - 6)] = 10 + 9 - [8 - 1] = 10 + 9 - 7 = 12
-b) (12 + 8) - (15 - 7) = 20 - 8 = 12
-c) [1 + (4 - 2)] - [5 - (3 + 1)] = [1 + 2] - [5 - 4] = 3 - 1 = 2
-d) 28 - 12 + (14 - 8) = 28 - 12 + 6 = 22
-e) 15 + (16 - 6) - 8 = 15 + 10 - 8 = 17
-f) 13 + [(14 + 15) - (16 + 12)] = 13 + [29 - 28] = 13 + 1 = 14
-g) 18 - [12 - (2 + 4)] - 4 = 18 - [12 - 6] - 4 = 18 - 6 - 4 = 8
-h) 45 - (17 + 8) + 20 = 45 - 25 + 20 = 40
-i) 21 - [49 - (40 + 2)] = 21 - [49 - 42] = 21 - 7 = 14
-j) 36 + (18 - 16 - 2) = 36 + 0 = 36`;
-           showFeedback('feedback3', solution, 'solution');
-       }
-
-       function resetExercise3() {
-           ['ex3_a', 'ex3_b', 'ex3_c', 'ex3_d', 'ex3_e', 'ex3_f', 'ex3_g', 'ex3_h', 'ex3_i', 'ex3_j'].forEach(id => {
-               document.getElementById(id).value = '';
-           });
-           resetFeedback('feedback3');
-       }
-
-       // Exercice 4: Parenthèses
-       function checkExercise4() {
-           const answers = {
-               a: document.getElementById('ex4_a').value.trim(),
-               b: document.getElementById('ex4_b').value.trim(),
-               c: document.getElementById('ex4_c').value.trim(),
-               d: document.getElementById('ex4_d').value.trim(),
-               e: document.getElementById('ex4_e').value.trim(),
-               f: document.getElementById('ex4_f').value.trim(),
-               g: document.getElementById('ex4_g').value.trim(),
-               h: document.getElementById('ex4_h').value.trim(),
-               i: document.getElementById('ex4_i').value.trim(),
-               j: document.getElementById('ex4_j').value.trim()
-           };
-
-           const correct = {
-               a: '(6-5)×(7+3)',
-               b: '6-(5×7+3)',
-               c: '(3+8-7)×5',
-               d: '3+(8-7)×5',
-               e: '12×(3+1)×5+6×4',
-               f: '12×(3+1×5+6)×4',
-               g: '[23-(2+1)]×5×2-1',
-               h: '23-(2+1×5×2-1)',
-               i: '[14-(3+5)]×6',
-               j: '14-(3+5)×6'
-           };
-
-           let correctCount = 0;
-           let feedback = '';
-
-           Object.keys(correct).forEach(key => {
-               const userAnswer = answers[key].replace(/\s/g, '');
-               const correctAnswer = correct[key].replace(/\s/g, '');
-               
-               if (userAnswer === correctAnswer) {
-                   correctCount++;
-                   feedback += `✓ ${key.toUpperCase()}: Correct\n`;
-               } else {
-                   feedback += `✗ ${key.toUpperCase()}: Incorrect\n`;
-               }
-           });
-
-           if (correctCount === 10) {
-               showFeedback('feedback4', '🎉 Toutes les expressions avec parenthèses sont correctes !', 'correct');
-               if (!document.getElementById('ex4_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex4_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback4', feedback, 'incorrect');
-               if (!document.getElementById('ex4_completed')) {
-                   completedExercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex4_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution4() {
-           const solution = `Solutions:
-a) (6-5)×(7+3) = 1×10 = 10
-b) 6-(5×7+3) = 6-38 = -32
-c) (3+8-7)×5 = 4×5 = 20
-d) 3+(8-7)×5 = 3+5 = 8
-e) 12×(3+1)×5+6×4 = 12×4×5+24 = 240+24 = 264
-f) 12×(3+1×5+6)×4 = 12×14×4 = 672... (Vérifiez le calcul)
-g) [23-(2+1)]×5×2-1 = 20×10-1 = 199... (Vérifiez)
-h) 23-(2+1×5×2-1) = 23-11 = 12... (Vérifiez)
-i) [14-(3+5)]×6 = 6×6 = 36
-j) 14-(3+5)×6 = 14-48 = -34`;
-           showFeedback('feedback4', solution, 'solution');
-       }
-
-       function resetExercise4() {
-           ['ex4_a', 'ex4_b', 'ex4_c', 'ex4_d', 'ex4_e', 'ex4_f', 'ex4_g', 'ex4_h', 'ex4_i', 'ex4_j'].forEach(id => {
-               document.getElementById(id).value = '';
-           });
-           resetFeedback('feedback4');
-       }
-
-       // Exercice 5: Combinaisons 1,3,5,7,9
-       function checkExercise5() {
-           const answers = {};
-           for (let i = 0; i <= 9; i++) {
-               answers[i] = document.getElementById(`ex5_${i}`).value.trim();
-           }
-
-           // Exemples de solutions possibles
-           const possibleSolutions = {
-               0: ['1+3-5+7-9', '1×3×5-7-9', '(1+3)×5-7×9'],
-               1: ['1+3-5+7-9+4', '1×3+5-7', '1+3-5+7-5'],
-               2: ['1-3+5-7+9-4', '1×3-5+7-9+3'],
-               3: ['1×3+5-7+9-8', '(1+3)×5-7-8'],
-               4: ['1×3×5-7-9+5', '1+3×5-7-9+4'],
-               5: ['1×3+5-7+9-5', '5'],
-               6: ['1×3+5+7-9', '1+3+5-7+9-6'],
-               7: ['1+3-5+7+9-8', '7'],
-               8: ['1-3+5+7-9+7', '1×3+5'],
-               9: ['1×3×5+7-9+6', '9']
-           };
-
-           let feedback = 'Vos réponses ont été enregistrées. Voici des exemples de solutions possibles :\n';
-           
-           for (let i = 0; i <= 9; i++) {
-               if (answers[i]) {
-                   feedback += `${i}: Votre réponse "${answers[i]}" - `;
-                   try {
-                       const result = eval(answers[i].replace(/×/g, '*'));
-                       if (Math.abs(result - i) < 0.001) {
-                           feedback += '✓ Correct!\n';
-                       } else {
-                           feedback += `✗ Résultat: ${result}\n`;
-                       }
-                   } catch (e) {
-                       feedback += '✗ Expression invalide\n';
-                   }
-               } else {
-                   feedback += `${i}: Pas de réponse\n`;
-               }
-           }
-
-           showFeedback('feedback5', feedback, 'solution');
-           if (!document.getElementById('ex5_completed')) {
-               completedExercises++;
-               const marker = document.createElement('span');
-               marker.id = 'ex5_completed';
-               marker.style.display = 'none';
-               document.body.appendChild(marker);
-           }
-           updateStats();
-       }
-
-       function showSolution5() {
-           const solution = `Solutions possibles:
-0 = 1+3-5+7-9
-1 = 1+3-5+7-9+4 ou 1×3+5-7
-2 = 1-3×5+7+9
-3 = ((1+3)×5+7)÷9
-4 = 1×3×(5+7)÷9
-5 = 1-3+5-7+9
-6 = 1×3+5+7-9
-7 = 1+3+5+7-9
-8 = (1-3+5)×7+9
-9 = 1-3-5+7+9
-
-Note: Il y a parfois plusieurs possibilités.`;
-           showFeedback('feedback5', solution, 'solution');
-       }
-
-       function resetExercise5() {
-           for (let i = 0; i <= 9; i++) {
-               document.getElementById(`ex5_${i}`).value = '';
-           }
-           resetFeedback('feedback5');
-       }
-
-       // Exercice 6: Combinaisons 1,2,3,4
-       function checkExercise6() {
-           const answers = {};
-           for (let i = 0; i <= 9; i++) {
-               answers[i] = document.getElementById(`ex6_${i}`).value.trim();
-           }
-
-           let feedback = 'Vos réponses ont été enregistrées. Vérification :\n';
-           
-           for (let i = 0; i <= 9; i++) {
-               if (answers[i]) {
-                   feedback += `${i}: Votre réponse "${answers[i]}" - `;
-                   try {
-                       const result = eval(answers[i].replace(/×/g, '*'));
-                       if (Math.abs(result - i) < 0.001) {
-                           feedback += '✓ Correct!\n';
-                       } else {
-                           feedback += `✗ Résultat: ${result}\n`;
-                       }
-                   } catch (e) {
-                       feedback += '✗ Expression invalide\n';
-                   }
-               } else {
-                   feedback += `${i}: Pas de réponse\n`;
-               }
-           }
-
-           showFeedback('feedback6', feedback, 'solution');
-           if (!document.getElementById('ex6_completed')) {
-               completedExercises++;
-               const marker = document.createElement('span');
-               marker.id = 'ex6_completed';
-               marker.style.display = 'none';
-               document.body.appendChild(marker);
-           }
-           updateStats();
-       }
-
-       function showSolution6() {
-           const solution = `Solutions possibles:
-0 = (1+2-3)×4
-1 = (1-2)×(3-4)
-2 = -(1-2)×(3-4)
-3 = 1×2-(3-4)
-4 = 1+2+3-4
-5 = (1+2)×3-4
-6 = 1-(2-3)×4
-7 = -(1-2)×3+4
-
-Note: Il y a parfois plusieurs possibilités.`;
-           showFeedback('feedback6', solution, 'solution');
-       }
-
-       function resetExercise6() {
-           for (let i = 0; i <= 9; i++) {
-               document.getElementById(`ex6_${i}`).value = '';
-           }
-           resetFeedback('feedback6');
-       }
-
-       // Exercice 7: Calculatrice - Arrondissement
-       function checkExercise7() {
-           const answers = {
-               a_2: parseFloat(document.getElementById('ex7_a_2').value),
-               a_4: parseFloat(document.getElementById('ex7_a_4').value),
-               b_2: parseFloat(document.getElementById('ex7_b_2').value),
-               b_4: parseFloat(document.getElementById('ex7_b_4').value),
-               c_2: parseFloat(document.getElementById('ex7_c_2').value),
-               c_4: parseFloat(document.getElementById('ex7_c_4').value)
-           };
-
-           const correct = {
-               a_2: 13.37, a_4: 13.3714,
-               b_2: -7.85, b_4: -7.8500,
-               c_2: 4.69, c_4: 4.6923
-           };
-
-           let correctCount = 0;
-           let feedback = '';
-
-           Object.keys(correct).forEach(key => {
-               const tolerance = key.includes('_2') ? 0.01 : 0.0001;
-               if (Math.abs(answers[key] - correct[key]) < tolerance) {
-                   correctCount++;
-                   feedback += `✓ ${key}: Correct (${correct[key]})\n`;
-               } else {
-                   feedback += `✗ ${key}: Votre réponse ${answers[key]} ≠ ${correct[key]}\n`;
-               }
-           });
-
-           if (correctCount === 6) {
-               showFeedback('feedback7', '🎉 Tous les arrondissements sont corrects !', 'correct');
-               if (!document.getElementById('ex7_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex7_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback7', feedback, 'incorrect');
-               if (!document.getElementById('ex7_completed')) {
-                   completedExercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex7_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution7() {
-           const solution = `Solutions:
-a) 3×4-(2×4÷2-3)+7÷5×2-3÷7 = 13.37 resp. 13.3714
-b) 3×(2/3+4/5)-4×3-(2-1)÷4 = -7.85 resp. -7.8500
-c) 4×7/6-(3/4-4/5)×0.512 = 4.69 resp. 4.6923`;
-           showFeedback('feedback7', solution, 'solution');
-       }
-
-       function resetExercise7() {
-           ['ex7_a_2', 'ex7_a_4', 'ex7_b_2', 'ex7_b_4', 'ex7_c_2', 'ex7_c_4'].forEach(id => {
-               document.getElementById(id).value = '';
-           });
-           resetFeedback('feedback7');
-       }
-
-       // Exercice 8: Calculatrice - Enregistrement
-       function checkExercise8() {
-           const answers = {
-               a: parseFloat(document.getElementById('ex8_a').value),
-               b: parseFloat(document.getElementById('ex8_b').value),
-               c: parseFloat(document.getElementById('ex8_c').value),
-               d: parseFloat(document.getElementById('ex8_d').value)
-           };
-
-           const correct = { a: 7.736, b: 5.367, c: 1.224, d: 0.021 };
-
-           let correctCount = 0;
-           let feedback = '';
-
-           Object.keys(correct).forEach(key => {
-               if (Math.abs(answers[key] - correct[key]) < 0.01) {
-                   correctCount++;
-                   feedback += `✓ ${key}: Correct (${correct[key]})\n`;
-               } else {
-                   feedback += `✗ ${key}: Votre réponse ${answers[key]} ≠ ${correct[key]}\n`;
-               }
-           });
-
-           if (correctCount === 4) {
-               showFeedback('feedback8', '🎉 Tous les calculs avec enregistrement sont corrects !', 'correct');
-               if (!document.getElementById('ex8_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex8_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback8', feedback, 'incorrect');
-               if (!document.getElementById('ex8_completed')) {
-                   completedExercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex8_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution8() {
-           const solution = `Solutions:
-Calculs intermédiaires:
-- 3×2-(4×4÷2-3)×3÷7 = calcul 1 = 0.714
-- 3×(2/3+4/5)-4×(2-1) = calcul 2 = 0.2
-- 4×9/6-(3/4-4/5) = calcul 3 = 6.05
-
-Résultats finaux:
-a) la somme des trois = 6.964
-b) le produit des trois = 0.087
-c) la somme des deux premiers, divisée par le troisième = 0.151
-d) la somme des deux derniers, moins le premier = 5.536`;
-           showFeedback('feedback8', solution, 'solution');
-       }
-
-       function resetExercise8() {
-           ['ex8_a', 'ex8_b', 'ex8_c', 'ex8_d'].forEach(id => {
-               document.getElementById(id).value = '';
-           });
-           resetFeedback('feedback8');
-       }
-
-       // Exercice 9: Nombres premiers
-       function checkExercise9() {
-           const answer = document.getElementById('ex9_primes').value.trim();
-           const userPrimes = answer.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x)).sort((a,b) => a-b);
-           const correctPrimes = [163, 179, 223, 271].sort((a,b) => a-b);
-
-           const isCorrect = JSON.stringify(userPrimes) === JSON.stringify(correctPrimes);
-
-           if (isCorrect) {
-               showFeedback('feedback9', '🎉 Parfait ! Vous avez trouvé tous les nombres premiers !', 'correct');
-               if (!document.getElementById('ex9_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex9_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback9', `❌ Incorrect. Nombres trouvés: ${userPrimes.join(', ')}`, 'incorrect');
-               if (!document.getElementById('ex9_completed')) {
-                   completedExercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex9_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution9() {
-           const solution = `Nombres premiers: 179, 163, 223, 271
-
-Vérifications:
-- 153 = 3² × 17 (pas premier)
-- 179 est premier ✓
-- 161 = 7 × 23 (pas premier) 
-- 159 = 3 × 53 (pas premier)
-- 163 est premier ✓
-- 217 = 7 × 31 (pas premier)
-- 186 = 2 × 3 × 31 (pas premier)
-- 223 est premier ✓
-- 271 est premier ✓
-- 123 = 3 × 41 (pas premier)`;
-           showFeedback('feedback9', solution, 'solution');
-       }
-
-       function resetExercise9() {
-           document.getElementById('ex9_primes').value = '';
-           resetFeedback('feedback9');
-       }
-
-       // Exercice 10: Décomposition en facteurs premiers
-       function checkExercise10() {
-           const answers = {
-               12: document.getElementById('ex10_12').value.trim(),
-               16: document.getElementById('ex10_16').value.trim(),
-               18: document.getElementById('ex10_18').value.trim(),
-               26: document.getElementById('ex10_26').value.trim(),
-               38: document.getElementById('ex10_38').value.trim(),
-               46: document.getElementById('ex10_46').value.trim(),
-               56: document.getElementById('ex10_56').value.trim(),
-               88: document.getElementById('ex10_88').value.trim(),
-               124: document.getElementById('ex10_124').value.trim(),
-               218: document.getElementById('ex10_218').value.trim(),
-               312: document.getElementById('ex10_312').value.trim(),
-               432: document.getElementById('ex10_432').value.trim()
-           };
-
-           const correct = {
-               12: ['2²×3', '2^2×3', '2²*3', '2^2*3'],
-               16: ['2⁴', '2^4'],
-               18: ['2×3²', '2×3^2', '2*3²', '2*3^2'],
-               26: ['2×13', '2*13'],
-               38: ['2×19', '2*19'],
-               46: ['2×23', '2*23'],
-               56: ['2³×7', '2^3×7', '2³*7', '2^3*7'],
-               88: ['2³×11', '2^3×11', '2³*11', '2^3*11'],
-               124: ['2²×31', '2^2×31', '2²*31', '2^2*31'],
-               218: ['2×109', '2*109'],
-               312: ['2³×3×13', '2^3×3×13', '2³*3*13', '2^3*3*13'],
-               432: ['2⁴×3³', '2^4×3^3', '2⁴*3³', '2^4*3^3']
-           };
-
-           let correctCount = 0;
-           let feedback = '';
-
-           Object.keys(correct).forEach(num => {
-               const userAnswer = answers[num].replace(/\s/g, '');
-               const isCorrect = correct[num].some(solution => 
-                   solution.replace(/\s/g, '') === userAnswer
-               );
-               
-               if (isCorrect) {
-                   correctCount++;
-                   feedback += `✓ ${num}: Correct\n`;
-               } else {
-                   feedback += `✗ ${num}: Incorrect\n`;
-               }
-           });
-
-           if (correctCount === 12) {
-               showFeedback('feedback10', '🎉 Toutes les décompositions sont correctes !', 'correct');
-               if (!document.getElementById('ex10_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex10_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback10', feedback, 'incorrect');
-               if (!document.getElementById('ex10_completed')) {
-                   completedExercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex10_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution10() {
-           const solution = `Solutions:
-a) 12 = 2² × 3    g) 56 = 2³ × 7
-b) 16 = 2⁴        h) 88 = 2³ × 11
-c) 18 = 2 × 3²    i) 124 = 2² × 31
-d) 26 = 2 × 13    j) 218 = 2 × 109
-e) 38 = 2 × 19    k) 312 = 2³ × 3 × 13
-f) 46 = 2 × 23    l) 432 = 2⁴ × 3³`;
-           showFeedback('feedback10', solution, 'solution');
-       }
-
-       function resetExercise10() {
-           ['ex10_12', 'ex10_16', 'ex10_18', 'ex10_26', 'ex10_38', 'ex10_46', 'ex10_56', 'ex10_88', 'ex10_124', 'ex10_218', 'ex10_312', 'ex10_432'].forEach(id => {
-               document.getElementById(id).value = '';
-           });
-           resetFeedback('feedback10');
-       }
-
-       // Fonctions pour les exercices restants (11-19) suivront le même pattern...
-       // Je continue avec quelques exercices clés:
-
-       // Exercice 11: Diviseur commun
-       function checkExercise11() {
-           const divisor = parseInt(document.getElementById('ex11_divisor').value);
-           const justification = document.getElementById('ex11_justification').value.trim();
-
-           if (divisor === 4 && justification.length > 20) {
-               showFeedback('feedback11', '✓ Correct ! Le diviseur commun est 4.', 'correct');
-               if (!document.getElementById('ex11_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex11_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback11', 'Vérifiez votre réponse et justification.', 'incorrect');
-               if (!document.getElementById('ex11_completed')) {
-                   completedEx
-ercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex11_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution11() {
-           const solution = `Oui, les trois sont divisibles par 4, et donc aussi par 2.
-
-Justification:
-56 = 2³ × 7
-88 = 2³ × 11  
-124 = 2² × 31
-
-Le facteur commun est 2², donc PGDC = 4.
-Tous ces nombres sont divisibles par 4.`;
-           showFeedback('feedback11', solution, 'solution');
-       }
-
-       function resetExercise11() {
-           document.getElementById('ex11_divisor').value = '';
-           document.getElementById('ex11_justification').value = '';
-           resetFeedback('feedback11');
-       }
-
-       // Exercice 12: PPMC
-       function checkExercise12() {
-           const answers = {
-               a: parseInt(document.getElementById('ex12_a').value),
-               b: parseInt(document.getElementById('ex12_b').value),
-               c: parseInt(document.getElementById('ex12_c').value),
-               d: parseInt(document.getElementById('ex12_d').value),
-               e: parseInt(document.getElementById('ex12_e').value),
-               f: parseInt(document.getElementById('ex12_f').value)
-           };
-
-           const correct = { a: 84, b: 390, c: 630, d: 1120, e: 3000, f: 316800 };
-           
-           let correctCount = 0;
-           let feedback = '';
-
-           Object.keys(correct).forEach(key => {
-               if (answers[key] === correct[key]) {
-                   correctCount++;
-                   feedback += `✓ ${key.toUpperCase()}: ${correct[key]} - Correct\n`;
-               } else {
-                   feedback += `✗ ${key.toUpperCase()}: Votre réponse ${answers[key]} ≠ ${correct[key]}\n`;
-               }
-           });
-
-           if (correctCount === 6) {
-               showFeedback('feedback12', '🎉 Tous les PPMC sont corrects !', 'correct');
-               if (!document.getElementById('ex12_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex12_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback12', feedback, 'incorrect');
-               if (!document.getElementById('ex12_completed')) {
-                   completedExercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex12_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution12() {
-           const solution = `Solutions:
-a) PPMC(4,7,12) = 84
-b) PPMC(3,10,13) = 390  
-c) PPMC(5,9,14) = 630
-d) PPMC(20,32,56) = 1120
-e) PPMC(24,60,125) = 3000
-f) PPMC(128,150,180,220) = 316800`;
-           showFeedback('feedback12', solution, 'solution');
-       }
-
-       function resetExercise12() {
-           ['ex12_a', 'ex12_b', 'ex12_c', 'ex12_d', 'ex12_e', 'ex12_f'].forEach(id => {
-               document.getElementById(id).value = '';
-           });
-           resetFeedback('feedback12');
-       }
-
-       // Exercice 13: PGDC
-       function checkExercise13() {
-           const answers = {
-               a: parseInt(document.getElementById('ex13_a').value),
-               b: parseInt(document.getElementById('ex13_b').value),
-               c: parseInt(document.getElementById('ex13_c').value),
-               d: parseInt(document.getElementById('ex13_d').value),
-               e: parseInt(document.getElementById('ex13_e').value),
-               f: parseInt(document.getElementById('ex13_f').value)
-           };
-
-           const correct = { a: 1, b: 2, c: 8, d: 1, e: 7, f: 4 };
-           
-           let correctCount = 0;
-           let feedback = '';
-
-           Object.keys(correct).forEach(key => {
-               if (answers[key] === correct[key]) {
-                   correctCount++;
-                   feedback += `✓ ${key.toUpperCase()}: ${correct[key]} - Correct\n`;
-               } else {
-                   feedback += `✗ ${key.toUpperCase()}: Votre réponse ${answers[key]} ≠ ${correct[key]}\n`;
-               }
-           });
-
-           if (correctCount === 6) {
-               showFeedback('feedback13', '🎉 Tous les PGDC sont corrects !', 'correct');
-               if (!document.getElementById('ex13_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex13_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback13', feedback, 'incorrect');
-               if (!document.getElementById('ex13_completed')) {
-                   completedExercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex13_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution13() {
-           const solution = `Solutions:
-a) PGDC(35,8,15) = 1
-b) PGDC(26,48,10) = 2
-c) PGDC(64,8,24) = 8  
-d) PGDC(82,15,25) = 1
-e) PGDC(91,28,65) = 7
-f) PGDC(108,24,56) = 4`;
-           showFeedback('feedback13', solution, 'solution');
-       }
-
-       function resetExercise13() {
-           ['ex13_a', 'ex13_b', 'ex13_c', 'ex13_d', 'ex13_e', 'ex13_f'].forEach(id => {
-               document.getElementById(id).value = '';
-           });
-           resetFeedback('feedback13');
-       }
-
-       // Exercice 14: Famille Bachmann
-       function checkExercise14() {
-           const distance = parseInt(document.getElementById('ex14_distance').value);
-           
-           if (distance === 5850) {
-               showFeedback('feedback14', '🎉 Correct ! La distance est 5850 cm = 58.5 m', 'correct');
-               if (!document.getElementById('ex14_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex14_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback14', `❌ Incorrect. Votre réponse: ${distance} cm`, 'incorrect');
-               if (!document.getElementById('ex14_completed')) {
-                   completedExercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex14_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution14() {
-           const solution = `Solution: 5850 cm (58.5 m)
-
-Calcul:
-Il faut trouver le PPMC de 90, 65 et 25.
-90 = 2 × 3² × 5
-65 = 5 × 13  
-25 = 5²
-
-PPMC(90,65,25) = 2 × 3² × 5² × 13 = 2 × 9 × 25 × 13 = 5850 cm`;
-           showFeedback('feedback14', solution, 'solution');
-       }
-
-       function resetExercise14() {
-           document.getElementById('ex14_distance').value = '';
-           resetFeedback('feedback14');
-       }
-
-       // Exercice 15: Patricia et Stéphanie
-       function checkExercise15() {
-           const time = parseFloat(document.getElementById('ex15_time').value);
-           
-           if (Math.abs(time - 7.5) < 0.1) {
-               showFeedback('feedback15', '🎉 Correct ! Le temps est 7.5 secondes', 'correct');
-               if (!document.getElementById('ex15_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex15_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback15', `❌ Incorrect. Votre réponse: ${time} s`, 'incorrect');
-               if (!document.getElementById('ex15_completed')) {
-                   completedExercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex15_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution15() {
-           const solution = `Solution: 7.5 secondes
-
-Calcul:
-Patricia: 20 tours/min = 20/60 tours/s = 1/3 tours/s, soit 2/3 bruits/s
-Stéphanie: 24 tours/min = 24/60 tours/s = 2/5 tours/s, soit 2/5 bruits/s
-
-Il faut trouver quand les bruits coïncident.
-PPMC des fréquences: 2/3 et 2/5
-Le temps = 15/2 = 7.5 secondes`;
-           showFeedback('feedback15', solution, 'solution');
-       }
-
-       function resetExercise15() {
-           document.getElementById('ex15_time').value = '';
-           resetFeedback('feedback15');
-       }
-
-       // Exercice 16: Gobelets
-       function checkExercise16() {
-           const quantity = parseInt(document.getElementById('ex16_quantity').value);
-           
-           if (quantity === 97) {
-               showFeedback('feedback16', '🎉 Correct ! Il y a 97 dl de jus d\'orange', 'correct');
-               if (!document.getElementById('ex16_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex16_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback16', `❌ Incorrect. Votre réponse: ${quantity} dl`, 'incorrect');
-               if (!document.getElementById('ex16_completed')) {
-                   completedExercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex16_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution16() {
-           const solution = `Solution: 97 dl
-
-Explication:
-- Déterminer le PPMC de 3 dl et de 4 dl: 12 dl
-- puis inclure le 1 dl restant: 13 dl  
-- les quantités possibles sont donc: 61 dl, 73 dl, 85 dl et 97 dl
-- parmi ces quantités, seule 97 dl donne le reste souhaité avec des gobelets de 5 dl
-
-Vérification: 97 ÷ 5 = 19 reste 2 ✓`;
-           showFeedback('feedback16', solution, 'solution');
-       }
-
-       function resetExercise16() {
-           document.getElementById('ex16_quantity').value = '';
-           resetFeedback('feedback16');
-       }
-
-       // Exercice 17: Rayon laser
-       function checkExercise17() {
-           const count = parseInt(document.getElementById('ex17_count').value);
-           
-           if (count === 25) {
-               showFeedback('feedback17', '🎉 Correct ! Le rayon passe 25 fois en 10 minutes', 'correct');
-               if (!document.getElementById('ex17_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex17_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback17', `❌ Incorrect. Votre réponse: ${count} fois`, 'incorrect');
-               if (!document.getElementById('ex17_completed')) {
-                   completedExercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex17_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution17() {
-           const solution = `Solution: 25 fois en 10 minutes
-
-Calcul:
-Le disque A laisse passer le rayon toutes les 12 s, le disque B toutes les 4.8 s.
-En tout, le rayon passe à travers les deux disques toutes les 24 s, donc 25 fois en 10 min.
-
-Détail:
-Disque A: 5 tours/min = 1 tour/12s
-Disque B: 6.25 tours/min = 1 tour/9.6s, mais 2 trous donc passage toutes les 4.8s
-PPMC(12, 4.8) = 24s
-600s ÷ 24s = 25 fois`;
-           showFeedback('feedback17', solution, 'solution');
-       }
-
-       function resetExercise17() {
-           document.getElementById('ex17_count').value = '';
-           resetFeedback('feedback17');
-       }
-
-       // Exercice 18: PGDC sans calculatrice
-       function checkExercise18() {
-           const answers = {
-               a: parseInt(document.getElementById('ex18_a').value),
-               b: parseInt(document.getElementById('ex18_b').value),
-               c: parseInt(document.getElementById('ex18_c').value),
-               d: parseInt(document.getElementById('ex18_d').value),
-               e: parseInt(document.getElementById('ex18_e').value),
-               f: parseInt(document.getElementById('ex18_f').value)
-           };
-
-           const correct = { a: 1, b: 1, c: 1, d: 4, e: 1, f: 2 };
-           
-           let correctCount = 0;
-           let feedback = '';
-
-           Object.keys(correct).forEach(key => {
-               if (answers[key] === correct[key]) {
-                   correctCount++;
-                   feedback += `✓ ${key.toUpperCase()}: ${correct[key]} - Correct\n`;
-               } else {
-                   feedback += `✗ ${key.toUpperCase()}: Votre réponse ${answers[key]} ≠ ${correct[key]}\n`;
-               }
-           });
-
-           if (correctCount === 6) {
-               showFeedback('feedback18', '🎉 Tous les PGDC sont corrects !', 'correct');
-               if (!document.getElementById('ex18_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex18_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback18', feedback, 'incorrect');
-               if (!document.getElementById('ex18_completed')) {
-                   completedExercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex18_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution18() {
-           const solution = `Solutions:
-a) PGDC(4,7,12) = 1
-b) PGDC(3,10,13) = 1
-c) PGDC(5,9,14) = 1  
-d) PGDC(20,32,56) = 4
-e) PGDC(24,60,125) = 1
-f) PGDC(128,150,180,220) = 2`;
-           showFeedback('feedback18', solution, 'solution');
-       }
-
-       function resetExercise18() {
-           ['ex18_a', 'ex18_b', 'ex18_c', 'ex18_d', 'ex18_e', 'ex18_f'].forEach(id => {
-               document.getElementById(id).value = '';
-           });
-           resetFeedback('feedback18');
-       }
-
-       // Exercice 19: Problème de carrelage
-       function checkExercise19() {
-           const taille = parseFloat(document.getElementById('ex19_taille').value);
-           
-           if (Math.abs(taille - 0.9) < 0.05) {
-               showFeedback('feedback19', '🎉 Correct ! La taille maximale est 0.9 m', 'correct');
-               if (!document.getElementById('ex19_completed')) {
-                   completedExercises++;
-                   correctAnswers++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex19_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           } else {
-               showFeedback('feedback19', `❌ Incorrect. Votre réponse: ${taille} m`, 'incorrect');
-               if (!document.getElementById('ex19_completed')) {
-                   completedExercises++;
-                   const marker = document.createElement('span');
-                   marker.id = 'ex19_completed';
-                   marker.style.display = 'none';
-                   document.body.appendChild(marker);
-               }
-           }
-           updateStats();
-       }
-
-       function showSolution19() {
-           const solution = `Solution: 0.9 m
-
-Calcul:
-Dimensions en décimètres: 81 dm × 45 dm × 18 dm
-Il faut trouver le PGDC de 81, 45 et 18.
-
-81 = 3⁴  
-45 = 3² × 5
-18 = 2 × 3²
-
-PGDC(81,45,18) = 3² = 9 dm = 0.9 m
-
-La taille maximale du carrelage carré est donc 0.9 m × 0.9 m.`;
-           showFeedback('feedback19', solution, 'solution');
-       }
-
-       function resetExercise19() {
-           document.getElementById('ex19_taille').value = '';
-           resetFeedback('feedback19');
-       }
-
-       // Navigation smooth scroll
-       document.querySelectorAll('.nav-btn').forEach(btn => {
-           btn.addEventListener('click', function(e) {
-               e.preventDefault();
-               const targetId = this.getAttribute('href').substring(1);
-               const targetElement = document.getElementById(targetId);
-               if (targetElement) {
-                   targetElement.scrollIntoView({ 
-                       behavior: 'smooth',
-                       block: 'start'
-                   });
-               }
-           });
-       });
-
-       // Initialisation
-       updateStats();
-   </script>
+            let node;
+            while (node = walker.nextNode()) {
+                textNodes.push(node);
+            }
+            
+            return textNodes;
+        }
+        
+        compareAnswers(userAnswer, correctAnswer) {
+            const normalize = (answer) => {
+                return answer.toLowerCase()
+                    .replace(/\s+/g, '')
+                    .replace(/×/g, '*')
+                    .replace(/÷/g, '/')
+                    .replace(/−/g, '-');
+            };
+            
+            return normalize(userAnswer) === normalize(correctAnswer);
+        }
+        
+        destroy() {
+            if (this.palette) {
+                this.palette.remove();
+            }
+        }
+    }
+
+    /**
+     * Gestionnaire de chapitre complet
+     */
+    class ChapterManager {
+        constructor() {
+            this.currentChapter = null;
+            this.completedExercises = 0;
+            this.correctAnswers = 0;
+            this.exerciseStates = new Map();
+            this.hybridMathSystem = new HybridMathInputSystem();
+            this.createHelpModal();
+        }
+        
+        createHelpModal() {
+            const modal = document.createElement('div');
+            modal.id = 'math-help-modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Guide de saisie mathématique</h3>
+                        <button class="modal-close" onclick="chapterManager.closeHelpModal()">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Conversion automatique :</strong> Tapez "/" pour créer des fractions automatiquement.</p>
+                        <p><strong>Palette :</strong> Cliquez dans un champ pour ouvrir la palette de symboles.</p>
+                        <p><strong>Exemple :</strong> Tapez "3/4" et cela devient une fraction formatée.</p>
+                        <p><strong>Fractions complexes :</strong> Tapez "(2x+1)/(x-3)" pour des expressions complexes.</p>
+                        <p><strong>Symboles disponibles :</strong> +, −, ×, ÷, π, ², ³, ⁴</p>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        showHelpModal() {
+            document.getElementById('math-help-modal').style.display = 'flex';
+        }
+        
+        closeHelpModal() {
+            document.getElementById('math-help-modal').style.display = 'none';
+        }
+        
+        loadChapter(data = chapterData) {
+            this.currentChapter = data;
+            this.initializePage(data);
+        }
+        
+        initializePage(data) {
+            this.updatePageMetadata(data);
+            this.generateNavigation(data.sections);
+            this.generateContent(data);
+        }
+        
+        updatePageMetadata(data) {
+            document.title = `${data.chapter.title} - Cours Interactif`;
+            document.getElementById('chapter-title').textContent = `📚 ${data.chapter.number} ${data.chapter.title}`;
+            document.getElementById('totalExercises').textContent = data.chapter.totalExercises;
+            
+            const quoteElement = document.getElementById('chapter-quote');
+            if (data.chapter.quote) {
+                quoteElement.innerHTML = `"${DOMSanitizer.sanitizeText(data.chapter.quote.text)}"<br><em>— ${DOMSanitizer.sanitizeText(data.chapter.quote.author)}</em>`;
+            }
+        }
+        
+        generateNavigation(sections) {
+            const nav = document.getElementById('navigation');
+            let navHTML = '<button class="nav-btn" onclick="chapterManager.showHelpModal()">❓ Aide</button>';
+            
+            sections.forEach(section => {
+                navHTML += `<button class="nav-btn" onclick="document.getElementById('${section.id}').scrollIntoView({behavior: 'smooth'})">${section.icon} ${section.title}</button>`;
+            });
+            
+            navHTML += '<button class="nav-btn" onclick="document.getElementById(\'exercices\').scrollIntoView({behavior: \'smooth\'})">📝 Exercices</button>';
+            nav.innerHTML = navHTML;
+        }
+        
+        generateContent(data) {
+            const content = document.getElementById('dynamic-content');
+            let contentHTML = '';
+            
+            // Générer les sections
+            data.sections.forEach(section => {
+                contentHTML += this.generateSection(section);
+            });
+            
+            // Générer les exercices
+            contentHTML += '<div class="section" id="exercices"><h2 class="section-title">📝 Exercices</h2>';
+            
+            data.exercises.forEach(exercise => {
+                contentHTML += this.generateExercise(exercise);
+            });
+            
+            contentHTML += '</div>';
+            content.innerHTML = contentHTML;
+        }
+        
+        generateSection(section) {
+            let html = `<div class="section" id="${section.id}">
+                <h2 class="section-title">${section.title}</h2>`;
+            
+            if (section.theory) {
+                section.theory.forEach(item => {
+                    html += this.generateTheoryItem(item);
+                });
+            }
+            
+            if (section.examples) {
+                section.examples.forEach(example => {
+                    html += `<div class="example-box">
+                        <div class="example-title">${DOMSanitizer.sanitizeText(example.title)}</div>
+                        <p>${DOMSanitizer.sanitizeText(example.content)}</p>
+                    </div>`;
+                });
+            }
+            
+            if (section.subsections) {
+                section.subsections.forEach(subsection => {
+                    html += `<div class="subsection-title">${DOMSanitizer.sanitizeText(subsection.title)}</div>`;
+                    if (subsection.content) {
+                        subsection.content.forEach(item => {
+                            html += this.generateTheoryItem(item);
+                        });
+                    }
+                });
+            }
+            
+            html += '</div>';
+            return html;
+        }
+        
+        generateTheoryItem(item) {
+            switch (item.type) {
+                case 'text':
+                    return `<div class="theory-box"><p>${DOMSanitizer.sanitizeText(item.content)}</p></div>`;
+                
+                case 'table':
+                    return this.generateTable(item);
+                
+                case 'ordered_list':
+                    return this.generateOrderedList(item);
+                
+                case 'steps':
+                    return this.generateSteps(item);
+                
+                default:
+                    return `<div class="theory-box"><p>${DOMSanitizer.sanitizeText(item.content || '')}</p></div>`;
+            }
+        }
+        
+        generateTable(tableData) {
+            let html = `<div class="theory-box">
+                <table class="divisibility-table">
+                    <thead><tr>`;
+            
+            tableData.headers.forEach(header => {
+                html += `<th>${DOMSanitizer.sanitizeText(header)}</th>`;
+            });
+            
+            html += `</tr></thead><tbody>`;
+            
+            tableData.data.forEach(row => {
+                html += '<tr>';
+                row.forEach(cell => {
+                    html += `<td>${DOMSanitizer.sanitizeText(cell)}</td>`;
+                });
+                html += '</tr>';
+            });
+            
+            html += '</tbody></table></div>';
+            return html;
+        }
+        
+        generateOrderedList(listData) {
+            let html = `<div class="priority-list">
+                <h3>${DOMSanitizer.sanitizeText(listData.title)}</h3>
+                <ol>`;
+            
+            listData.items.forEach(item => {
+                html += `<li><strong>${DOMSanitizer.sanitizeText(item)}</strong></li>`;
+            });
+            
+            html += '</ol></div>';
+            return html;
+        }
+        
+        generateSteps(stepsData) {
+            let html = `<div class="calculator-steps">`;
+            
+            if (stepsData.title) {
+                html += `<h4>${DOMSanitizer.sanitizeText(stepsData.title)}</h4>`;
+            }
+            
+            html += '<ol>';
+            
+            stepsData.items.forEach(step => {
+                html += `<li>${DOMSanitizer.sanitizeText(step)}</li>`;
+            });
+            
+            html += '</ol></div>';
+            return html;
+        }
+        
+        generateExercise(exercise) {
+            let html = `<div class="exercise">
+                <div class="exercise-title">${exercise.icon} Exercice ${exercise.id}: ${DOMSanitizer.sanitizeText(exercise.title)}</div>
+                <div class="question">
+                    <div class="question-text">${DOMSanitizer.sanitizeText(exercise.description)}</div>`;
+            
+            html += this.generateExerciseInputs(exercise);
+            
+            html += `
+                <button class="btn btn-check" onclick="chapterManager.checkExercise(${exercise.id})">Vérifier</button>
+                <button class="btn btn-solution" onclick="chapterManager.showSolution(${exercise.id})">Solution</button>
+                <button class="btn btn-reset" onclick="chapterManager.resetExercise(${exercise.id})">Reset</button>
+                <div class="feedback" id="feedback${exercise.id}"></div>
+            </div>
+        </div>`;
+            
+            return html;
+        }
+        
+        generateExerciseInputs(exercise) {
+            let html = '';
+            
+            switch (exercise.type) {
+                case 'grid_input':
+                    html += '<div class="grid-answers">';
+                    exercise.questions.forEach(q => {
+                        const inputType = q.type === 'number' ? 'number' : 'text';
+                        html += `<div>
+                            <label><strong>${DOMSanitizer.sanitizeText(q.label)}</strong></label>
+                            <div contenteditable="true" class="answer-input math-input" id="${q.id}" 
+                                 data-placeholder="${DOMSanitizer.sanitizeText(q.placeholder || '')}" 
+                                 data-input-type="${inputType}"></div>
+                        </div>`;
+                    });
+                    html += '</div>';
+                    break;
+                    
+                case 'single_input':
+                    const q = exercise.questions[0];
+                    const inputType = q.type === 'number' ? 'number' : 'text';
+                    html += `<div>
+                        <label><strong>${DOMSanitizer.sanitizeText(q.label)}</strong></label>
+                        <div contenteditable="true" class="answer-input math-input" id="${q.id}" 
+                             data-placeholder="${DOMSanitizer.sanitizeText(q.placeholder || '')}" 
+                             data-input-type="${inputType}"></div>
+                    </div>`;
+                    break;
+                    
+                case 'textarea':
+                    html += `<textarea class="answer-input" id="ex${exercise.id}_text" 
+                        placeholder="${DOMSanitizer.sanitizeText(exercise.hint || '')}" 
+                        style="width: 100%; height: 120px; resize: vertical;"></textarea>`;
+                    break;
+            }
+            
+            return html;
+        }
+        
+        checkExercise(exerciseId) {
+            const exercise = this.currentChapter.exercises.find(ex => ex.id === exerciseId);
+            if (!exercise) return;
+
+            let isCorrect = false;
+            let feedback = '';
+            let correctCount = 0;
+            let totalQuestions = 0;
+
+            switch (exercise.type) {
+                case 'grid_input':
+                case 'single_input':
+                    totalQuestions = exercise.questions.length;
+                    
+                    exercise.questions.forEach(question => {
+                        const element = document.getElementById(question.id);
+                        const userAnswer = (element.textContent || element.innerText || '').trim();
+                        const correctAnswer = question.answer.toString().trim();
+                        
+                        let isQuestionCorrect = false;
+                        
+                        if (question.type === 'number') {
+                            const userNum = parseFloat(userAnswer);
+                            const correctNum = parseFloat(correctAnswer);
+                            if (!isNaN(userNum) && Math.abs(userNum - correctNum) < 0.001) {
+                                correctCount++;
+                                isQuestionCorrect = true;
+                            }
+                        } else {
+                            if (this.hybridMathSystem.compareAnswers(userAnswer, correctAnswer)) {
+                                correctCount++;
+                                isQuestionCorrect = true;
+                            }
+                        }
+                        
+                        element.classList.remove('correct', 'incorrect');
+                        element.classList.add(isQuestionCorrect ? 'correct' : 'incorrect');
+                    });
+                    
+                    isCorrect = correctCount === totalQuestions;
+                    feedback = totalQuestions === 1 ? 
+                        (isCorrect ? 'Correct !' : 'Incorrect.') :
+                        `${correctCount}/${totalQuestions} réponses correctes`;
+                    break;
+                    
+                case 'textarea':
+                    const userText = document.getElementById(`ex${exerciseId}_text`).value.trim();
+                    const minLength = exercise.minLength || 20;
+                    isCorrect = userText.length >= minLength;
+                    feedback = isCorrect ? 
+                        'Explication fournie ! Consultez la solution pour comparer.' : 
+                        `Veuillez fournir une explication plus détaillée (minimum ${minLength} caractères).`;
+                    break;
+            }
+
+            this.showFeedback(exerciseId, feedback, isCorrect ? 'correct' : 'incorrect');
+            this.updateExerciseState(exerciseId, isCorrect);
+            this.updateStats();
+        }
+        
+        showSolution(exerciseId) {
+            const exercise = this.currentChapter.exercises.find(ex => ex.id === exerciseId);
+            if (exercise && exercise.solution) {
+                this.showFeedback(exerciseId, exercise.solution, 'solution');
+            }
+        }
+        
+        resetExercise(exerciseId) {
+            const exercise = this.currentChapter.exercises.find(ex => ex.id === exerciseId);
+            if (!exercise) return;
+
+            switch (exercise.type) {
+                case 'grid_input':
+                case 'single_input':
+                    exercise.questions.forEach(question => {
+                        const element = document.getElementById(question.id);
+                        if (element) {
+                            element.innerHTML = '';
+                            element.classList.remove('correct', 'incorrect');
+                        }
+                    });
+                    break;
+                    
+                case 'textarea':
+                    const element = document.getElementById(`ex${exerciseId}_text`);
+                    if (element) {
+                        element.value = '';
+                        element.classList.remove('correct', 'incorrect');
+                    }
+                    break;
+            }
+            
+            this.resetFeedback(exerciseId);
+        }
+        
+        showFeedback(exerciseId, message, type) {
+            const feedback = document.getElementById(`feedback${exerciseId}`);
+            if (feedback) {
+                feedback.textContent = message;
+                feedback.className = `feedback ${type}`;
+                feedback.style.display = 'block';
+            }
+        }
+        
+        resetFeedback(exerciseId) {
+            const feedback = document.getElementById(`feedback${exerciseId}`);
+            if (feedback) {
+                feedback.style.display = 'none';
+            }
+        }
+        
+        updateExerciseState(exerciseId, isCorrect) {
+            const wasCompleted = this.exerciseStates.has(exerciseId);
+            const wasCorrect = this.exerciseStates.get(exerciseId);
+            
+            if (!wasCompleted) {
+                this.completedExercises++;
+                if (isCorrect) this.correctAnswers++;
+            } else if (wasCorrect !== isCorrect) {
+                this.correctAnswers += isCorrect ? 1 : -1;
+            }
+            
+            this.exerciseStates.set(exerciseId, isCorrect);
+        }
+        
+        updateStats() {
+            const elements = {
+                'completedExercises': this.completedExercises,
+                'correctAnswers': this.correctAnswers
+            };
+
+            Object.entries(elements).forEach(([id, value]) => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = value;
+            });
+
+            const totalExercises = this.currentChapter?.chapter?.totalExercises || 1;
+            const progress = (this.completedExercises / totalExercises) * 100;
+            const progressFill = document.getElementById('progressFill');
+            if (progressFill) {
+                progressFill.style.width = progress + '%';
+            }
+        }
+    }
+
+    // Initialisation
+    const chapterManager = new ChapterManager();
+    document.addEventListener('DOMContentLoaded', function() {
+        chapterManager.loadChapter();
+    });
+    </script>
 </body>
 </html>
