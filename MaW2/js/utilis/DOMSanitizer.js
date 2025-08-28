@@ -1,5 +1,5 @@
 /**
- * Utilitaires pour sécuriser l'injection de contenu dans le DOM
+ * Utilitaires pour sécuriser l'injection de contenu dans le  DOM
  */
 class DOMSanitizer {
     /**
