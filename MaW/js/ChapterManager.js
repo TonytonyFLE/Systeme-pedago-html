@@ -14,10 +14,16 @@ class ChapterManager {
         this.initHybridMathSystem();
     }
 
-    initHybridMathSystem() {
+initHybridMathSystem() {
+    // Attendre que HybridMathInputSystem soit disponible
+    if (typeof HybridMathInputSystem !== 'undefined') {
         this.hybridMathSystem = new HybridMathInputSystem();
         this.createHelpModal();
+    } else {
+        // Réessayer après un délai
+        setTimeout(() => this.initHybridMathSystem(), 100);
     }
+}
 
     createHelpModal() {
         const modal = document.createElement('div');
@@ -203,8 +209,10 @@ class ChapterManager {
         this.generateContent(data);
         this.initializeEventListeners();
         // Réinitialiser le système mathématique hybride après génération du contenu
-        this.hybridMathSystem.reinitialize();
-    }
+// Réinitialiser le système mathématique hybride après génération du contenu
+if (this.hybridMathSystem) {
+    this.hybridMathSystem.reinitialize();
+}
 
     // Méthodes de génération identiques à votre version...
     updatePageMetadata(data) {
