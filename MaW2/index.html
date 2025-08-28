@@ -53,22 +53,28 @@
 <script src="https://raw.githubusercontent.com/tonytonyfle/Systeme-pedago-html/main/MaW2/js/core/ChapterManager.js"></script>
     
 <script>
-function initializeApp() {
-    if (typeof ChapterManager === 'undefined') {
-        console.log('En attente de ChapterManager...');
-        setTimeout(initializeApp, 50);
-        return;
+document.addEventListener('DOMContentLoaded', function() {
+    // Attendre que tous les scripts soient chargés
+    function waitForDependencies() {
+        if (typeof ChapterManager === 'undefined' || 
+            typeof MathValidator === 'undefined' || 
+            typeof HybridMathInputSystem === 'undefined' ||
+            typeof DOMSanitizer === 'undefined') {
+            setTimeout(waitForDependencies, 50);
+            return;
+        }
+        
+        // Toutes les dépendances sont prêtes
+        const chapterManager = new ChapterManager();
+        chapterManager.configure({
+            baseUrl: 'data/',
+            defaultChapter: 1
+        });
+        chapterManager.loadChapter();
     }
     
-    const chapterManager = new ChapterManager();
-    chapterManager.configure({
-        baseUrl: 'data/',
-        defaultChapter: 1
-    });
-    chapterManager.loadChapter();
-}
-
-document.addEventListener('DOMContentLoaded', initializeApp);
+    waitForDependencies();
+});
 </script>
 </body>
 </html>
