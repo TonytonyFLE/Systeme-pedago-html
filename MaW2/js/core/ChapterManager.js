@@ -10,7 +10,7 @@ class ChapterManager {
         this.mathValidator = new MathValidator();
         
         this.config = {
-            baseUrl: '/Systeme-pedago-html/MaW/data/',
+            baseUrl: '/Systeme-pedago-html/MaW2/data/',
             defaultChapter: 1
         };
         
