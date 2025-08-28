@@ -52,20 +52,23 @@
 <script src="https://raw.githubusercontent.com/tonytonyfle/Systeme-pedago-html/main/MaW2/js/core/HybridMathInputSystem.js"></script>
 <script src="https://raw.githubusercontent.com/tonytonyfle/Systeme-pedago-html/main/MaW2/js/core/ChapterManager.js"></script>
     
-    <script>
-    // Instance globale du gestionnaire
+<script>
+function initializeApp() {
+    if (typeof ChapterManager === 'undefined') {
+        console.log('En attente de ChapterManager...');
+        setTimeout(initializeApp, 50);
+        return;
+    }
+    
     const chapterManager = new ChapterManager();
-
-    // Configuration adaptée à la structure locale
     chapterManager.configure({
         baseUrl: 'data/',
         defaultChapter: 1
     });
+    chapterManager.loadChapter();
+}
 
-    // Initialisation automatique au chargement de la page
-    document.addEventListener('DOMContentLoaded', function() {
-        chapterManager.loadChapter();
-    });
-    </script>
+document.addEventListener('DOMContentLoaded', initializeApp);
+</script>
 </body>
 </html>
