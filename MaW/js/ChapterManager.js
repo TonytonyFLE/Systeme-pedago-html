@@ -203,16 +203,18 @@ initHybridMathSystem() {
         return fallbackData;
     }
 
-    initializePage(data) {
-        this.updatePageMetadata(data);
-        this.generateNavigation(data.sections);
-        this.generateContent(data);
-       this.initializeEventListeners();
-        // Réinitialiser le système mathématique hybride après génération du contenu
-        if (this.hybridMathSystem) {
-            this.hybridMathSystem.reinitialize();
-        }
+initializePage(data) {
+    this.updatePageMetadata(data);
+    this.generateNavigation(data.sections);
+    this.generateContent(data);
+    this.initializeEventListeners();
+    
+    // Détruire l'ancien système et en créer un nouveau
+    if (this.hybridMathSystem) {
+        this.hybridMathSystem.destroy();
     }
+    this.hybridMathSystem = new HybridMathInputSystem();
+}
 
     // Méthodes de génération identiques à votre version...
     updatePageMetadata(data) {
@@ -508,12 +510,18 @@ initHybridMathSystem() {
         return this.loadChapter(chapterIdentifier);
     }
 
-    resetState() {
-        this.completedExercises = 0;
-        this.correctAnswers = 0;
-        this.exerciseStates.clear();
-        this.currentChapter = null;
+resetState() {
+    this.completedExercises = 0;
+    this.correctAnswers = 0;
+    this.exerciseStates.clear();
+    this.currentChapter = null;
+    
+    // Nettoyer le système mathématique
+    if (this.hybridMathSystem) {
+        this.hybridMathSystem.destroy();
+        this.hybridMathSystem = null;
     }
+}
 
     exportState() {
         return {
