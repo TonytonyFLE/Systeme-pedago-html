@@ -439,11 +439,14 @@ class HybridMathInputSystem {
         return normalize(userAnswer) === normalize(correctAnswer);
     }
     
-    reinitialize() {
-        setTimeout(() => {
-            this.bindEvents();
-        }, 100);
-    }
+reinitialize() {
+    // Ne pas re-bind les événements car ils sont déjà globaux
+    // Cette méthode existe pour la compatibilité mais ne fait rien
+    setTimeout(() => {
+        // Juste s'assurer que les palettes sont masquées
+        this.hideAllPalettes();
+    }, 100);
+}
     
     destroy() {
         if (this.primaryPalette) {
