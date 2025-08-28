@@ -375,6 +375,9 @@ if (question.type === 'number') {
         isQuestionCorrect = true;
     }
 } else {
+    // DEBUG : affichera dans la console pourquoi ça passe/échoue
+    this.mathValidator.debugComparison(userAnswer, correctAnswer);
+
     // Utiliser désormais le validateur mathématique avancé
     if (this.mathValidator.compareAnswers(userAnswer, correctAnswer)) {
         correctCount++;
