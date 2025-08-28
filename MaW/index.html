@@ -892,7 +892,16 @@
         </div>
     </div>
 
-    <script src="js/HybridMathInputSystem.js"></script>
+<script src="js/HybridMathInputSystem.js"></script>
 <script src="js/ChapterManager.js"></script>
+<script>
+// Instance globale du gestionnaire
+const chapterManager = new ChapterManager();
+
+// Initialisation automatique au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    chapterManager.loadChapter();
+});
+</script>
 </body>
 </html>
