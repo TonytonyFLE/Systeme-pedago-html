@@ -116,12 +116,12 @@ class HybridMathInputSystem {
             }
         });
         
-        // Empêcher la fermeture lors du clic sur les palettes
-        document.addEventListener('mousedown', (e) => {
-            if (e.target.closest('.math-palette')) {
-                e.preventDefault();
-            }
-        });
+// Empêcher la fermeture lors du clic sur les palettes mais permettre la navigation
+document.addEventListener('mousedown', (e) => {
+    if (e.target.closest('.math-palette') && !e.target.classList.contains('symbol-btn')) {
+        e.preventDefault();
+    }
+});
         
         // NOUVEAU : Gestion de la conversion automatique des fractions
         document.addEventListener('keyup', (e) => {
@@ -254,17 +254,17 @@ class HybridMathInputSystem {
         this.secondaryPalette.classList.add('active');
     }
     
-    hideSecondaryPalette() {
-        this.secondaryPalette.classList.remove('active');
-        this.currentSecondaryType = null;
-        
-        if (this.activeInput) {
-            setTimeout(() => {
-                this.activeInput.focus();
-                this.restoreCursor();
-            }, 10);
-        }
+hideSecondaryPalette() {
+    this.secondaryPalette.classList.remove('active');
+    this.currentSecondaryType = null;
+    
+    // Ne pas forcer le focus - laisser l'utilisateur naviguer librement
+    if (this.activeInput && this.savedRange) {
+        setTimeout(() => {
+            this.restoreCursor();
+        }, 10);
     }
+}
     
     hideAllPalettes() {
         this.primaryPalette.classList.remove('active');
