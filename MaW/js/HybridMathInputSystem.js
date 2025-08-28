@@ -98,13 +98,14 @@ class HybridMathInputSystem {
             }
         });
         
-        // Clic en dehors pour fermer
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.math-palette') && 
-                !e.target.classList.contains('math-input')) {
-                this.hideAllPalettes();
-            }
-        });
+// Clic en dehors pour fermer
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.math-palette') && 
+        !e.target.classList.contains('math-input') &&
+        !e.target.closest('.fraction')) {
+        this.hideAllPalettes();
+    }
+});
         
         // Gestion des clics sur les boutons de palette
         document.addEventListener('click', (e) => {
@@ -201,9 +202,11 @@ document.addEventListener('mousedown', (e) => {
                 range.collapse(false);
                 selection.removeAllRanges();
                 selection.addRange(range);
- this.enablePaletteInFractions(input);
+            }
+            
+            // CORRECTION : Ligne déplacée ici avec bonne indentation
+            this.enablePaletteInFractions(input);
         }
-    }
     }
 
     /**
