@@ -820,13 +820,6 @@ class MathInputSystem {
             fractions: ['½', '⅓', '¼', '⅔', '¾', '⅘'],
             advanced: ['×', '÷', '²', '³', '⁴', 'π', '½', '⅓', '¼'],
             simple: ['÷', '×']
-            convertToSuperscript(number) {
-    const superscriptMap = {
-        '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵',
-        '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻', '+': '⁺'
-    };
-    return number.split('').map(digit => superscriptMap[digit] || digit).join('');
-}
         };
         
 this.conversions = {
@@ -911,13 +904,6 @@ this.conversions = {
             this.hidePalette();
         }
     });
-
-        convertToSuperscript(number) {
-    const superscriptMap = {
-        '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵',
-        '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻', '+': '⁺'
-    };
-    return number.split('').map(digit => superscriptMap[digit] || digit).join('');
 }
     
     showPalette(input) {
@@ -1060,6 +1046,13 @@ insertSymbol(symbol) {
         setTimeout(() => {
             this.bindEvents();
         }, 100);
+    }
+        convertToSuperscript(number) {
+        const superscriptMap = {
+            '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵',
+            '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻', '+': '⁺'
+        };
+        return number.split('').map(digit => superscriptMap[digit] || digit).join('');
     }
 }
 
