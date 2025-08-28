@@ -207,12 +207,12 @@ initHybridMathSystem() {
         this.updatePageMetadata(data);
         this.generateNavigation(data.sections);
         this.generateContent(data);
-        this.initializeEventListeners();
+       this.initializeEventListeners();
         // Réinitialiser le système mathématique hybride après génération du contenu
-// Réinitialiser le système mathématique hybride après génération du contenu
-if (this.hybridMathSystem) {
-    this.hybridMathSystem.reinitialize();
-}
+        if (this.hybridMathSystem) {
+            this.hybridMathSystem.reinitialize();
+        }
+    }
 
     // Méthodes de génération identiques à votre version...
     updatePageMetadata(data) {
