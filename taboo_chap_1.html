@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taboo Professionnel B1</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .screen {
+      display: none;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .card-container {
+      background: white;
+      color: #333;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+      margin: 20px auto;
+    }
+
+    .input-group {
+      margin: 20px 0;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    .color-picker {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+      justify-content: center;
+    }
+
+    .color-option {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 3px solid #ddd;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .color-option:hover {
+      transform: scale(1.1);
+    }
+
+    .color-option.selected {
+      border: 4px solid #333;
+      transform: scale(1.2);
+    }
+
+    .btn {
+      background: linear-gradient(45deg, #4CAF50, #45a049);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 10px;
+      transition: all 0.3s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .btn.secondary {
+      background: linear-gradient(45deg, #9b59b6, #8e44ad);
+    }
+
+    .scoreboard {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 15px;
+      margin: 20px 0;
+      backdrop-filter: blur(10px);
+    }
+
+    .team-score {
+      padding: 20px;
+      border-radius: 15px;
+      min-width: 150px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .team-name {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .team-points {
+      font-size: 2.5em;
+      font-weight: bold;
+    }
+
+    .current-turn {
+      font-size: 1.1em;
+      padding: 15px 25px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .timer {
+      font-size: 4em;
+      font-weight: bold;
+      margin: 20px 0;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+
+    .timer.warning {
+      color: #ff4444;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+
+    .word-to-guess {
+      font-size: 3.5em;
+      font-weight: bold;
+      margin: 30px 0;
+      color: #2c3e50;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+
+    .forbidden-title {
+      font-size: 1.4em;
+      color: #e74c3c;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+
+    .forbidden-words {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 25px 0;
+    }
+
+    .forbidden-word {
+      background: linear-gradient(45deg, #e74c3c, #c0392b);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 25px;
+      font-weight: bold;
+      font-size: 1.2em;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .game-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px 0;
+    }
+
+    .btn-start-timer {
+      background: linear-gradient(45deg, #2196F3, #1976D2);
+      font-size: 1.3em;
+      padding: 20px 40px;
+    }
+
+    .btn-pass {
+      background: linear-gradient(45deg, #ff9800, #e68900);
+    }
+
+    .btn-success {
+      background: linear-gradient(45deg, #4CAF50, #45a049);
+    }
+
+    .btn-next {
+      background: linear-gradient(45deg, #9C27B0, #7B1FA2);
+    }
+
+    .revision-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      max-height: 500px;
+      overflow-y: auto;
+      display: block;
+    }
+
+    .revision-table thead {
+      display: table-header-group;
+      background: #2c3e50;
+      color: white;
+    }
+
+    .revision-table tbody {
+      display: table-row-group;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .revision-table th,
+    .revision-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .revision-table tbody tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+
+    .revision-table tbody tr:nth-child(odd) {
+      background-color: white;
+    }
+
+    .card-counter {
+      background: rgba(255,255,255,0.1);
+      padding: 10px 20px;
+      border-radius: 15px;
+      margin: 10px 0;
+      font-size: 1.1em;
+    }
+
+    .winner-screen {
+      text-align: center;
+      padding: 50px;
+    }
+
+    .winner-text {
+      font-size: 3em;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+
+    .final-scores {
+      display: flex;
+      justify-content: space-around;
+      margin: 40px 0;
+    }
+
+    .final-score {
+      padding: 30px;
+      border-radius: 15px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    @media (max-width: 768px) {
+      .scoreboard {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .word-to-guess {
+        font-size: 2.5em;
+      }
+      
+      .timer {
+        font-size: 3em;
+      }
+      
+      .game-controls {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 TABOO PROFESSIONNEL B1 💼</h1>
+
+  <!-- Écran de configuration -->
+  <div id="setup-screen" class="screen active">
+    <div class="card-container">
+      <h2 style="color: #2c3e50; margin-bottom: 30px;">Configuration du jeu</h2>
+      
+      <div class="input-group">
+        <label for="team1-name">Nom de l'équipe 1 :</label>
+        <input type="text" id="team1-name" placeholder="Les Champions" maxlength="15">
+      </div>
+      
+      <div class="input-group">
+        <label>Couleur équipe 1 :</label>
+        <div class="color-picker" id="team1-colors">
+          <div class="color-option selected" style="background: #e74c3c;" data-color="#e74c3c"></div>
+          <div class="color-option" style="background: #3498db;" data-color="#3498db"></div>
+          <div class="color-option" style="background: #2ecc71;" data-color="#2ecc71"></div>
+          <div class="color-option" style="background: #f39c12;" data-color="#f39c12"></div>
+          <div class="color-option" style="background: #9b59b6;" data-color="#9b59b6"></div>
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <label for="team2-name">Nom de l'équipe 2 :</label>
+        <input type="text" id="team2-name" placeholder="Les Génies" maxlength="15">
+      </div>
+      
+      <div class="input-group">
+        <label>Couleur équipe 2 :</label>
+        <div class="color-picker" id="team2-colors">
+          <div class="color-option" style="background: #e74c3c;" data-color="#e74c3c"></div>
+          <div class="color-option selected" style="background: #3498db;" data-color="#3498db"></div>
+          <div class="color-option" style="background: #2ecc71;" data-color="#2ecc71"></div>
+          <div class="color-option" style="background: #f39c12;" data-color="#f39c12"></div>
+          <div class="color-option" style="background: #9b59b6;" data-color="#9b59b6"></div>
+        </div>
+      </div>
+      
+      <div style="margin-top: 40px;">
+        <button class="btn" onclick="startGame()">🚀 Commencer la partie</button>
+        <button class="btn secondary" onclick="showRevision()">📚 Révision</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Écran de révision -->
+  <div id="revision-screen" class="screen">
+    <div class="card-container">
+      <h2 style="color: #2c3e50; margin-bottom: 20px;">📚 Révision - Vocabulaire Professionnel</h2>
+      
+      <div style="overflow: auto; max-height: 500px; border: 1px solid #ddd; border-radius: 10px;">
+        <table class="revision-table">
+          <thead>
+            <tr>
+              <th>Français</th>
+              <th>Allemand</th>
+              <th>Mots interdits</th>
+            </tr>
+          </thead>
+          <tbody id="revision-tbody">
+          </tbody>
+        </table>
+      </div>
+      
+      <div style="margin-top: 30px;">
+        <button class="btn" onclick="backToSetup()">🔙 Retour</button>
+        <button class="btn" onclick="startGame()">🎯 Commencer le jeu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Écran de jeu -->
+  <div id="game-screen" class="screen">
+    <!-- Scoreboard -->
+    <div class="scoreboard">
+      <div class="team-score" id="team1-display">
+        <div class="team-name" id="team1-name-display">Équipe 1</div>
+        <div class="team-points" id="team1-score-display">0</div>
+      </div>
+      
+      <div class="current-turn" id="current-turn-display">Tour de : Équipe 1</div>
+      
+      <div class="team-score" id="team2-display">
+        <div class="team-name" id="team2-name-display">Équipe 2</div>
+        <div class="team-points" id="team2-score-display">0</div>
+      </div>
+    </div>
+
+    <!-- Timer et compteur -->
+    <div>
+      <div class="timer" id="timer-display">1:00</div>
+      <div class="card-counter" id="card-counter">Carte 1 / 49</div>
+    </div>
+
+    <!-- Carte de jeu -->
+    <div class="card-container">
+      <div class="word-to-guess" id="word-display">ENTREPRISE</div>
+      <div class="forbidden-title">❌ Mots interdits ❌</div>
+      <div class="forbidden-words" id="forbidden-words-display">
+        <div class="forbidden-word">SOCIÉTÉ</div>
+        <div class="forbidden-word">TRAVAIL</div>
+        <div class="forbidden-word">PATRON</div>
+      </div>
+    </div>
+
+    <!-- Contrôles de jeu -->
+    <div class="game-controls">
+      <button class="btn btn-start-timer" id="start-timer-btn" onclick="startTimer()">▶️ Commencer le chrono</button>
+      <button class="btn btn-pass" id="pass-btn" onclick="passCard()" style="display: none;">⏭️ Passer</button>
+      <button class="btn btn-success" id="success-btn" onclick="successCard()" style="display: none;">✅ Réussi (+1 pt)</button>
+      <button class="btn btn-next" id="next-turn-btn" onclick="nextTurn()" style="display: none;">👥 Tour suivant</button>
+      <button class="btn" onclick="resetGame()">🔄 Nouvelle partie</button>
+    </div>
+  </div>
+
+  <!-- Écran de fin -->
+  <div id="end-screen" class="screen">
+    <div class="card-container winner-screen">
+      <div class="winner-text" id="winner-text">🏆 Les Champions gagnent !</div>
+      <div class="final-scores" id="final-scores-display">
+        <div class="final-score">
+          <h3>Les Champions</h3>
+          <div style="font-size: 2em;">5 points</div>
+        </div>
+        <div class="final-score">
+          <h3>Les Génies</h3>
+          <div style="font-size: 2em;">3 points</div>
+        </div>
+      </div>
+      <button class="btn" onclick="resetGame()">🔄 Nouvelle partie</button>
+    </div>
+  </div>
+
+  <script>
+    // Données du jeu
+    const vocabulary = [
+      { word: "LIBRAIRE", forbidden: ["LIVRE", "MAGASIN", "VENDRE"], german: "der Buchhändler" },
+      { word: "RÉCEPTIONNISTE", forbidden: ["ACCUEIL", "TÉLÉPHONE", "BUREAU"], german: "der Empfangschef" },
+      { word: "ENTREPRISE", forbidden: ["SOCIÉTÉ", "TRAVAIL", "PATRON"], german: "das Unternehmen" },
+      { word: "ASSISTANT", forbidden: ["AIDE", "SECRÉTAIRE", "SOUTIEN"], german: "der Assistent" },
+      { word: "ENTRETIEN", forbidden: ["INTERVIEW", "TRAVAIL", "QUESTIONS"], german: "das Vorstellungsgespräch" },
+      { word: "AGENCE", forbidden: ["BUREAU", "SUCCURSALE", "FILIALE"], german: "die Agentur" },
+      { word: "STANDARD", forbidden: ["TÉLÉPHONE", "RÉCEPTION", "APPEL"], german: "die Zentrale" },
+      { word: "PORTABLE", forbidden: ["TÉLÉPHONE", "MOBILE", "SMARTPHONE"], german: "das Handy" },
+      { word: "MATINÉE", forbidden: ["MATIN", "JOURNÉE", "AVANT-MIDI"], german: "der Vormittag" },
+      { word: "VOYAGEUR", forbidden: ["TOURISTE", "CLIENT", "VOYAGE"], german: "der Reisende" },
+      { word: "AÉROPORT", forbidden: ["AVION", "VOL", "TERMINAL"], german: "der Flughafen" },
+      { word: "PONCTUEL", forbidden: ["À L'HEURE", "PRÉCIS", "TEMPS"], german: "pünktlich" },
+      { word: "ENCHANTÉ", forbidden: ["RAVI", "PLAISIR", "RENCONTRER"], german: "freut mich" },
+      { word: "VALISE", forbidden: ["BAGAGE", "VOYAGE", "VÊTEMENTS"], german: "der Koffer" },
+      { word: "CONDUIRE", forbidden: ["VOITURE", "ROUTE", "DIRIGER"], german: "fahren" },
+      { word: "CHERCHER", forbidden: ["TROUVER", "RECHERCHER", "DÉCOUVRIR"], german: "suchen" },
+      { word: "ÉNERVER", forbidden: ["FÂCHER", "COLÈRE", "IRRITER"], german: "ärgern" },
+      { word: "RAPPELER", forbidden: ["TÉLÉPHONER", "CONTACTER", "APPELER"], german: "zurückrufen" },
+      { word: "RECEVOIR", forbidden: ["OBTENIR", "PRENDRE", "ACCEPTER"], german: "erhalten" },
+      { word: "QUARTIER", forbidden: ["ZONE", "SECTEUR", "VOISINAGE"], german: "das Viertel" },
+      { word: "DIRECTEUR", forbidden: ["CHEF", "PATRON", "RESPONSABLE"], german: "der Direktor" },
+      { word: "MAGASIN", forbidden: ["BOUTIQUE", "COMMERCE", "ACHETER"], german: "das Geschäft" },
+      { word: "BUREAU", forbidden: ["OFFICE", "TRAVAIL", "ORDINATEUR"], german: "das Büro" },
+      { word: "RETARD", forbidden: ["TARDIF", "ATTENDRE", "PONCTUEL"], german: "die Verspätung" },
+      { word: "RENDEZ-VOUS", forbidden: ["MEETING", "RENCONTRE", "HEURE"], german: "der Termin" },
+      { word: "MESSAGE", forbidden: ["TEXTE", "INFORMATION", "DIRE"], german: "die Nachricht" },
+      { word: "NUMÉRO", forbidden: ["CHIFFRE", "TÉLÉPHONE", "COMPOSER"], german: "die Nummer" },
+      { word: "BIENVENUE", forbidden: ["ACCUEIL", "BONJOUR", "ARRIVÉE"], german: "willkommen" },
+      { word: "VOLONTIERS", forbidden: ["PLAISIR", "OUI", "ACCEPTER"], german: "gerne" },
+      { word: "FATIGUÉ", forbidden: ["ÉPUISÉ", "SOMMEIL", "DORMIR"], german: "müde" },
+      { word: "NERVEUX", forbidden: ["STRESSÉ", "ANXIEUX", "INQUIET"], german: "nervös" },
+      { word: "OUVERT", forbidden: ["FERMÉ", "HORAIRE", "ACCESSIBLE"], german: "geöffnet" },
+      { word: "PATRON", forbidden: ["CHEF", "DIRECTEUR", "BOSS"], german: "der Chef" },
+      { word: "COLLÈGUE", forbidden: ["ÉQUIPE", "TRAVAIL", "BUREAU"], german: "der Kollege" },
+      { word: "CLIENT", forbidden: ["ACHETEUR", "SERVICE", "VENTE"], german: "der Kunde" },
+      { word: "TRANSPORT", forbidden: ["VOYAGE", "VÉHICULE", "DÉPLACEMENT"], german: "der Transport" },
+      { word: "APPARTEMENT", forbidden: ["LOGEMENT", "MAISON", "HABITER"], german: "die Wohnung" },
+      { word: "PROGRÈS", forbidden: ["AMÉLIORATION", "MIEUX", "AVANCER"], german: "der Fortschritt" },
+      { word: "EFFORT", forbidden: ["TRAVAIL", "ESSAYER", "DIFFICILE"], german: "die Anstrengung" },
+      { word: "AFFAIRES", forbidden: ["BUSINESS", "COMMERCE", "ENTREPRISE"], german: "das Geschäft" },
+      { word: "ASSISTER", forbidden: ["AIDER", "PARTICIPER", "PRÉSENT"], german: "teilnehmen" },
+      { word: "GAGNER", forbidden: ["VICTOIRE", "ARGENT", "RÉUSSIR"], german: "verdienen" },
+      { word: "SECRÉTAIRE", forbidden: ["ASSISTANT", "BUREAU", "ÉCRIRE"], german: "die Sekretärin" },
+      { word: "RÉUNION", forbidden: ["MEETING", "GROUPE", "DISCUTER"], german: "die Besprechung" },
+      { word: "PRÉSENTATION", forbidden: ["MONTRER", "EXPLIQUER", "PROJET"], german: "die Präsentation" },
+      { word: "FORMATION", forbidden: ["APPRENDRE", "COURS", "ÉTUDIER"], german: "die Ausbildung" },
+      { word: "CANDIDAT", forbidden: ["POSTULANT", "CHERCHER", "TRAVAIL"], german: "der Bewerber" },
+      { word: "HORAIRE", forbidden: ["TEMPS", "HEURE", "PLANNING"], german: "der Fahrplan" },
+      { word: "SALAIRE", forbidden: ["ARGENT", "PAYER", "MOIS"], german: "das Gehalt" },
+      { word: "VACANCES", forbidden: ["REPOS", "VOYAGE", "CONGÉ"], german: "die Ferien" }
+    ];
+
+    // État du jeu
+    let gameState = {
+      team1: { name: "Équipe 1", color: "#e74c3c", score: 0 },
+      team2: { name: "Équipe 2", color: "#3498db", score: 0 },
+      currentTeam: 1,
+      deck: [],
+      currentCard: 0,
+      totalCards: 0,
+      timer: 60,
+      timerInterval: null,
+      timerRunning: false
+    };
+
+    // Initialisation
+    function init() {
+      setupColorPickers();
+      populateRevisionTable();
+    }
+
+    // Configuration des sélecteurs de couleurs
+    function setupColorPickers() {
+      const team1Colors = document.querySelectorAll('#team1-colors .color-option');
+      const team2Colors = document.querySelectorAll('#team2-colors .color-option');
+
+      team1Colors.forEach(color => {
+        color.addEventListener('click', function() {
+          team1Colors.forEach(c => c.classList.remove('selected'));
+          this.classList.add('selected');
+          gameState.team1.color = this.dataset.color;
+        });
+      });
+
+      team2Colors.forEach(color => {
+        color.addEventListener('click', function() {
+          team2Colors.forEach(c => c.classList.remove('selected'));
+          this.classList.add('selected');
+          gameState.team2.color = this.dataset.color;
+        });
+      });
+    }
+
+    // Remplir le tableau de révision
+    function populateRevisionTable() {
+      const tbody = document.getElementById('revision-tbody');
+      tbody.innerHTML = '';
+      
+      vocabulary.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td style="font-weight: bold; color: #2c3e50;">${item.word}</td>
+          <td style="font-style: italic; color: #7f8c8d;">${item.german}</td>
+          <td style="color: #e74c3c;">${item.forbidden.join(', ')}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Navigation entre écrans
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    function showRevision() {
+      showScreen('revision-screen');
+    }
+
+    function backToSetup() {
+      showScreen('setup-screen');
+    }
+
+    // Mélanger le deck
+    function shuffleDeck() {
+      gameState.deck = [...vocabulary].sort(() => Math.random() - 0.5);
+      gameState.totalCards = gameState.deck.length;
+      gameState.currentCard = 0;
+    }
+
+    // Démarrer le jeu
+    function startGame() {
+      // Récupérer les noms des équipes
+      gameState.team1.name = document.getElementById('team1-name').value || 'Équipe 1';
+      gameState.team2.name = document.getElementById('team2-name').value || 'Équipe 2';
+      
+      // Réinitialiser les scores
+      gameState.team1.score = 0;
+      gameState.team2.score = 0;
+      gameState.currentTeam = 1;
+      
+      // Mélanger le deck
+      shuffleDeck();
+      
+      // Aller à l'écran de jeu
+      showScreen('game-screen');
+      
+      // Mettre à jour l'affichage
+      updateScoreboard();
+      displayCard();
+      resetTimer();
+    }
+
+    // Mettre à jour le scoreboard
+    function updateScoreboard() {
+      document.getElementById('team1-name-display').textContent = gameState.team1.name;
+      document.getElementById('team1-score-display').textContent = gameState.team1.score;
+      document.getElementById('team1-display').style.background = gameState.team1.color + '33';
+      document.getElementById('team1-display').style.border = '3px solid ' + gameState.team1.color;
+      
+      document.getElementById('team2-name-display').textContent = gameState.team2.name;
+      document.getElementById('team2-score-display').textContent = gameState.team2.score;
+      document.getElementById('team2-display').style.background = gameState.team2.color + '33';
+      document.getElementById('team2-display').style.border = '3px solid ' + gameState.team2.color;
+      
+      const currentTeamName = gameState.currentTeam === 1 ? gameState.team1.name : gameState.team2.name;
+      const currentColor = gameState.currentTeam === 1 ? gameState.team1.color : gameState.team2.color;
+      document.getElementById('current-turn-display').textContent = `Tour de : ${currentTeamName}`;
+      document.getElementById('current-turn-display').style.background = currentColor + '44';
+      document.getElementById('current-turn-display').style.border = '2px solid ' + currentColor;
+    }
+
+    // Afficher la carte actuelle
+    function displayCard() {
+      if (gameState.currentCard >= gameState.deck.length) {
+        endGame();
+        return;
+      }
+
+      const card = gameState.deck[gameState.currentCard];
+      document.getElementById('word-display').textContent = card.word;
+      document.getElementById('card-counter').textContent = 
+        `Carte ${gameState.currentCard + 1} / ${gameState.totalCards}`;
+      
+      const forbiddenContainer = document.getElementById('forbidden-words-display');
+      forbiddenContainer.innerHTML = '';
+      card.forbidden.forEach(word => {
+        const div = document.createElement('div');
+        div.className = 'forbidden-word';
+        div.textContent = word;
+        forbiddenContainer.appendChild(div);
+      });
+    }
+
+    // Gestion du timer
+    function resetTimer() {
+      gameState.timer = 60;
+      gameState.timerRunning = false;
+      if (gameState.timerInterval) {
+        clearInterval(gameState.timerInterval);
+      }
+      updateTimerDisplay();
+      
+      // Réinitialiser les boutons
+      document.getElementById('start-timer-btn').style.display = 'inline-block';
+      document.getElementById('pass-btn').style.display = 'none';
+      document.getElementById('success-btn').style.display = 'none';
+      document.getElementById('next-turn-btn').style.display = 'none';
+    }
+
+    function startTimer() {
+      if (gameState.timerRunning) return;
+      
+      gameState.timerRunning = true;
+      document.getElementById('start-timer-btn').style.display = 'none';
+      document.getElementById('pass-btn').style.display = 'inline-block';
+      document.getElementById('success-btn').style.display = 'inline-block';
+      
+      gameState.timerInterval = setInterval(() => {
+        gameState.timer--;
+        updateTimerDisplay();
+        
+        if (gameState.timer <= 0) {
+          timeUp();
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(gameState.timer / 60);
+      const seconds = gameState.timer % 60;
+      const timerElement = document.getElementById('timer-display');
+      
+      timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      
+      if (gameState.timer <= 10 && gameState.timer > 0) {
+        timerElement.classList.add('warning');
+      } else {
+        timerElement.classList.remove('warning');
+      }
+    }
+
+    function timeUp() {
+      clearInterval(gameState.timerInterval);
+      gameState.timerRunning = false;
+      
+      document.getElementById('pass-btn').style.display = 'none';
+      document.getElementById('success-btn').style.display = 'none';
+      document.getElementById('next-turn-btn').style.display = 'inline-block';
+      
+      alert('⏰ Temps écoulé ! Passez le tour à l\'autre équipe.');
+    }
+
+    // Actions de jeu
+    function passCard() {
+      if (gameState.currentCard >= gameState.deck.length) return;
+      
+      // Passer au mot suivant sans pénalité
+      gameState.currentCard++;
+      displayCard();
+    }
+
+    function successCard() {
+      if (gameState.currentCard >= gameState.deck.length) return;
+      
+      // Ajouter un point à l'équipe actuelle
+      if (gameState.currentTeam === 1) {
+        gameState.team1.score++;
+      } else {
+        gameState.team2.score++;
+      }
+      
+      // Passer au mot suivant
+      gameState.currentCard++;
+      
+      updateScoreboard();
+      displayCard();
+    }
+
+    function nextTurn() {
+      // Changer d'équipe
+      gameState.currentTeam = gameState.currentTeam === 1 ? 2 : 1;
+      
+      // Réinitialiser le timer
+      resetTimer();
+      updateScoreboard();
+    }
+
+    // Fin de jeu
+    function endGame() {
+      clearInterval(gameState.timerInterval);
+      
+      let winnerText = '';
+      if (gameState.team1.score > gameState.team2.score) {
+        winnerText = `🏆 ${gameState.team1.name} gagne !`;
+      } else if (gameState.team2.score > gameState.team1.score) {
+        winnerText = `🏆 ${gameState.team2.name} gagne !`;
+      } else {
+        winnerText = '🤝 Égalité parfaite !';
+      }
+      
+      document.getElementById('winner-text').textContent = winnerText;
+      
+      // Afficher les scores finaux
+      const finalScoresContainer = document.getElementById('final-scores-display');
+      finalScoresContainer.innerHTML = `
+        <div class="final-score" style="border: 3px solid ${gameState.team1.color};">
+          <h3 style="color: ${gameState.team1.color};">${gameState.team1.name}</h3>
+          <div style="font-size: 2em; color: ${gameState.team1.color};">${gameState.team1.score} points</div>
+        </div>
+        <div class="final-score" style="border: 3px solid ${gameState.team2.color};">
+          <h3 style="color: ${gameState.team2.color};">${gameState.team2.name}</h3>
+          <div style="font-size: 2em; color: ${gameState.team2.color};">${gameState.team2.score} points</div>
+        </div>
+      `;
+      
+      showScreen('end-screen');
+    }
+
+    // Recommencer le jeu
+    function resetGame() {
+      // Réinitialiser l'état du jeu
+      gameState.team1.score = 0;
+      gameState.team2.score = 0;
+      gameState.currentTeam = 1;
+      gameState.currentCard = 0;
+      gameState.timer = 60;
+      gameState.timerRunning = false;
+      
+      if (gameState.timerInterval) {
+        clearInterval(gameState.timerInterval);
+      }
+      
+      // Retourner à l'écran de configuration
+      showScreen('setup-screen');
+    }
+
+    // Démarrer l'application
+    window.onload = init;
+  </script>
+</body>
+</html>
