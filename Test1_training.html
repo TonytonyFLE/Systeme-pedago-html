@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entraînement oral A2</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      margin: 0;
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: white;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .subtitle {
+      color: rgba(255,255,255,0.9);
+      font-size: 1.1em;
+      margin-bottom: 30px;
+    }
+
+    #fiche {
+      border: none;
+      padding: 25px;
+      margin: 20px auto;
+      width: 100%;
+      max-width: 600px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+    }
+
+    #fiche:hover {
+      transform: translateY(-2px);
+    }
+
+    #fiche h3 {
+      color: #4a5568;
+      font-size: 1.8em;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 10px;
+    }
+
+    #fiche p {
+      text-align: left;
+      line-height: 1.8;
+      font-size: 1.1em;
+    }
+
+    #fiche b {
+      color: #2d3748;
+      display: inline-block;
+      width: 140px;
+    }
+
+    .btn-section {
+      margin: 30px 0;
+    }
+
+    button {
+      padding: 12px 24px;
+      margin: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .btn-success {
+      background: linear-gradient(45deg, #48bb78, #38a169);
+      color: white;
+    }
+
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+    }
+
+    .btn-danger {
+      background: linear-gradient(45deg, #f56565, #e53e3e);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245, 101, 101, 0.4);
+    }
+
+    .timer-section {
+      background: rgba(255,255,255,0.95);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 30px auto;
+      max-width: 500px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .timer-section h2 {
+      color: #4a5568;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+    }
+
+    #timer {
+      font-size: 3em;
+      margin: 20px 0;
+      color: #e53e3e;
+      font-weight: bold;
+      font-family: 'Courier New', monospace;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .timer-finished {
+      color: #38a169 !important;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .placeholder {
+      color: #a0aec0;
+      font-style: italic;
+      font-size: 1.2em;
+      padding: 40px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      h1 {
+        font-size: 2em;
+      }
+
+      #fiche {
+        padding: 20px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 14px;
+        margin: 5px;
+      }
+
+      #timer {
+        font-size: 2.5em;
+      }
+
+      #fiche b {
+        width: 120px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎯 Entraînement oral – A2</h1>
+    <p class="subtitle">Appuie sur « Nouvelle fiche » pour commencer. Lis la fiche et entraîne-toi à l'oral avec le timer.</p>
+
+    <div class="btn-section">
+      <button class="btn-primary" onclick="nouvelleFiche()">🆕 Nouvelle fiche</button>
+    </div>
+
+    <div id="fiche">
+      <div class="placeholder">La fiche apparaîtra ici.</div>
+    </div>
+
+    <div class="timer-section">
+      <h2>⏱️ Timer</h2>
+      <div id="timer">– : –</div>
+      <div class="btn-section">
+        <button class="btn-success" onclick="startTimer(120)">▶️ 2 min – Présentation personnelle</button>
+        <button class="btn-success" onclick="startTimer(120)">▶️ 2 min – Présentation du personnage</button>
+        <button class="btn-danger" onclick="stopTimer()">⏹️ Stop</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- FICHES : 20 cartes de personnages ---
+    const fiches = [
+      { 
+        nom: "Marco Rossi", 
+        age: 19, 
+        nat: "Italien", 
+        ville: "Florence", 
+        pro: "Étudiant en architecture", 
+        famille: "1 sœur, vit avec parents", 
+        loisirs: "Dessine, visite des musées, lit", 
+        caractere: "Travailleur, révise souvent" 
+      },
+      { 
+        nom: "Sarah Lefèvre", 
+        age: 28, 
+        nat: "Française", 
+        ville: "Lyon", 
+        pro: "Infirmière", 
+        famille: "Mariée, 1 fils", 
+        loisirs: "Sport, sorties entre amis", 
+        caractere: "Active, aime aider les autres" 
+      },
+      { 
+        nom: "Amir Benali", 
+        age: 35, 
+        nat: "Marocain", 
+        ville: "Rabat", 
+        pro: "Restaurateur", 
+        famille: "Marié, 2 enfants", 
+        loisirs: "Cuisine, émissions culinaires", 
+        caractere: "Travailleur, perfectionniste" 
+      },
+      { 
+        nom: "Emma Dubois", 
+        age: 23, 
+        nat: "Belge", 
+        ville: "Bruxelles", 
+        pro: "Étudiante en langues", 
+        famille: "En colocation", 
+        loisirs: "Musique, voyages, danse", 
+        caractere: "Sociable, créative" 
+      },
+      { 
+        nom: "Lucas Martin", 
+        age: 21, 
+        nat: "Français", 
+        ville: "Bordeaux", 
+        pro: "Étudiant en sport", 
+        famille: "Parents + 1 frère", 
+        loisirs: "Football, regarder des matchs", 
+        caractere: "Esprit d'équipe, motivé" 
+      },
+      { 
+        nom: "Anna Müller", 
+        age: 27, 
+        nat: "Allemande", 
+        ville: "Berlin", 
+        pro: "Graphiste", 
+        famille: "Célibataire", 
+        loisirs: "Dessins, musées d'art", 
+        caractere: "Créative, change souvent d'idée" 
+      },
+      { 
+        nom: "Pedro Alvarez", 
+        age: 40, 
+        nat: "Espagnol", 
+        ville: "Madrid", 
+        pro: "Chauffeur de bus", 
+        famille: "Marié, 3 enfants", 
+        loisirs: "Jeux de cartes, cuisine", 
+        caractere: "Sociable, bavard" 
+      },
+      { 
+        nom: "Sophie Laurent", 
+        age: 32, 
+        nat: "Française", 
+        ville: "Lille", 
+        pro: "Professeure de primaire", 
+        famille: "Mariée, 1 bébé", 
+        loisirs: "Activités scolaires, lire des histoires", 
+        caractere: "Patiente, bienveillante" 
+      },
+      { 
+        nom: "Ahmed Saleh", 
+        age: 25, 
+        nat: "Égyptien", 
+        ville: "Alexandrie", 
+        pro: "Mécanicien", 
+        famille: "Vit chez ses parents", 
+        loisirs: "Réparer des motos", 
+        caractere: "Persévérant, manuel" 
+      },
+      { 
+        nom: "Clara Bianchi", 
+        age: 30, 
+        nat: "Italienne", 
+        ville: "Milan", 
+        pro: "Styliste", 
+        famille: "Célibataire", 
+        loisirs: "Mode, défilés de mode", 
+        caractere: "Élégante, créative" 
+      },
+      { 
+        nom: "Tomás Silva", 
+        age: 18, 
+        nat: "Portugais", 
+        ville: "Porto", 
+        pro: "Lycéen", 
+        famille: "Avec parents & grand-mère", 
+        loisirs: "Jeux vidéo, films", 
+        caractere: "Tranquille, timide" 
+      },
+      { 
+        nom: "Marie Dubois", 
+        age: 50, 
+        nat: "Française", 
+        ville: "Paris", 
+        pro: "Boulangère", 
+        famille: "Mariée, 2 filles", 
+        loisirs: "Se lève tôt, faire des gâteaux", 
+        caractere: "Travailleuse, généreuse" 
+      },
+      { 
+        nom: "Jonas Hansen", 
+        age: 34, 
+        nat: "Danois", 
+        ville: "Copenhague", 
+        pro: "Informaticien", 
+        famille: "Vit avec son compagnon", 
+        loisirs: "Voyages, apprendre des langues", 
+        caractere: "Curieux, ouvert d'esprit" 
+      },
+      { 
+        nom: "Amina Rachid", 
+        age: 26, 
+        nat: "Tunisienne", 
+        ville: "Tunis", 
+        pro: "Étudiante en médecine", 
+        famille: "2 frères", 
+        loisirs: "Révisions, aide ses camarades", 
+        caractere: "Ambitieuse, solidaire" 
+      },
+      { 
+        nom: "Pierre Lefort", 
+        age: 65, 
+        nat: "Français", 
+        ville: "Marseille", 
+        pro: "Retraité, ancien marin", 
+        famille: "Marié, petits-enfants", 
+        loisirs: "Pêche, raconter des histoires", 
+        caractere: "Expérimenté, sage" 
+      },
+      { 
+        nom: "Yukiko Tanaka", 
+        age: 31, 
+        nat: "Japonaise", 
+        ville: "Kyoto", 
+        pro: "Photographe", 
+        famille: "Célibataire", 
+        loisirs: "Nature, méditation", 
+        caractere: "Patiente, observatrice" 
+      },
+      { 
+        nom: "Samuel Brown", 
+        age: 45, 
+        nat: "Britannique", 
+        ville: "Londres", 
+        pro: "Policier", 
+        famille: "2 enfants", 
+        loisirs: "Jogging, résoudre des énigmes", 
+        caractere: "Calme, réfléchi" 
+      },
+      { 
+        nom: "Leila Haddad", 
+        age: 22, 
+        nat: "Algérienne", 
+        ville: "Oran", 
+        pro: "Étudiante en biologie", 
+        famille: "3 sœurs", 
+        loisirs: "Musique, chant", 
+        caractere: "Joyeuse, optimiste" 
+      },
+      { 
+        nom: "Ivan Petrov", 
+        age: 29, 
+        nat: "Russe", 
+        ville: "Moscou", 
+        pro: "Ingénieur", 
+        famille: "Fiancé", 
+        loisirs: "Échecs, presse scientifique", 
+        caractere: "Réfléchi, méthodique" 
+      },
+      { 
+        nom: "Fatou Diop", 
+        age: 37, 
+        nat: "Sénégalaise", 
+        ville: "Dakar", 
+        pro: "Coiffeuse", 
+        famille: "Mère, 2 filles", 
+        loisirs: "Famille, nouvelles coiffures", 
+        caractere: "Généreuse, chaleureuse" 
+      }
+    ];
+
+    // --- GESTION DES FICHES ---
+    function nouvelleFiche() {
+      const fiche = fiches[Math.floor(Math.random() * fiches.length)];
+      document.getElementById('fiche').innerHTML = `
+        <h3>👤 ${fiche.nom} (${fiche.age} ans)</h3>
+        <p>
+          <b>🌍 Nationalité :</b> ${fiche.nat}<br>
+          <b>🏙️ Ville :</b> ${fiche.ville}<br>
+          <b>💼 Profession :</b> ${fiche.pro}<br>
+          <b>👨‍👩‍👧‍👦 Famille :</b> ${fiche.famille}<br>
+          <b>🎯 Loisirs :</b> ${fiche.loisirs}<br>
+          <b>✨ Caractère :</b> ${fiche.caractere}
+        </p>`;
+    }
+
+    // --- GESTION DU TIMER ---
+    let timerInterval;
+    
+    function startTimer(duration) {
+      clearInterval(timerInterval);
+      let time = duration;
+      updateDisplay(time);
+
+      timerInterval = setInterval(() => {
+        time--;
+        updateDisplay(time);
+
+        if (time <= 0) {
+          clearInterval(timerInterval);
+          const timerElement = document.getElementById('timer');
+          timerElement.textContent = "✅ Temps écoulé !";
+          timerElement.classList.add('timer-finished');
+          
+          // Retirer la classe après 3 secondes
+          setTimeout(() => {
+            timerElement.classList.remove('timer-finished');
+          }, 3000);
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+      const timerElement = document.getElementById('timer');
+      timerElement.textContent = "⏹️ Arrêté";
+      timerElement.classList.remove('timer-finished');
+    }
+
+    function updateDisplay(time) {
+      const minutes = Math.floor(time / 60);
+      const seconds = time % 60;
+      document.getElementById('timer').textContent = 
+        `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+  </script>
+</body>
+</html>
