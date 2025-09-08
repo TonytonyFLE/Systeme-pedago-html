@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Révision Vocabulaire des Sentiments</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .game-selector {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .game-btn {
+            background: rgba(255,255,255,0.9);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .game-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .game-btn.active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .game-area {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+        }
+
+        .game-area.active {
+            display: block;
+        }
+
+        /* Vocabulary List Styles */
+        .vocab-header {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .vocabulary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 15px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .vocabulary-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #3498db;
+            transition: transform 0.2s ease;
+        }
+
+        .vocabulary-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .vocab-french {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .vocab-german {
+            font-size: 1.1em;
+            color: #7f8c8d;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+
+        .vocab-type {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            margin-top: 8px;
+        }
+
+        .vocab-details {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .vocab-extra {
+            font-size: 0.9em;
+            color: #34495e;
+            margin: 2px 0;
+        }
+
+        .expression-item {
+            border-left-color: #9b59b6;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        /* Flash Cards Styles */
+        .flashcard-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .flashcard {
+            width: 400px;
+            height: 250px;
+            perspective: 1000px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            font-size: 1.8em;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.6s;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.flipped .flashcard-front {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.flipped .flashcard-back {
+            transform: rotateY(0deg);
+        }
+
+        .flashcard-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        /* Cards Quiz Styles */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .quiz-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #3498db;
+        }
+
+        .quiz-question {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .quiz-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .quiz-input.correct {
+            border-color: #27ae60;
+            background-color: #d5f4e6;
+        }
+
+        .quiz-input.incorrect {
+            border-color: #e74c3c;
+            background-color: #fdeaea;
+        }
+
+        .quiz-feedback {
+            font-size: 0.9em;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        .quiz-feedback.correct {
+            color: #27ae60;
+        }
+
+        .quiz-feedback.incorrect {
+            color: #e74c3c;
+        }
+
+        /* Taboo Game Styles */
+        .taboo-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+
+        .taboo-word {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .taboo-forbidden {
+            background: #ffebee;
+            border: 2px solid #f44336;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .taboo-forbidden h3 {
+            color: #f44336;
+            margin-bottom: 10px;
+        }
+
+        .taboo-forbidden-words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .forbidden-word {
+            background: #f44336;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        /* Sentences Styles */
+        .sentence-exercise {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .sentence-text {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .blank {
+            display: inline-block;
+            min-width: 120px;
+            padding: 5px 10px;
+            margin: 0 5px;
+            border-bottom: 2px solid #3498db;
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .answer-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: inherit;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn.success {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+        }
+
+        .btn.danger {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+
+        .btn.secondary {
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 1.3em;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 10px;
+            color: #4CAF50;
+        }
+
+        .result-display {
+            text-align: center;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            font-size: 1.1em;
+        }
+
+        .correct {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .incorrect {
+            background: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .vocabulary-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+            
+            .flashcard {
+                width: 300px;
+                height: 200px;
+            }
+            
+            .cards-container {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Révision Vocabulaire des Sentiments</h1>
+        
+        <div class="game-selector">
+            <button class="game-btn active" onclick="showGame('vocabulary')">📚 Vocabulaire</button>
+            <button class="game-btn" onclick="showGame('flashcards')">🃏 Flash Cards</button>
+            <button class="game-btn" onclick="showGame('cards')">🎴 Cartes</button>
+            <button class="game-btn" onclick="showGame('taboo')">🚫 Taboo</button>
+            <button class="game-btn" onclick="showGame('sentences')">📝 Phrases</button>
+        </div>
+
+        <!-- Vocabulary List -->
+        <div id="vocabulary" class="game-area active">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2>📚 Liste du Vocabulaire</h2>
+                <p>Parcourez tout le vocabulaire des sentiments français-allemand</p>
+                <div class="vocab-header">
+                    <button class="btn" onclick="showVocabulary('all')">Tout afficher</button>
+                    <button class="btn secondary" onclick="showVocabulary('words')">Mots uniquement</button>
+                    <button class="btn secondary" onclick="showVocabulary('expressions')">Expressions utiles</button>
+                </div>
+            </div>
+            <div class="vocabulary-grid" id="vocabulary-grid"></div>
+        </div>
+
+        <!-- Flash Cards Game -->
+        <div id="flashcards" class="game-area">
+            <div class="score-display">
+                <span>Carte: <span id="flashcard-current">1</span> / <span id="flashcard-total">36</span></span>
+                <span style="margin-left: 20px;">Score: <span id="flashcard-score">0</span></span>
+                <div style="margin: 10px 0;">
+                    <label>Langue première: </label>
+                    <select id="flashcard-language" onchange="resetFlashCards()">
+                        <option value="fr">Français → Allemand</option>
+                        <option value="de">Allemand → Français</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flashcard-container">
+                <div class="flashcard" id="flashcard" onclick="flipFlashCard()">
+                    <div class="flashcard-front" id="flashcard-front"></div>
+                    <div class="flashcard-back" id="flashcard-back"></div>
+                </div>
+                <div class="flashcard-controls">
+                    <button class="btn danger" onclick="flashCardIncorrect()">❌ Difficile</button>
+                    <button class="btn success" onclick="flashCardCorrect()">✅ Facile</button>
+                    <button class="btn" onclick="nextFlashCard()">➡️ Suivant</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards Quiz Game -->
+        <div id="cards" class="game-area">
+            <div class="score-display">
+                <span>Score: <span id="cards-score">0</span> / <span id="cards-total">6</span></span>
+                <div style="margin: 10px 0;">
+                    <label>Langue question: </label>
+                    <select id="cards-language" onchange="initCardsGame()">
+                        <option value="fr">Français → Allemand</option>
+                        <option value="de">Allemand → Français</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="checkAllCards()">✅ Vérifier tout</button>
+                <button class="btn secondary" onclick="initCardsGame()">🔄 Nouvelles cartes</button>
+            </div>
+            <div class="cards-container" id="cards-container"></div>
+        </div>
+
+        <!-- Taboo Game -->
+        <div id="taboo" class="game-area">
+            <div class="score-display">
+                <span>Score: <span id="taboo-score">0</span> | Temps: <span id="taboo-timer">60</span>s</span>
+                <button class="btn success" onclick="tabooCorrect()">✅ Trouvé!</button>
+                <button class="btn danger" onclick="tabooSkip()">⭐ Passer</button>
+                <button class="btn" onclick="startTaboo()">🔥 Nouvelle partie</button>
+            </div>
+            <div id="taboo-card-container"></div>
+        </div>
+
+        <!-- Sentences Game -->
+        <div id="sentences" class="game-area">
+            <div class="score-display">
+                Score: <span id="sentences-score">0</span> / <span id="sentences-total">0</span>
+            </div>
+            <div id="sentences-container"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="checkSentences()">✅ Vérifier</button>
+                <button class="btn secondary" onclick="initSentencesGame()">🔄 Nouvelles phrases</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Complete vocabulary data with all details from PDF
+        const vocabulary = [
+            { 
+                fr: "Admiration", 
+                de: "die Bewunderung", 
+                type: "noun",
+                verb: "admirer → bewundern",
+                adj: "admiratif/admirative → bewundernd"
+            },
+            { 
+                fr: "Affection", 
+                de: "die Zuneigung", 
+                type: "noun",
+                adj: "affectueux/affectueuse → zärtlich, liebevoll"
+            },
+            { 
+                fr: "Amitié", 
+                de: "die Freundschaft", 
+                type: "noun",
+                verb: "ressentir de l'amitié → Freundschaft empfinden"
+            },
+            { 
+                fr: "Amoureux/amoureuse", 
+                de: "verliebt", 
+                type: "adj",
+                verb: "être amoureux de → verliebt sein in"
+            },
+            { 
+                fr: "Antipathie", 
+                de: "die Antipathie, die Abneigung", 
+                type: "noun",
+                adj: "antipathique → unsympathisch"
+            },
+            { 
+                fr: "Attirer", 
+                de: "anziehen", 
+                type: "verb",
+                adj: "attirant(e) → anziehend"
+            },
+            { 
+                fr: "Colère", 
+                de: "die Wut, der Zorn", 
+                type: "noun",
+                verb: "être en colère contre → wütend sein auf"
+            },
+            { 
+                fr: "Compassion", 
+                de: "das Mitleid, das Mitgefühl", 
+                type: "noun"
+            },
+            { 
+                fr: "Content(e)", 
+                de: "zufrieden, froh", 
+                type: "adj"
+            },
+            { 
+                fr: "Déception", 
+                de: "die Enttäuschung", 
+                type: "noun",
+                adj: "déçu(e) → enttäuscht",
+                expr: "Quelle déception ! → Was für eine Enttäuschung!"
+            },
+            { 
+                fr: "Éprouver", 
+                de: "empfinden, fühlen", 
+                type: "verb",
+                expr: "éprouver un sentiment → ein Gefühl empfinden"
+            },
+            { 
+                fr: "Estime", 
+                de: "die Wertschätzung, die Achtung", 
+                type: "noun",
+                verb: "estimer → schätzen, achten"
+            },
+            { 
+                fr: "Faire confiance", 
+                de: "vertrauen", 
+                type: "verb",
+                expr: "je ne peux pas lui faire confiance → ich kann ihm/ihr nicht vertrauen"
+            },
+            { 
+                fr: "Fier/fière", 
+                de: "stolz", 
+                type: "adj",
+                verb: "être fier de → stolz sein auf",
+                noun: "fierté (f.) → der Stolz"
+            },
+            { 
+                fr: "Heureux/heureuse", 
+                de: "glücklich", 
+                type: "adj",
+                verb: "être heureux pour quelqu'un → glücklich sein für jemanden"
+            },
+            { 
+                fr: "Honte", 
+                de: "die Scham", 
+                type: "noun",
+                verb: "avoir honte → sich schämen"
+            },
+            { 
+                fr: "Indifférence", 
+                de: "die Gleichgültigkeit", 
+                type: "noun",
+                adj: "indifférent(e) → gleichgültig"
+            },
+            { 
+                fr: "Inspirer", 
+                de: "einflößen, erwecken", 
+                type: "verb",
+                expr: "il ne m'inspire pas confiance → er flößt mir kein Vertrauen ein"
+            },
+            { 
+                fr: "Manifester", 
+                de: "zeigen, äußern", 
+                type: "verb",
+                expr: "manifester du soutien → Unterstützung zeigen"
+            },
+            { 
+                fr: "Mépriser", 
+                de: "verachten", 
+                type: "verb",
+                noun: "mépris (m.) → die Verachtung"
+            },
+            { 
+                fr: "Partager", 
+                de: "teilen", 
+                type: "verb",
+                expr: "partager ses sentiments → seine Gefühle teilen"
+            },
+            { 
+                fr: "Pitié", 
+                de: "das Mitleid", 
+                type: "noun",
+                verb: "avoir pitié de → Mitleid haben mit",
+                expr: "me faire pitié → mir leid tun"
+            },
+            { 
+                fr: "Plaindre", 
+                de: "bemitleiden", 
+                type: "verb"
+            },
+            { 
+                fr: "Réjouir (se)", 
+                de: "sich freuen", 
+                type: "verb",
+                expr: "je me réjouis pour toi → ich freue mich für dich"
+            },
+            { 
+                fr: "Ressentir", 
+                de: "empfinden, fühlen", 
+                type: "verb"
+            },
+            { 
+                fr: "Sentiment", 
+                de: "das Gefühl", 
+                type: "noun",
+                expr: "sentiment amoureux → Liebesgefühl"
+            },
+            { 
+                fr: "Soutien", 
+                de: "die Unterstützung", 
+                type: "noun"
+            },
+            { 
+                fr: "Sympathie", 
+                de: "die Sympathie", 
+                type: "noun",
+                adj: "sympathique → sympathisch",
+                verb: "sympathiser → sympathisieren",
+                expr: "trouver sympathique → sympathisch finden"
+            },
+            { 
+                fr: "Tendre", 
+                de: "zärtlich", 
+                type: "adj",
+                noun: "tendresse (f.) → die Zärtlichkeit",
+                expr: "éprouver de la tendresse → Zärtlichkeit empfinden"
+            }
+        ];
+
+        // Useful expressions
+        const usefulExpressions = [
+            { fr: "J'éprouve de la...", de: "Ich empfinde...", type: "expression" },
+            { fr: "Je ressens...", de: "Ich fühle...", type: "expression" },
+            { fr: "J'ai de l'... pour", de: "Ich habe... für", type: "expression" },
+            { fr: "Je suis fier/fière de", de: "Ich bin stolz auf", type: "expression" },
+            { fr: "Je suis déçu(e) de", de: "Ich bin enttäuscht von", type: "expression" },
+            { fr: "Il/elle éprouve", de: "Er/sie empfindet", type: "expression" },
+            { fr: "Il/elle me fait pitié", de: "Er/sie tut mir leid", type: "expression" }
+        ];
+
+        // Game states
+        let flashCardIndex = 0;
+        let flashCardScore = 0;
+        let isFlashCardFlipped = false;
+        let tabooScore = 0;
+        let tabooTimer = 60;
+        let tabooInterval;
+        let currentTabooCard = 0;
+        let cardsScore = 0;
+        let sentencesScore = 0;
+
+        // Show/hide games
+        function showGame(gameType) {
+            document.querySelectorAll('.game-area').forEach(area => {
+                area.classList.remove('active');
+            });
+            document.querySelectorAll('.game-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(gameType).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (gameType === 'vocabulary' && !document.querySelector('.vocabulary-item')) initVocabularyList();
+            if (gameType === 'flashcards') initFlashCards();
+            if (gameType === 'cards' && !document.querySelector('.quiz-card')) initCardsGame();
+            if (gameType === 'sentences' && !document.querySelector('.sentence-exercise')) initSentencesGame();
+        }
+
+        // Vocabulary List
+        function initVocabularyList() {
+            showVocabulary('all');
+        }
+
+        function showVocabulary(type) {
+            const grid = document.getElementById('vocabulary-grid');
+            grid.innerHTML = '';
+            
+            let itemsToShow = [];
+            if (type === 'all') {
+                itemsToShow = [...vocabulary, ...usefulExpressions];
+            } else if (type === 'words') {
+                itemsToShow = vocabulary;
+            } else if (type === 'expressions') {
+                itemsToShow = usefulExpressions;
+            }
+            
+            itemsToShow.forEach(word => {
+                const div = document.createElement('div');
+                div.className = word.type === 'expression' ? 'vocabulary-item expression-item' : 'vocabulary-item';
+                
+                let detailsHtml = '';
+                if (word.verb) detailsHtml += `<div class="vocab-extra">Verbe: ${word.verb}</div>`;
+                if (word.adj) detailsHtml += `<div class="vocab-extra">Adjectif: ${word.adj}</div>`;
+                if (word.noun) detailsHtml += `<div class="vocab-extra">Nom: ${word.noun}</div>`;
+                if (word.expr) detailsHtml += `<div class="vocab-extra">Expression: ${word.expr}</div>`;
+                
+                div.innerHTML = `
+                    <div class="vocab-french">${word.fr}</div>
+                    <div class="vocab-german">${word.de}</div>
+                    <div class="vocab-type">${word.type === 'noun' ? 'nom' : word.type === 'adj' ? 'adjectif' : word.type === 'verb' ? 'verbe' : 'expression'}</div>
+                    ${detailsHtml ? `<div class="vocab-details">${detailsHtml}</div>` : ''}
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        // Flash Cards Game
+        function initFlashCards() {
+            flashCardIndex = 0;
+            flashCardScore = 0;
+            isFlashCardFlipped = false;
+            const allWords = [...vocabulary, ...usefulExpressions];
+            document.getElementById('flashcard-score').textContent = flashCardScore;
+            document.getElementById('flashcard-total').textContent = allWords.length;
+            showFlashCard();
+        }
+
+        function showFlashCard() {
+            const allWords = [...vocabulary, ...usefulExpressions];
+            if (flashCardIndex >= allWords.length) {
+                alert(`Terminé! Score final: ${flashCardScore}/${allWords.length}`);
+                flashCardIndex = 0;
+            }
+            
+            const word = allWords[flashCardIndex];
+            const language = document.getElementById('flashcard-language').value;
+            const flashcard = document.getElementById('flashcard');
+            
+            flashcard.classList.remove('flipped');
+            isFlashCardFlipped = false;
+            
+            if (language === 'fr') {
+                document.getElementById('flashcard-front').textContent = word.fr;
+                document.getElementById('flashcard-back').textContent = word.de;
+            } else {
+                document.getElementById('flashcard-front').textContent = word.de;
+                document.getElementById('flashcard-back').textContent = word.fr;
+            }
+            
+            document.getElementById('flashcard-current').textContent = flashCardIndex + 1;
+        }
+
+        function flipFlashCard() {
+            const flashcard = document.getElementById('flashcard');
+            flashcard.classList.toggle('flipped');
+            isFlashCardFlipped = !isFlashCardFlipped;
+        }
+
+        function flashCardCorrect() {
+            if (isFlashCardFlipped) {
+                flashCardScore++;
+                document.getElementById('flashcard-score').textContent = flashCardScore;
+            }
+            nextFlashCard();
+        }
+
+        function flashCardIncorrect() {
+            nextFlashCard();
+        }
+
+        function nextFlashCard() {
+            flashCardIndex++;
+            showFlashCard();
+        }
+
+        function resetFlashCards() {
+            initFlashCards();
+        }
+
+        // Cards Quiz Game
+        function initCardsGame() {
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
+            cardsScore = 0;
+            document.getElementById('cards-score').textContent = cardsScore;
+            
+            const allWords = [...vocabulary, ...usefulExpressions];
+            const selectedWords = allWords.sort(() => Math.random() - 0.5).slice(0, 6);
+            const language = document.getElementById('cards-language').value;
+            
+            selectedWords.forEach((word, index) => {
+                const div = document.createElement('div');
+                div.className = 'quiz-card';
+                
+                const question = language === 'fr' ? word.fr : word.de;
+                const answer = language === 'fr' ? word.de : word.fr;
+                
+                div.innerHTML = `
+                    <div class="quiz-question">${question}</div>
+                    <input type="text" class="quiz-input" id="card-input-${index}" data-answer="${answer.toLowerCase()}" placeholder="Votre réponse...">
+                    <div class="quiz-feedback" id="card-feedback-${index}"></div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function checkAllCards() {
+            const inputs = document.querySelectorAll('.quiz-input');
+            cardsScore = 0;
+            
+            inputs.forEach((input, index) => {
+                const userAnswer = input.value.toLowerCase().trim();
+                const correctAnswer = input.dataset.answer;
+                const feedback = document.getElementById(`card-feedback-${index}`);
+                
+                // Check for exact match or partial match (for multiple translations)
+                const isCorrect = correctAnswer.includes(userAnswer) && userAnswer.length > 2 || 
+                                 userAnswer === correctAnswer ||
+                                 correctAnswer.split(',').some(answer => answer.trim().toLowerCase() === userAnswer);
+                
+                if (isCorrect) {
+                    input.classList.remove('incorrect');
+                    input.classList.add('correct');
+                    feedback.textContent = '✅ Correct!';
+                    feedback.className = 'quiz-feedback correct';
+                    cardsScore++;
+                } else {
+                    input.classList.remove('correct');
+                    input.classList.add('incorrect');
+                    feedback.textContent = `❌ Réponse: ${correctAnswer}`;
+                    feedback.className = 'quiz-feedback incorrect';
+                }
+            });
+            
+            document.getElementById('cards-score').textContent = cardsScore;
+        }
+
+        // Taboo Game
+        const tabooWords = [
+            {
+                word: "ADMIRATION",
+                forbidden: ["respecter", "admirer", "apprécier", "estimer", "honorer"]
+            },
+            {
+                word: "COLÈRE",
+                forbidden: ["fâché", "énervé", "furieux", "rage", "irrité"]
+            },
+            {
+                word: "BONHEUR",
+                forbidden: ["joie", "content", "heureux", "satisfait", "plaisir"]
+            },
+            {
+                word: "TRISTESSE",
+                forbidden: ["pleurer", "déprimé", "malheureux", "chagrin", "peine"]
+            },
+            {
+                word: "FIERTÉ",
+                forbidden: ["fier", "orgueil", "satisfaction", "honneur", "réussite"]
+            },
+            {
+                word: "JALOUSIE",
+                forbidden: ["envieux", "rival", "posséder", "compétition", "vert"]
+            },
+            {
+                word: "AFFECTION",
+                forbidden: ["amour", "tendresse", "attachement", "câlin", "bisou"]
+            },
+            {
+                word: "DÉCEPTION",
+                forbidden: ["déçu", "frustration", "espoir", "attente", "échec"]
+            }
+        ];
+
+        function startTaboo() {
+            tabooScore = 0;
+            tabooTimer = 60;
+            currentTabooCard = 0;
+            document.getElementById('taboo-score').textContent = tabooScore;
+            showTabooCard();
+            
+            if (tabooInterval) clearInterval(tabooInterval);
+            tabooInterval = setInterval(() => {
+                tabooTimer--;
+                document.getElementById('taboo-timer').textContent = tabooTimer;
+                if (tabooTimer <= 0) {
+                    clearInterval(tabooInterval);
+                    alert(`Temps écoulé! Score final: ${tabooScore}`);
+                }
+            }, 1000);
+        }
+
+        function showTabooCard() {
+            if (currentTabooCard >= tabooWords.length) {
+                currentTabooCard = 0;
+            }
+            
+            const card = tabooWords[currentTabooCard];
+            const container = document.getElementById('taboo-card-container');
+            
+            container.innerHTML = `
+                <div class="taboo-card">
+                    <div class="taboo-word">${card.word}</div>
+                    <div class="taboo-forbidden">
+                        <h3>Mots interdits:</h3>
+                        <div class="taboo-forbidden-words">
+                            ${card.forbidden.map(word => `<span class="forbidden-word">${word}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function tabooCorrect() {
+            if (tabooTimer <= 0) return;
+            tabooScore++;
+            document.getElementById('taboo-score').textContent = tabooScore;
+            currentTabooCard++;
+            showTabooCard();
+        }
+
+        function tabooSkip() {
+            if (tabooTimer <= 0) return;
+            currentTabooCard++;
+            showTabooCard();
+        }
+
+        // Sentences Game
+        const sentences = [
+            "Je ressens de la ___ quand je vois ce magnifique tableau. (bewunderung)",
+            "Il éprouve une grande ___ pour ses parents. (zuneigung)", 
+            "Elle est très ___ de ses résultats scolaires. (stolz)",
+            "Cette nouvelle m'a causé une énorme ___. (enttäuschung)",
+            "Je n'ai aucune ___ pour cette personne. (sympathie)",
+            "Il a ressenti de la ___ en voyant cet accident. (mitleid)",
+            "Elle manifeste beaucoup d'___ envers les autres. (gleichgültigkeit)",
+            "Ce comportement m'inspire du ___. (verachtung)",
+            "J'éprouve de la ___ pour lui après son échec. (mitleid)",
+            "Cette réussite me remplit de ___. (stolz)",
+            "Son attitude me cause de l'___. (antipathie)",
+            "Je ressens une grande ___ envers mes amis. (zuneigung)",
+            "Il éprouve de la ___ face à cette injustice. (wut)",
+            "Cette histoire me remplit de ___. (mitleid)",
+            "Je suis ___ de ma réussite. (stolz)",
+            "Il manifeste de l'___ totale. (gleichgültigkeit)",
+            "Cette personne m'inspire de la ___. (verachtung)",
+            "Je ressens du ___ pour ses actions. (verachtung)",
+            "Elle éprouve une grande ___ pour l'art. (bewunderung)",
+            "Cette situation me cause de la ___. (scham)"
+        ];
+
+        function initSentencesGame() {
+            const container = document.getElementById('sentences-container');
+            container.innerHTML = '';
+            sentencesScore = 0;
+            
+            const selectedSentences = sentences.sort(() => Math.random() - 0.5).slice(0, 5);
+            
+            selectedSentences.forEach((sentence, index) => {
+                const div = document.createElement('div');
+                div.className = 'sentence-exercise';
+                
+                const parts = sentence.split('___');
+                const correctAnswer = sentence.match(/\(([^)]+)\)/)[1];
+                
+                div.innerHTML = `
+                    <div class="sentence-text">
+                        ${parts[0]}<span class="blank"><input type="text" class="answer-input" id="answer-${index}" data-correct="${correctAnswer}"></span>${parts[1]}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            
+            document.getElementById('sentences-total').textContent = selectedSentences.length;
+            document.getElementById('sentences-score').textContent = '0';
+        }
+
+        function checkSentences() {
+            const inputs = document.querySelectorAll('.answer-input');
+            sentencesScore = 0;
+            
+            inputs.forEach((input, index) => {
+                const correctAnswer = input.dataset.correct.toLowerCase();
+                const userAnswer = input.value.toLowerCase().trim();
+                
+                // Find corresponding French word for German answer
+                const frenchEquivalent = vocabulary.find(v => 
+                    v.de.toLowerCase().includes(correctAnswer) || 
+                    v.fr.toLowerCase().includes(userAnswer)
+                );
+                
+                const isCorrect = userAnswer === correctAnswer || 
+                                 (frenchEquivalent && frenchEquivalent.fr.toLowerCase().includes(userAnswer)) ||
+                                 correctAnswer.includes(userAnswer);
+                
+                if (isCorrect) {
+                    input.style.backgroundColor = '#c8e6c9';
+                    input.style.color = '#2e7d32';
+                    sentencesScore++;
+                } else {
+                    input.style.backgroundColor = '#ffcdd2';
+                    input.style.color = '#c62828';
+                }
+            });
+            
+            document.getElementById('sentences-score').textContent = sentencesScore;
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            initVocabularyList();
+        };
+    </script>
+</body>
+</html>
