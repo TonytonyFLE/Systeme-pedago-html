@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Description d'Objets - Français/Allemand</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: #34495e;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: #34495e;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background 0.3s;
+        }
+
+        .tab:hover {
+            background: #3498db;
+        }
+
+        .tab.active {
+            background: #3498db;
+            box-shadow: inset 0 -3px 0 #2980b9;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            min-height: 600px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Vocabulaire Tab */
+        .vocab-controls {
+            margin-bottom: 30px;
+        }
+
+        .control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-selector label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .language-selector select {
+            padding: 8px 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            background: white;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .language-selector select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .quizlet-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card-counter {
+            font-size: 1.2em;
+            color: #2c3e50;
+            font-weight: bold;
+            background: #ecf0f1;
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+
+        .single-vocab-card {
+            width: 400px;
+            height: 250px;
+            cursor: pointer;
+            perspective: 1000px;
+            margin: 20px 0;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .single-vocab-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .card-text {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            word-wrap: break-word;
+        }
+
+        .card-category {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+        .card-instruction {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        .navigation-controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: #34495e;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            min-width: 120px;
+        }
+
+        .nav-btn:hover {
+            background: #2c3e50;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .shuffle-btn {
+            background: #e67e22;
+        }
+
+        .shuffle-btn:hover {
+            background: #d35400;
+        }
+
+        .toggle-vocab {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background 0.3s;
+        }
+
+        .toggle-vocab:hover {
+            background: #2980b9;
+        }
+
+        .vocab-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .vocab-table th {
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .vocab-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .vocab-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .vocab-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        /* Game Tab */
+        .game-container {
+            text-align: center;
+        }
+
+        .game-header {
+            margin-bottom: 30px;
+        }
+
+        .timer {
+            font-size: 3em;
+            color: #e74c3c;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .game-controls {
+            margin: 20px 0;
+        }
+
+        .game-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin: 0 10px;
+            transition: background 0.3s;
+        }
+
+        .game-btn:hover {
+            background: #229954;
+        }
+
+        .game-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .current-card {
+            background: #3498db;
+            color: white;
+            font-size: 2em;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .description-helper {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .description-helper h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .helper-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .helper-category {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .helper-category h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .helper-category ul {
+            list-style: none;
+        }
+
+        .helper-category li {
+            padding: 3px 0;
+            color: #7f8c8d;
+        }
+
+        .score {
+            background: #2ecc71;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1.2em;
+            margin: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .helper-categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .current-card {
+                font-size: 1.5em;
+                padding: 30px 20px;
+            }
+
+            .control-row {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .single-vocab-card {
+                width: 90%;
+                max-width: 350px;
+                height: 200px;
+            }
+
+            .card-text {
+                font-size: 1.5em;
+            }
+
+            .navigation-controls {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .nav-btn {
+                min-width: 100px;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Description d'Objets</h1>
+            <p>Apprendre le vocabulaire et pratiquer les descriptions en français et allemand</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('vocab')">📚 Vocabulaire</button>
+            <button class="tab" onclick="switchTab('game')">🎮 Jeu "Qu'est-ce que c'est ?"</button>
+        </div>
+
+        <div id="vocab" class="tab-content active">
+            <div class="vocab-controls">
+                <div class="control-row">
+                    <div class="language-selector">
+                        <label for="front-language">Langue au recto :</label>
+                        <select id="front-language" onchange="updateCurrentCard()">
+                            <option value="fr">Français</option>
+                            <option value="de">Allemand</option>
+                        </select>
+                    </div>
+                    <button class="toggle-vocab" onclick="toggleVocabTable()">
+                        <span id="toggle-text">Afficher le vocabulaire complet</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="quizlet-container">
+                <div class="card-counter">
+                    <span id="current-card-number">1</span> / <span id="total-cards">67</span>
+                </div>
+                
+                <div class="single-vocab-card" id="single-vocab-card" onclick="flipSingleCard()">
+                    <div class="card-inner" id="single-card-inner">
+                        <div class="card-front">
+                            <div class="card-text" id="front-text">Silex</div>
+                            <div class="card-category" id="front-category">Nature</div>
+                            <div class="card-instruction">Clic pour voir la traduction</div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-text" id="back-text">der Feuerstein</div>
+                            <div class="card-category" id="back-category">Nature</div>
+                            <div class="card-instruction">Clic pour revenir</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navigation-controls">
+                    <button class="nav-btn" id="prev-btn" onclick="previousCard()">← Précédente</button>
+                    <button class="nav-btn shuffle-btn" onclick="shuffleCards()">🔀 Mélanger</button>
+                    <button class="nav-btn" id="next-btn" onclick="nextCard()">Suivante →</button>
+                </div>
+            </div>
+            
+            <div id="vocab-table-container" class="hidden">
+                <table class="vocab-table">
+                    <thead>
+                        <tr>
+                            <th>Français</th>
+                            <th>Allemand</th>
+                            <th>Catégorie</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vocab-tbody">
+                        <!-- Vocabulaire sera inséré ici -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="game" class="tab-content">
+            <div class="game-container">
+                <div class="game-header">
+                    <h2>🎯 Décris cet objet !</h2>
+                    <div class="timer" id="timer">60</div>
+                    <div class="score">Score: <span id="score">0</span></div>
+                </div>
+
+                <div class="game-controls">
+                    <button class="game-btn" id="start-btn" onclick="startGame()">Commencer</button>
+                    <button class="game-btn" id="next-btn" onclick="nextCard()" disabled>Carte suivante</button>
+                    <button class="game-btn" id="stop-btn" onclick="stopGame()" disabled>Arrêter</button>
+                </div>
+
+                <div class="current-card" id="current-card">
+                    Clique sur "Commencer" pour débuter !
+                </div>
+
+                <div class="description-helper">
+                    <h3>💡 Aide pour décrire :</h3>
+                    <div class="helper-categories">
+                        <div class="helper-category">
+                            <h4>🔹 Forme</h4>
+                            <ul>
+                                <li>rond, carré, rectangulaire</li>
+                                <li>long, court, large, étroit</li>
+                                <li>plat, épais, fin</li>
+                                <li>courbe, droit, pointu</li>
+                            </ul>
+                        </div>
+                        <div class="helper-category">
+                            <h4>🎨 Couleur</h4>
+                            <ul>
+                                <li>rouge, bleu, vert, jaune</li>
+                                <li>noir, blanc, gris</li>
+                                <li>transparent, coloré</li>
+                                <li>brillant, mat</li>
+                            </ul>
+                        </div>
+                        <div class="helper-category">
+                            <h4>🔧 Matière</h4>
+                            <ul>
+                                <li>en métal, en plastique</li>
+                                <li>en bois, en verre</li>
+                                <li>en papier, en tissu</li>
+                                <li>dur, mou, flexible</li>
+                            </ul>
+                        </div>
+                        <div class="helper-category">
+                            <h4>⚡ Utilité</h4>
+                            <ul>
+                                <li>Ça sert à...</li>
+                                <li>On l'utilise pour...</li>
+                                <li>C'est utile quand...</li>
+                                <li>On en a besoin pour...</li>
+                            </ul>
+                        </div>
+                        <div class="helper-category">
+                            <h4>📍 Où le trouve-t-on ?</h4>
+                            <ul>
+                                <li>à la maison, à l'école</li>
+                                <li>dans la cuisine, au bureau</li>
+                                <li>dehors, dans la nature</li>
+                                <li>dans un magasin, un sac</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Vocabulaire des objets
+        const vocabulary = [
+            { fr: "Silex", de: "der Feuerstein", category: "Nature" },
+            { fr: "Ticket de bus", de: "das Busticket", category: "Transport" },
+            { fr: "Boîte d'allumettes", de: "die Streichholzschachtel", category: "Maison" },
+            { fr: "Extincteur", de: "der Feuerlöscher", category: "Sécurité" },
+            { fr: "Raquette de tennis", de: "der Tennisschläger", category: "Sport" },
+            { fr: "Baguettes chinoises", de: "die Essstäbchen", category: "Cuisine" },
+            { fr: "Perruque", de: "die Perücke", category: "Mode" },
+            { fr: "Carte d'inscription à la bibliothèque", de: "der Bibliotheksausweis", category: "Education" },
+            { fr: "Carnet de chant", de: "das Liederbuch", category: "Musique" },
+            { fr: "Papier origami", de: "das Origami-Papier", category: "Loisirs" },
+            { fr: "Album de bande dessinée", de: "der Comic", category: "Lecture" },
+            { fr: "Tétine", de: "der Schnuller", category: "Bébé" },
+            { fr: "Balle rebondissante", de: "der Gummiball", category: "Jouets" },
+            { fr: "Drapeau des Nations unies", de: "die UN-Flagge", category: "Politique" },
+            { fr: "Seau", de: "der Eimer", category: "Maison" },
+            { fr: "Vernis à ongles", de: "der Nagellack", category: "Beauté" },
+            { fr: "Dé à coudre", de: "der Fingerhut", category: "Couture" },
+            { fr: "Clé", de: "der Schlüssel", category: "Maison" },
+            { fr: "Mâchoire de vampire", de: "das Vampirgebiss", category: "Déguisement" },
+            { fr: "Couverture chauffante", de: "die Heizdecke", category: "Maison" },
+            { fr: "Râpe à fromage", de: "die Käsereibe", category: "Cuisine" },
+            { fr: "Rouge à lèvres", de: "der Lippenstift", category: "Beauté" },
+            { fr: "Cage de perroquet", de: "der Vogelkäfig", category: "Animaux" },
+            { fr: "Sandwich au poisson", de: "das Fischsandwich", category: "Nourriture" },
+            { fr: "Patins à roulette", de: "die Rollschuhe", category: "Sport" },
+            { fr: "Mégaphone", de: "das Megafon", category: "Communication" },
+            { fr: "Calumet de la paix", de: "die Friedenspfeife", category: "Culture" },
+            { fr: "Poêle", de: "die Pfanne", category: "Cuisine" },
+            { fr: "Moulin à poivre", de: "die Pfeffermühle", category: "Cuisine" },
+            { fr: "Os de dinosaure", de: "der Dinosaurierknochen", category: "Paléontologie" },
+            { fr: "Râteau", de: "der Rechen", category: "Jardinage" },
+            { fr: "Boule de neige", de: "der Schneeball", category: "Hiver" },
+            { fr: "Timbre", de: "die Briefmarke", category: "Poste" },
+            { fr: "Fusil à pompe", de: "die Schrotflinte", category: "Armes" },
+            { fr: "Boa à plumes", de: "die Federboa", category: "Mode" },
+            { fr: "Pendule à coucou", de: "die Kuckucksuhr", category: "Maison" },
+            { fr: "Jumelles", de: "das Fernglas", category: "Optique" },
+            { fr: "Caddie", de: "der Einkaufswagen", category: "Shopping" },
+            { fr: "Poster de Che Guevara", de: "das Che-Guevara-Poster", category: "Décoration" },
+            { fr: "Polaroid", de: "die Sofortbildkamera", category: "Photo" },
+            { fr: "Gants de gardien de foot", de: "die Torwarthandschuhe", category: "Sport" },
+            { fr: "Armure de chevalier", de: "die Ritterrüstung", category: "Histoire" },
+            { fr: "Moutarde de Dijon", de: "der Dijon-Senf", category: "Condiments" },
+            { fr: "Marionnette", de: "die Marionette", category: "Spectacle" },
+            { fr: "Tapette à mouche", de: "die Fliegenklatsche", category: "Maison" },
+            { fr: "Tuyau d'arrosage", de: "der Gartenschlauch", category: "Jardinage" },
+            { fr: "Fouet", de: "der Schneebesen", category: "Cuisine" },
+            { fr: "Cuillère", de: "der Löffel", category: "Cuisine" },
+            { fr: "Faux nez", de: "die falsche Nase", category: "Déguisement" },
+            { fr: "Bouillotte", de: "die Wärmflasche", category: "Santé" },
+            { fr: "Carte routière", de: "die Straßenkarte", category: "Navigation" },
+            { fr: "Pince à linge", de: "die Wäscheklammer", category: "Maison" },
+            { fr: "Saucisse de Francfort", de: "die Frankfurter Wurst", category: "Nourriture" },
+            { fr: "Bière", de: "das Bier", category: "Boissons" },
+            { fr: "Trombone", de: "die Posaune", category: "Musique" },
+            { fr: "Étoile de shériff", de: "der Sheriffstern", category: "Far West" },
+            { fr: "Couteau suisse", de: "das Schweizer Messer", category: "Outils" },
+            { fr: "Chewing-gum", de: "der Kaugummi", category: "Confiserie" },
+            { fr: "Sonnette de vélo", de: "die Fahrradklingel", category: "Vélo" },
+            { fr: "Coussin", de: "das Kissen", category: "Maison" },
+            { fr: "Sabre laser", de: "das Lichtschwert", category: "Science-fiction" },
+            { fr: "Brosse à dent", de: "die Zahnbürste", category: "Hygiène" },
+            { fr: "Four à chaleur tournante", de: "der Umluftbackofen", category: "Électroménager" },
+            { fr: "Canne à pêche", de: "die Angelrute", category: "Pêche" },
+            { fr: "Machine à remonter dans le temps", de: "die Zeitmaschine", category: "Science-fiction" },
+            { fr: "Ballon gonflable", de: "der Luftballon", category: "Fête" },
+            { fr: "Sac isotherme", de: "die Kühltasche", category: "Pique-nique" },
+            { fr: "Thermomètre", de: "das Thermometer", category: "Santé" },
+            { fr: "Filet à papillons", de: "das Schmetterlingsnetz", category: "Nature" },
+            { fr: "Aspirateur", de: "der Staubsauger", category: "Électroménager" },
+            { fr: "Haltères", de: "die Hanteln", category: "Sport" }
+        ];
+
+        let gameTimer;
+        let timeLeft = 60;
+        let gameActive = false;
+        let currentCardIndex = 0;
+        let score = 0;
+        let usedCards = [];
+        let currentVocabIndex = 0;
+        let vocabOrder = [];
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            loadVocabulary();
+            initializeVocabCards();
+        });
+
+        function initializeVocabCards() {
+            vocabOrder = Array.from({length: vocabulary.length}, (_, i) => i);
+            document.getElementById('total-cards').textContent = vocabulary.length;
+            updateCurrentCard();
+        }
+
+        function updateCurrentCard() {
+            const frontLanguage = document.getElementById('front-language').value;
+            const currentItem = vocabulary[vocabOrder[currentVocabIndex]];
+            
+            const frontText = frontLanguage === 'fr' ? currentItem.fr : currentItem.de;
+            const backText = frontLanguage === 'fr' ? currentItem.de : currentItem.fr;
+            
+            document.getElementById('front-text').textContent = frontText;
+            document.getElementById('back-text').textContent = backText;
+            document.getElementById('front-category').textContent = currentItem.category;
+            document.getElementById('back-category').textContent = currentItem.category;
+            document.getElementById('current-card-number').textContent = currentVocabIndex + 1;
+            
+            // Reset flip state
+            document.getElementById('single-vocab-card').classList.remove('flipped');
+            
+            // Update navigation buttons
+            document.getElementById('prev-btn').disabled = currentVocabIndex === 0;
+            document.getElementById('next-btn').disabled = currentVocabIndex === vocabulary.length - 1;
+        }
+
+        function flipSingleCard() {
+            document.getElementById('single-vocab-card').classList.toggle('flipped');
+        }
+
+        function previousCard() {
+            if (currentVocabIndex > 0) {
+                currentVocabIndex--;
+                updateCurrentCard();
+            }
+        }
+
+        function nextCard() {
+            if (currentVocabIndex < vocabulary.length - 1) {
+                currentVocabIndex++;
+                updateCurrentCard();
+            }
+        }
+
+        function shuffleCards() {
+            // Mélanger l'ordre des cartes
+            for (let i = vocabOrder.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [vocabOrder[i], vocabOrder[j]] = [vocabOrder[j], vocabOrder[i]];
+            }
+            currentVocabIndex = 0;
+            updateCurrentCard();
+        }
+
+        function switchTab(tabName) {
+            // Masquer tous les contenus d'onglets
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Masquer tous les onglets actifs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Afficher l'onglet sélectionné
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function loadVocabulary() {
+            const tbody = document.getElementById('vocab-tbody');
+            tbody.innerHTML = '';
+            
+            vocabulary.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${item.fr}</strong></td>
+                    <td><em>${item.de}</em></td>
+                    <td><span style="background: #3498db; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8em;">${item.category}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function toggleVocabTable() {
+            const container = document.getElementById('vocab-table-container');
+            const toggleText = document.getElementById('toggle-text');
+            
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                toggleText.textContent = 'Masquer le vocabulaire';
+            } else {
+                container.classList.add('hidden');
+                toggleText.textContent = 'Afficher le vocabulaire complet';
+            }
+        }
+
+        function startGame() {
+            gameActive = true;
+            timeLeft = 60;
+            score = 0;
+            usedCards = [];
+            
+            document.getElementById('start-btn').disabled = true;
+            document.getElementById('next-btn').disabled = false;
+            document.getElementById('stop-btn').disabled = false;
+            
+            updateScore();
+            showNewCard();
+            startTimer();
+        }
+
+        function stopGame() {
+            gameActive = false;
+            clearInterval(gameTimer);
+            
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('next-btn').disabled = true;
+            document.getElementById('stop-btn').disabled = true;
+            
+            document.getElementById('current-card').textContent = `Jeu terminé ! Score final: ${score}`;
+            document.getElementById('timer').textContent = '60';
+        }
+
+        function nextCard() {
+            if (gameActive) {
+                score++;
+                updateScore();
+                showNewCard();
+            }
+        }
+
+        function showNewCard() {
+            if (usedCards.length >= vocabulary.length) {
+                usedCards = []; // Reset si tous les mots ont été utilisés
+            }
+            
+            let availableCards = vocabulary.filter((_, index) => !usedCards.includes(index));
+            let randomIndex = Math.floor(Math.random() * availableCards.length);
+            let selectedCard = availableCards[randomIndex];
+            let originalIndex = vocabulary.findIndex(item => item.fr === selectedCard.fr);
+            
+            usedCards.push(originalIndex);
+            document.getElementById('current-card').textContent = selectedCard.fr;
+        }
+
+        function startTimer() {
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                
+                if (timeLeft <= 10) {
+                    document.getElementById('timer').style.color = '#e74c3c';
+                } else {
+                    document.getElementById('timer').style.color = '#27ae60';
+                }
+                
+                if (timeLeft <= 0) {
+                    stopGame();
+                }
+            }, 1000);
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+    </script>
+</body>
+</html>
