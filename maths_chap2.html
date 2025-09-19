@@ -1,0 +1,945 @@
+            10: {
+                answers: {
+                    ex10_a: "2800000000",
+                    ex10_b: "0.0634",
+                    ex10_c: "16000000000",
+                    ex10_<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapitre 2 - Puissances de dix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .quote {
+            font-style: italic;
+            margin-top: 15px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .theory-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid #3498db;
+        }
+
+        .example-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .example-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .exercise {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #e74c3c;
+        }
+
+        .exercise-title {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #e9ecef;
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .grid-answers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .answer-input {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .answer-input.correct {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .answer-input.incorrect {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-check { background: #27ae60; color: white; }
+        .btn-solution { background: #f39c12; color: white; }
+        .btn-reset { background: #95a5a6; color: white; }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: 500;
+            display: none;
+            white-space: pre-line;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .feedback.solution {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .navigation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(52, 152, 219, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            margin: 5px 0;
+            border-radius: 5px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <button class="nav-btn" onclick="scrollToSection('2-1-introduction')">💡 Introduction</button>
+        <button class="nav-btn" onclick="scrollToSection('2-3-representation')">🔢 Représentation</button>
+        <button class="nav-btn" onclick="scrollToSection('2-4-calculs')">⚙️ Calculs</button>
+        <button class="nav-btn" onclick="scrollToSection('exercices')">📝 Exercices</button>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>📚 Chapitre 2 - Puissances de dix</h1>
+            <div class="quote">
+                "Les mathématiques ne nuisent pas à la libido."<br>
+                <em>— Paul Möbius</em>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalExercises">11</div>
+                    <div class="stat-label">Exercices</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="completedExercises">0</div>
+                    <div class="stat-label">Complétés</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="correctAnswers">0</div>
+                    <div class="stat-label">Corrects</div>
+                </div>
+            </div>
+
+            <!-- Section 2.1 Introduction -->
+            <div class="section" id="2-1-introduction">
+                <h2 class="section-title">💡 2.1 Introduction</h2>
+                <div class="theory-box">
+                    <p>Dans des disciplines comme les sciences naturelles et la médecine, on a souvent affaire à des chiffres qui sont trop grands ou petits pour être écrits de la manière habituelle. Par exemple la masse d'un atome (0.0000166… avec le 1 en 27e position après la virgule) ou le nombre de cellules dans le corps humain (un 18 suivi de 14 zéros). Pour pouvoir travailler plus facilement avec de tels chiffres, on utilise les puissances de dix. La puissance est une sorte d'abréviation pour une multiplication répétée avec un même facteur.</p>
+                </div>
+                <div class="example-box">
+                    <div class="example-title">Exemple 2.1</div>
+                    <p>Au lieu de 5 · 10 · 10 · 10, on écrit 5 · 10³. Le 3 se nomme exposant.</p>
+                </div>
+                <div class="example-box">
+                    <div class="example-title">Exemple 2.2</div>
+                    <p>3 · 10⁻⁵ ; 7.2 · 10⁻¹⁰. Un autre avantage : l'écriture avec 10ⁿ évite les ambiguïtés internationales (p. ex. one billion = 10⁹).</p>
+                </div>
+            </div>
+
+            <!-- Section 2.3 Représentation -->
+            <div class="section" id="2-3-representation">
+                <h2 class="section-title">🔢 2.3 Représentation des nombres</h2>
+                <div class="theory-box">
+                    <p>Parfois, il est nécessaire de faire l'inverse, c'est-à-dire transcrire des nombres en écriture scientifique.</p>
+                </div>
+                <div class="example-box">
+                    <div class="example-title">Exemple 2.5</div>
+                    <p>Le nombre 2.5 · 10⁸ doit être écrit comme nombre «normal». La multiplication avec 10⁸ signifie : déplacer la virgule de 8 positions vers la droite. C'est exactement ce que l'on fait. On obtient alors 250 000 000 resp. 250 millions.</p>
+                </div>
+            </div>
+
+            <!-- Section 2.4 Calculs -->
+            <div class="section" id="2-4-calculs">
+                <h2 class="section-title">⚙️ 2.4 Calculer avec les puissances de dix</h2>
+                <div class="theory-box">
+                    <p>Un autre avantage des puissances de dix réside dans le fait qu'ils simplifient énormément les calculs avec des grands nombres. Nous allons voir les règles de calcul.</p>
+                </div>
+                <div class="theory-box">
+                    <h3>2.4.1 Multiplication et division</h3>
+                    <p>Pour multiplier les puissances de dix, on peut additionner les exposants. Pour la division, nous utilisons le fait que : 10ⁿ peut aussi s'écrire · 10⁻ⁿ. Ainsi, il n'y a plus du tout de division.</p>
+                </div>
+            </div>
+
+            <!-- Exercices -->
+            <div class="section" id="exercices">
+                <h2 class="section-title">📝 Exercices</h2>
+
+                <!-- Exercice 1 -->
+                <div class="exercise">
+                    <div class="exercise-title">🔢 Exercice 1: Transcrivez ces nombres en écriture scientifique</div>
+                    <div class="question">
+                        <div class="question-text">Transcrivez les nombres suivants en écriture scientifique (forme a · 10ⁿ) :</div>
+                        <div class="grid-answers">
+                            <div><label>a) 400</label><input type="text" class="answer-input" id="ex1_a" placeholder="a·10ⁿ"></div>
+                            <div><label>b) 33 000</label><input type="text" class="answer-input" id="ex1_b" placeholder="a·10ⁿ"></div>
+                            <div><label>c) 2 000 000</label><input type="text" class="answer-input" id="ex1_c" placeholder="a·10ⁿ"></div>
+                            <div><label>d) 455 000</label><input type="text" class="answer-input" id="ex1_d" placeholder="a·10ⁿ"></div>
+                            <div><label>e) 880</label><input type="text" class="answer-input" id="ex1_e" placeholder="a·10ⁿ"></div>
+                            <div><label>f) 7850</label><input type="text" class="answer-input" id="ex1_f" placeholder="a·10ⁿ"></div>
+                            <div><label>g) 330 000 000 000 000</label><input type="text" class="answer-input" id="ex1_g" placeholder="a·10ⁿ"></div>
+                            <div><label>h) 77 400 000 000</label><input type="text" class="answer-input" id="ex1_h" placeholder="a·10ⁿ"></div>
+                            <div><label>i) 278 800</label><input type="text" class="answer-input" id="ex1_i" placeholder="a·10ⁿ"></div>
+                            <div><label>j) 10 000 000 000 000</label><input type="text" class="answer-input" id="ex1_j" placeholder="a·10ⁿ"></div>
+                            <div><label>k) 9945</label><input type="text" class="answer-input" id="ex1_k" placeholder="a·10ⁿ"></div>
+                            <div><label>l) 15 995</label><input type="text" class="answer-input" id="ex1_l" placeholder="a·10ⁿ"></div>
+                            <div><label>m) 140.5</label><input type="text" class="answer-input" id="ex1_m" placeholder="a·10ⁿ"></div>
+                            <div><label>n) 220.5</label><input type="text" class="answer-input" id="ex1_n" placeholder="a·10ⁿ"></div>
+                            <div><label>o) 18.75</label><input type="text" class="answer-input" id="ex1_o" placeholder="a·10ⁿ"></div>
+                            <div><label>p) 4432.55</label><input type="text" class="answer-input" id="ex1_p" placeholder="a·10ⁿ"></div>
+                            <div><label>q) 626.9</label><input type="text" class="answer-input" id="ex1_q" placeholder="a·10ⁿ"></div>
+                            <div><label>r) 999.85</label><input type="text" class="answer-input" id="ex1_r" placeholder="a·10ⁿ"></div>
+                        </div>
+                        <button class="btn btn-check" onclick="checkExercise(1)">Vérifier</button>
+                        <button class="btn btn-solution" onclick="showSolution(1)">Solution</button>
+                        <button class="btn btn-reset" onclick="resetExercise(1)">Reset</button>
+                        <div class="feedback" id="feedback1"></div>
+                    </div>
+                </div>
+
+                <!-- Exercice 2 -->
+                <div class="exercise">
+                    <div class="exercise-title">🔄 Exercice 2: Écrivez les nombres suivants "normalement"</div>
+                    <div class="question">
+                        <div class="question-text">Écrivez les puissances de dix suivantes sous forme décimale normale :</div>
+                        <div class="grid-answers">
+                            <div><label>a) 10⁻⁴</label><input type="text" class="answer-input" id="ex2_a" placeholder="0.000..."></div>
+                            <div><label>b) 10⁻⁹</label><input type="text" class="answer-input" id="ex2_b" placeholder="0.000..."></div>
+                            <div><label>c) 10⁻³</label><input type="text" class="answer-input" id="ex2_c" placeholder="0.00..."></div>
+                            <div><label>d) 4.5·10⁻³</label><input type="text" class="answer-input" id="ex2_d" placeholder="0.00..."></div>
+                            <div><label>e) 9.2·10⁻¹</label><input type="text" class="answer-input" id="ex2_e" placeholder="0.9..."></div>
+                            <div><label>f) 4.1·10⁻⁶</label><input type="text" class="answer-input" id="ex2_f" placeholder="0.0000..."></div>
+                            <div><label>g) 8.45·10⁻³</label><input type="text" class="answer-input" id="ex2_g" placeholder="0.00..."></div>
+                            <div><label>h) 6.225·10⁻²</label><input type="text" class="answer-input" id="ex2_h" placeholder="0.0..."></div>
+                            <div><label>i) 9·10⁻⁶</label><input type="text" class="answer-input" id="ex2_i" placeholder="0.0000..."></div>
+                            <div><label>j) 7.9·10⁻⁴</label><input type="text" class="answer-input" id="ex2_j" placeholder="0.000..."></div>
+                            <div><label>k) 3.3·10⁻⁵</label><input type="text" class="answer-input" id="ex2_k" placeholder="0.0000..."></div>
+                            <div><label>l) 6·10⁻⁴</label><input type="text" class="answer-input" id="ex2_l" placeholder="0.000..."></div>
+                            <div><label>m) 4·10⁻¹⁰</label><input type="text" class="answer-input" id="ex2_m" placeholder="0.0000000000..."></div>
+                            <div><label>n) 7.729·10⁻¹</label><input type="text" class="answer-input" id="ex2_n" placeholder="0.7..."></div>
+                            <div><label>o) 6.1·10⁻⁷</label><input type="text" class="answer-input" id="ex2_o" placeholder="0.0000000..."></div>
+                        </div>
+                        <button class="btn btn-check" onclick="checkExercise(2)">Vérifier</button>
+                        <button class="btn btn-solution" onclick="showSolution(2)">Solution</button>
+                        <button class="btn btn-reset" onclick="resetExercise(2)">Reset</button>
+                        <div class="feedback" id="feedback2"></div>
+                    </div>
+                </div>
+
+                <!-- Exercice 3 -->
+                <div class="exercise">
+                    <div class="exercise-title">✖️ Exercice 3: Multipliez les puissances de dix</div>
+                    <div class="question">
+                        <div class="question-text">Multipliez les puissances de dix suivantes :</div>
+                        <div class="grid-answers">
+                            <div><label>a) 10⁸ · 10⁵ · 10¹²</label><input type="text" class="answer-input" id="ex3_a" placeholder="10ⁿ"></div>
+                            <div><label>b) 10⁻⁴ · 10⁸ · 10¹¹</label><input type="text" class="answer-input" id="ex3_b" placeholder="10ⁿ"></div>
+                            <div><label>c) 10⁷ · 10⁴ · 10⁹ · 10⁶</label><input type="text" class="answer-input" id="ex3_c" placeholder="10ⁿ"></div>
+                            <div><label>d) 10⁵ · 10⁻⁸ · 10⁻⁴</label><input type="text" class="answer-input" id="ex3_d" placeholder="10ⁿ ou 10⁻ⁿ"></div>
+                            <div><label>e) 10⁹ · 10⁻¹⁵ · 10⁴ · 10⁻² · 10⁰</label><input type="text" class="answer-input" id="ex3_e" placeholder="10ⁿ"></div>
+                            <div><label>f) 10² · 10 · 10⁻⁷</label><input type="text" class="answer-input" id="ex3_f" placeholder="10ⁿ"></div>
+                            <div><label>g) 10¹⁰ · 10⁻¹⁵ · 10¹⁴</label><input type="text" class="answer-input" id="ex3_g" placeholder="10ⁿ"></div>
+                            <div><label>h) 10⁵ · 10⁵⁵ · 10⁻¹⁸</label><input type="text" class="answer-input" id="ex3_h" placeholder="10ⁿ"></div>
+                            <div><label>i) 10⁻⁶ · 10⁶ · 10³ · 10⁻³</label><input type="text" class="answer-input" id="ex3_i" placeholder="10ⁿ ou 1"></div>
+                            <div><label>j) 10⁻⁶ · 10⁻¹² · 10⁻⁵ · 10⁻¹</label><input type="text" class="answer-input" id="ex3_j" placeholder="10⁻ⁿ"></div>
+                            <div><label>k) 10⁻¹⁶ · 10²⁴ · 10⁻⁷ · 10 · 10⁻¹</label><input type="text" class="answer-input" id="ex3_k" placeholder="10ⁿ"></div>
+                            <div><label>l) 10⁻³ · 10⁻⁹ · 10⁷</label><input type="text" class="answer-input" id="ex3_l" placeholder="10⁻ⁿ"></div>
+                        </div>
+                        <button class="btn btn-check" onclick="checkExercise(3)">Vérifier</button>
+                        <button class="btn btn-solution" onclick="showSolution(3)">Solution</button>
+                        <button class="btn btn-reset" onclick="resetExercise(3)">Reset</button>
+                        <div class="feedback" id="feedback3"></div>
+                    </div>
+                </div>
+
+                <!-- Exercice 4 -->
+                <div class="exercise">
+                    <div class="exercise-title">➕➖ Exercice 4: Calculez les additions/soustractions</div>
+                    <div class="question">
+                        <div class="question-text">Calculez les additions et soustractions suivantes :</div>
+                        <div class="grid-answers">
+                            <div><label>a) 10⁸ + 10⁸</label><input type="text" class="answer-input" id="ex4_a" placeholder="a·10ⁿ"></div>
+                            <div><label>b) 10⁻⁴ + 10⁻⁴ + 10⁻⁴</label><input type="text" class="answer-input" id="ex4_b" placeholder="a·10ⁿ"></div>
+                            <div><label>c) 2·10⁷ + 3·10⁷</label><input type="text" class="answer-input" id="ex4_c" placeholder="a·10ⁿ"></div>
+                            <div><label>d) 2·10¹⁰ + 10¹⁰</label><input type="text" class="answer-input" id="ex4_d" placeholder="a·10ⁿ"></div>
+                            <div><label>e) 5·10⁻⁵ + 4·10⁻⁵ + 10⁻⁵</label><input type="text" class="answer-input" id="ex4_e" placeholder="a·10ⁿ"></div>
+                            <div><label>f) 10⁻⁶ + 3·10⁻⁶</label><input type="text" class="answer-input" id="ex4_f" placeholder="a·10ⁿ"></div>
+                            <div><label>g) 8·10¹² − 5·10¹²</label><input type="text" class="answer-input" id="ex4_g" placeholder="a·10ⁿ"></div>
+                            <div><label>h) 3.6·10⁻⁴ − 10⁻⁴</label><input type="text" class="answer-input" id="ex4_h" placeholder="a·10ⁿ"></div>
+                            <div><label>i) 9·10⁷⁵ − 3·10⁷⁵</label><input type="text" class="answer-input" id="ex4_i" placeholder="a·10ⁿ"></div>
+                            <div><label>j) 8·10¹⁶ + 10¹⁶ − 4·10¹⁶</label><input type="text" class="answer-input" id="ex4_j" placeholder="a·10ⁿ"></div>
+                            <div><label>k) 18·10⁵ − 4·10⁵</label><input type="text" class="answer-input" id="ex4_k" placeholder="a·10ⁿ"></div>
+                            <div><label>l) 7·10⁻⁶ − 10⁻⁶</label><input type="text" class="answer-input" id="ex4_l" placeholder="a·10ⁿ"></div>
+                        </div>
+                        <button class="btn btn-check" onclick="checkExercise(4)">Vérifier</button>
+                        <button class="btn btn-solution" onclick="showSolution(4)">Solution</button>
+                        <button class="btn btn-reset" onclick="resetExercise(4)">Reset</button>
+                        <div class="feedback" id="feedback4"></div>
+                    </div>
+                </div>
+
+                <!-- Exercice 5 -->
+                <div class="exercise">
+                    <div class="exercise-title">⚖️ Exercice 5: Compensation d'exposants puis calcul</div>
+                    <div class="question">
+                        <div class="question-text">Compensez d'abord les exposants afin de pouvoir additionner/soustraire, puis calculez :</div>
+                        <div class="grid-answers">
+                            <div><label>a) 10³ + 10²</label><input type="text" class="answer-input" id="ex5_a" placeholder="a·10ⁿ"></div>
+                            <div><label>b) 10⁴ − 10³</label><input type="text" class="answer-input" id="ex5_b" placeholder="a·10ⁿ"></div>
+                            <div><label>c) 10⁴ + 10²</label><input type="text" class="answer-input" id="ex5_c" placeholder="a·10ⁿ"></div>
+                            <div><label>d) 10⁶ + 10⁴</label><input type="text" class="answer-input" id="ex5_d" placeholder="a·10ⁿ"></div>
+                            <div><label>e) 10⁵ − 10³</label><input type="text" class="answer-input" id="ex5_e" placeholder="a·10ⁿ"></div>
+                            <div><label>f) 10² − 10¹</label><input type="text" class="answer-input" id="ex5_f" placeholder="a·10ⁿ"></div>
+                            <div><label>g) 10³ − 10¹</label><input type="text" class="answer-input" id="ex5_g" placeholder="a·10ⁿ"></div>
+                            <div><label>h) 10²⁰ + 10¹⁷</label><input type="text" class="answer-input" id="ex5_h" placeholder="a·10ⁿ"></div>
+                            <div><label>i) 10⁸ + 2·10⁶</label><input type="text" class="answer-input" id="ex5_i" placeholder="a·10ⁿ"></div>
+                            <div><label>j) 10³⁰ + 5·10²⁸</label><input type="text" class="answer-input" id="ex5_j" placeholder="a·10ⁿ"></div>
+                            <div><label>k) 10¹⁸ + 2·10¹⁹</label><input type="text" class="answer-input" id="ex5_k" placeholder="a·10ⁿ"></div>
+                            <div><label>l) 3·10⁵ − 30·10⁴</label><input type="text" class="answer-input" id="ex5_l" placeholder="résultat"></div>
+                            <div><label>m) 3·10³ + 2·10²</label><input type="text" class="answer-input" id="ex5_m" placeholder="a·10ⁿ"></div>
+                            <div><label>n) 5·10⁴ − 6·10³</label><input type="text" class="answer-input" id="ex5_n" placeholder="a·10ⁿ"></div>
+                            <div><label>o) 4·10² + 6·10⁴</label><input type="text" class="answer-input" id="ex5_o" placeholder="a·10ⁿ"></div>
+                        </div>
+                        <button class="btn btn-check" onclick="checkExercise(5)">Vérifier</button>
+                        <button class="btn btn-solution" onclick="showSolution(5)">Solution</button>
+                        <button class="btn btn-reset" onclick="resetExercise(5)">Reset</button>
+                        <div class="feedback" id="feedback5"></div>
+                    </div>
+                </div>
+
+                <!-- Exercice 6 -->
+                <div class="exercise">
+                    <div class="exercise-title">🔄 Exercice 6: Écrivez sous forme "normale"</div>
+                    <div class="question">
+                        <div class="question-text">Écrivez les expressions du type a·10ⁿ sous forme décimale normale :</div>
+                        <div class="grid-answers">
+                            <div><label>a) 28·10⁸</label><input type="text" class="answer-input" id="ex6_a" placeholder="nombre entier"></div>
+                            <div><label>b) 634·10⁻⁴</label><input type="text" class="answer-input" id="ex6_b" placeholder="0.0..."></div>
+                            <div><label>c) 1600·10⁷</label><input type="text" class="answer-input" id="ex6_c" placeholder="nombre entier"></div>
+                            <div><label>d) 50·10¹⁰</label><input type="text" class="answer-input" id="ex6_d" placeholder="nombre entier"></div>
+                            <div><label>e) 6800·10⁵</label><input type="text" class="answer-input" id="ex6_e" placeholder="nombre entier"></div>
+                            <div><label>f) 4500·10⁻⁶</label><input type="text" class="answer-input" id="ex6_f" placeholder="0.00..."></div>
+                            <div><label>g) 53.8·10⁵</label><input type="text" class="answer-input" id="ex6_g" placeholder="nombre entier"></div>
+                            <div><label>h) 899.5·10⁹</label><input type="text" class="answer-input" id="ex6_h" placeholder="grand nombre"></div>
+                            <div><label>i) 22.5·10²</label><input type="text" class="answer-input" id="ex6_i" placeholder="nombre entier"></div>
+                            <div><label>j) 0.5·10⁶</label><input type="text" class="answer-input" id="ex6_j" placeholder="nombre entier"></div>
+                            <div><label>k) 0.004·10⁵</label><input type="text" class="answer-input" id="ex6_k" placeholder="nombre entier"></div>
+                            <div><label>l) 0.01·10⁻³</label><input type="text" class="answer-input" id="ex6_l" placeholder="0.0000..."></div>
+                            <div><label>m) 0.75·10⁸</label><input type="text" class="answer-input" id="ex6_m" placeholder="nombre entier"></div>
+                            <div><label>n) 0.0442·10⁻⁴</label><input type="text" class="answer-input" id="ex6_n" placeholder="0.0000..."></div>
+                            <div><label>o) 0.9·10⁻⁷</label><input type="text" class="answer-input" id="ex6_o" placeholder="0.0000..."></div>
+                        </div>
+                        <button class="btn btn-check" onclick="checkExercise(6)">Vérifier</button>
+                        <button class="btn btn-solution" onclick="showSolution(6)">Solution</button>
+                        <button class="btn btn-reset" onclick="resetExercise(6)">Reset</button>
+                        <div class="feedback" id="feedback6"></div>
+                    </div>
+                </div>
+
+                <!-- Exercice 7 -->
+                <div class="exercise">
+                    <div class="exercise-title">📝 Exercice 7: Série supplémentaire A</div>
+                    <div class="question">
+                        <div class="question-text">Écrivez les puissances de dix suivantes sous forme décimale normale :</div>
+                        <div class="grid-answers">
+                            <div><label>a) 0.00013·10¹⁰</label><input type="text" class="answer-input" id="ex7_a" placeholder="nombre entier"></div>
+                            <div><label>b) 0.011·10¹⁵</label><input type="text" class="answer-input" id="ex7_b" placeholder="grand nombre"></div>
+                            <div><label>c) 0.025·10⁻⁶</label><input type="text" class="answer-input" id="ex7_c" placeholder="0.0000..."></div>
+                            <div><label>d) 22.5·10⁴</label><input type="text" class="answer-input" id="ex7_d" placeholder="nombre entier"></div>
+                            <div><label>e) 625·10¹⁰</label><input type="text" class="answer-input" id="ex7_e" placeholder="grand nombre"></div>
+                            <div><label>f) 0.468·10⁵</label><input type="text" class="answer-input" id="ex7_f" placeholder="nombre entier"></div>
+                            <div><label>g) 456.5·10⁻¹</label><input type="text" class="answer-input" id="ex7_g" placeholder="nombre décimal"></div>
+                            <div><label>h) 0.335·10⁻³</label><input type="text" class="answer-input" id="ex7_h" placeholder="0.000..."></div>
+                            <div><label>i) 0.0046·10⁶</label><input type="text" class="answer-input" id="ex7_i" placeholder="nombre entier"></div>
+                            <div><label>j) 0.02·10⁻²</label><input type="text" class="answer-input" id="ex7_j" placeholder="0.000..."></div>
+                            <div><label>k) 0.7659·10⁴</label><input type="text" class="answer-input" id="ex7_k" placeholder="nombre entier"></div>
+                            <div><label>l) 0.003·10⁻⁹</label><input type="text" class="answer-input" id="ex7_l" placeholder="0.000000000..."></div>
+                            <div><label>m) 1450·10⁻⁸</label><input type="text" class="answer-input" id="ex7_m" placeholder="0.0000..."></div>
+                            <div><label>n) 0.0076·10⁵</label><input type="text" class="answer-input" id="ex7_n" placeholder="nombre entier"></div>
+                            <div><label>o) 36.5·10⁻⁴</label><input type="text" class="answer-input" id="ex7_o" placeholder="0.00..."></div>
+                        </div>
+                        <button class="btn btn-check" onclick="checkExercise(7)">Vérifier</button>
+                        <button class="btn btn-solution" onclick="showSolution(7)">Solution</button>
+                        <button class="btn btn-reset" onclick="resetExercise(7)">Reset</button>
+                        <div class="feedback" id="feedback7"></div>
+                    </div>
+                </div>
+
+                <!-- Exercice 8 -->
+                <div class="exercise">
+                    <div class="exercise-title">🧮 Exercice 8: Calculs avec puissances de dix</div>
+                    <div class="question">
+                        <div class="question-text">Effectuez les calculs suivants avec les puissances de dix :</div>
+                        <div class="grid-answers">
+                            <div><label>a) 10⁸ + 10⁸</label><input type="text" class="answer-input" id="ex8_a" placeholder="a·10ⁿ"></div>
+                            <div><label>b) 10⁻⁴ + 10⁻⁴ + 10⁻⁴</label><input type="text" class="answer-input" id="ex8_b" placeholder="a·10ⁿ"></div>
+                            <div><label>c) 2·10⁷ + 3·10⁷</label><input type="text" class="answer-input" id="ex8_c" placeholder="a·10ⁿ"></div>
+                            <div><label>d) 2·10¹⁰ + 10¹⁰</label><input type="text" class="answer-input" id="ex8_d" placeholder="a·10ⁿ"></div>
+                            <div><label>e) 5·10⁻⁵ + 4·10⁻⁵ + 10⁻⁵</label><input type="text" class="answer-input" id="ex8_e" placeholder="a·10ⁿ"></div>
+                            <div><label>f) 10⁻⁶ + 3·10⁻⁶</label><input type="text" class="answer-input" id="ex8_f" placeholder="a·10ⁿ"></div>
+                            <div><label>g) 8·10¹² − 5·10¹²</label><input type="text" class="answer-input" id="ex8_g" placeholder="a·10ⁿ"></div>
+                            <div><label>h) 3.6·10⁻⁴ − 10⁻⁴</label><input type="text" class="answer-input" id="ex8_h" placeholder="a·10ⁿ"></div>
+                            <div><label>i) 9·10⁷⁵ − 3·10⁷⁵</label><input type="text" class="answer-input" id="ex8_i" placeholder="a·10ⁿ"></div>
+                            <div><label>j) 8·10¹⁶ + 10¹⁶ − 4·10¹⁶</label><input type="text" class="answer-input" id="ex8_j" placeholder="a·10ⁿ"></div>
+                            <div><label>k) 18·10⁵ − 4·10⁵</label><input type="text" class="answer-input" id="ex8_k" placeholder="a·10ⁿ"></div>
+                            <div><label>l) 7·10⁻⁶ − 10⁻⁶</label><input type="text" class="answer-input" id="ex8_l" placeholder="a·10ⁿ"></div>
+                        </div>
+                        <button class="btn btn-check" onclick="checkExercise(8)">Vérifier</button>
+                        <button class="btn btn-solution" onclick="showSolution(8)">Solution</button>
+                        <button class="btn btn-reset" onclick="resetExercise(8)">Reset</button>
+                        <div class="feedback" id="feedback8"></div>
+                    </div>
+                </div>
+
+                <!-- Exercice 9 -->
+                <div class="exercise">
+                    <div class="exercise-title">🔀 Exercice 9: Compensez puis calculez</div>
+                    <div class="question">
+                        <div class="question-text">Compensez d'abord les exposants, puis calculez :</div>
+                        <div class="grid-answers">
+                            <div><label>a) 10³ + 10²</label><input type="text" class="answer-input" id="ex9_a" placeholder="a·10ⁿ"></div>
+                            <div><label>b) 10⁴ − 10³</label><input type="text" class="answer-input" id="ex9_b" placeholder="a·10ⁿ"></div>
+                            <div><label>c) 10⁴ + 10²</label><input type="text" class="answer-input" id="ex9_c" placeholder="a·10ⁿ"></div>
+                            <div><label>d) 10⁶ + 10⁴</label><input type="text" class="answer-input" id="ex9_d" placeholder="a·10ⁿ"></div>
+                            <div><label>e) 10⁵ − 10³</label><input type="text" class="answer-input" id="ex9_e" placeholder="a·10ⁿ"></div>
+                            <div><label>f) 10² − 10¹</label><input type="text" class="answer-input" id="ex9_f" placeholder="a·10ⁿ"></div>
+                            <div><label>g) 10³ − 10¹</label><input type="text" class="answer-input" id="ex9_g" placeholder="a·10ⁿ"></div>
+                            <div><label>h) 10²⁰ + 10¹⁷</label><input type="text" class="answer-input" id="ex9_h" placeholder="a·10ⁿ"></div>
+                            <div><label>i) 10⁸ + 2·10⁶</label><input type="text" class="answer-input" id="ex9_i" placeholder="a·10ⁿ"></div>
+                            <div><label>j) 10³⁰ + 5·10²⁸</label><input type="text" class="answer-input" id="ex9_j" placeholder="a·10ⁿ"></div>
+                            <div><label>k) 10¹⁸ + 2·10¹⁹</label><input type="text" class="answer-input" id="ex9_k" placeholder="a·10ⁿ"></div>
+                            <div><label>l) 3·10⁵ − 30·10⁴</label><input type="text" class="answer-input" id="ex9_l" placeholder="résultat"></div>
+                            <div><label>m) 3·10³ + 2·10²</label><input type="text" class="answer-input" id="ex9_m" placeholder="a·10ⁿ"></div>
+                            <div><label>n) 5·10⁴ − 6·10³</label><input type="text" class="answer-input" id="ex9_n" placeholder="a·10ⁿ"></div>
+                            <div><label>o) 4·10² + 6·10⁴</label><input type="text" class="answer-input" id="ex9_o" placeholder="a·10ⁿ"></div>
+                        </div>
+                        <button class="btn btn-check" onclick="checkExercise(9)">Vérifier</button>
+                        <button class="btn btn-solution" onclick="showSolution(9)">Solution</button>
+                        <button class="btn btn-reset" onclick="resetExercise(9)">Reset</button>
+                        <div class="feedback" id="feedback9"></div>
+                    </div>
+                </div>
+
+                <!-- Exercice 10 -->
+                <div class="exercise">
+                    <div class="exercise-title">📊 Exercice 10: Formes normales - Série A</div>
+                    <div class="question">
+                        <div class="question-text">Écrivez sous forme décimale normale :</div>
+                        <div class="grid-answers">
+                            <div><label>a) 28·10⁸</label><input type="text" class="answer-input" id="ex10_a" placeholder="nombre entier"></div>
+                            <div><label>b) 634·10⁻⁴</label><input type="text" class="answer-input" id="ex10_b" placeholder="0.0..."></div>
+                            <div><label>c) 1600·10⁷</label><input type="text" class="answer-input" id="ex10_c" placeholder="nombre entier"></div>
+                            <div><label>d) 50·10¹⁰</label><input type="text" class="answer-input" id="ex10_d" placeholder="nombre entier"></div>
+                            <div><label>e) 6800·10⁵</label><input type="text" class="answer-input" id="ex10_e" placeholder="nombre entier"></div>
+                            <div><label>f) 4500·10⁻⁶</label><input type="text" class="answer-input" id="ex10_f" placeholder="0.00..."></div>
+                            <div><label>g) 53.8·10⁵</label><input type="text" class="answer-input" id="ex10_g" placeholder="nombre entier"></div>
+                            <div><label>h) 899.5·10⁹</label><input type="text" class="answer-input" id="ex10_h" placeholder="grand nombre"></div>
+                            <div><label>i) 22.5·10²</label><input type="text" class="answer-input" id="ex10_i" placeholder="nombre entier"></div>
+                            <div><label>j) 0.5·10⁶</label><input type="text" class="answer-input" id="ex10_j" placeholder="nombre entier"></div>
+                        </div>
+                        <button class="btn btn-check" onclick="checkExercise(10)">Vérifier</button>
+                        <button class="btn btn-solution" onclick="showSolution(10)">Solution</button>
+                        <button class="btn btn-reset" onclick="resetExercise(10)">Reset</button>
+                        <div class="feedback" id="feedback10"></div>
+                    </div>
+                </div>
+
+                <!-- Exercice 11 -->
+                <div class="exercise">
+                    <div class="exercise-title">📋 Exercice 11: Formes normales - Série B</div>
+                    <div class="question">
+                        <div class="question-text">Écrivez sous forme décimale normale :</div>
+                        <div class="grid-answers">
+                            <div><label>a) 0.00013·10¹⁰</label><input type="text" class="answer-input" id="ex11_a" placeholder="nombre entier"></div>
+                            <div><label>b) 0.011·10¹⁵</label><input type="text" class="answer-input" id="ex11_b" placeholder="grand nombre"></div>
+                            <div><label>c) 0.025·10⁻⁶</label><input type="text" class="answer-input" id="ex11_c" placeholder="0.0000..."></div>
+                            <div><label>d) 22.5·10⁴</label><input type="text" class="answer-input" id="ex11_d" placeholder="nombre entier"></div>
+                            <div><label>e) 625·10¹⁰</label><input type="text" class="answer-input" id="ex11_e" placeholder="grand nombre"></div>
+                            <div><label>f) 0.468·10⁵</label><input type="text" class="answer-input" id="ex11_f" placeholder="nombre entier"></div>
+                            <div><label>g) 456.5·10⁻¹</label><input type="text" class="answer-input" id="ex11_g" placeholder="nombre décimal"></div>
+                            <div><label>h) 0.335·10⁻³</label><input type="text" class="answer-input" id="ex11_h" placeholder="0.000..."></div>
+                            <div><label>i) 0.0046·10⁶</label><input type="text" class="answer-input" id="ex11_i" placeholder="nombre entier"></div>
+                            <div><label>j) 0.02·10⁻²</label><input type="text" class="answer-input" id="ex11_j" placeholder="0.000..."></div>
+                            <div><label>k) 0.7659·10⁴</label><input type="text" class="answer-input" id="ex11_k" placeholder="nombre entier"></div>
+                            <div><label>l) 0.003·10⁻⁹</label><input type="text" class="answer-input" id="ex11_l" placeholder="0.000000000..."></div>
+                            <div><label>m) 1450·10⁻⁸</label><input type="text" class="answer-input" id="ex11_m" placeholder="0.0000..."></div>
+                            <div><label>n) 0.0076·10⁵</label><input type="text" class="answer-input" id="ex11_n" placeholder="nombre entier"></div>
+                            <div><label>o) 36.5·10⁻⁴</label><input type="text" class="answer-input" id="ex11_o" placeholder="0.00..."></div>
+                        </div>
+                        <button class="btn btn-check" onclick="checkExercise(11)">Vérifier</button>
+                        <button class="btn btn-solution" onclick="showSolution(11)">Solution</button>
+                        <button class="btn btn-reset" onclick="resetExercise(11)">Reset</button>
+                        <div class="feedback" id="feedback11"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour faire défiler vers une section
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({behavior: 'smooth'});
+            }
+        }
+
+        // Données des exercices
+        const exercises = {
+            1: {
+                answers: {
+                    ex1_a: "4·10²",
+                    ex1_b: "3.3·10⁴", 
+                    ex1_c: "2·10⁶",
+                    ex1_d: "4.55·10⁵",
+                    ex1_e: "8.8·10²",
+                    ex1_f: "7.85·10³",
+                    ex1_g: "3.3·10¹⁴",
+                    ex1_h: "7.74·10¹⁰",
+                    ex1_i: "2.788·10⁵",
+                    ex1_j: "10¹³",
+                    ex1_k: "9.945·10³",
+                    ex1_l: "1.5995·10⁴",
+                    ex1_m: "1.405·10²",
+                    ex1_n: "2.205·10²",
+                    ex1_o: "1.875·10¹",
+                    ex1_p: "4.43255·10³",
+                    ex1_q: "6.269·10²",
+                    ex1_r: "9.9985·10²"
+                },
+                solution: "Solutions:\na) 400 = 4·10² b) 33 000 = 3.3·10⁴ c) 2 000 000 = 2·10⁶\nd) 455 000 = 4.55·10⁵ e) 880 = 8.8·10² f) 7850 = 7.85·10³\ng) 330 000 000 000 000 = 3.3·10¹⁴ h) 77 400 000 000 = 7.74·10¹⁰\ni) 278 800 = 2.788·10⁵ j) 10 000 000 000 000 = 10¹³\nk) 9945 = 9.945·10³ l) 15 995 = 1.5995·10⁴\nm) 140.5 = 1.405·10² n) 220.5 = 2.205·10²\no) 18.75 = 1.875·10¹ p) 4432.55 = 4.43255·10³\nq) 626.9 = 6.269·10² r) 999.85 = 9.9985·10²"
+            },
+            2: {
+                answers: {
+                    ex2_a: "0.0001",
+                    ex2_b: "0.000000001",
+                    ex2_c: "0.001", 
+                    ex2_d: "0.0045",
+                    ex2_e: "0.92",
+                    ex2_f: "0.0000041",
+                    ex2_g: "0.00845",
+                    ex2_h: "0.06225",
+                    ex2_i: "0.000009",
+                    ex2_j: "0.00079",
+                    ex2_k: "0.000033",
+                    ex2_l: "0.0006",
+                    ex2_m: "0.0000000004",
+                    ex2_n: "0.7729",
+                    ex2_o: "0.00000061"
+                },
+                solution: "Solutions:\na) 10⁻⁴ = 0.0001 b) 10⁻⁹ = 0.000000001 c) 10⁻³ = 0.001\nd) 4.5·10⁻³ = 0.0045 e) 9.2·10⁻¹ = 0.92 f) 4.1·10⁻⁶ = 0.0000041\ng) 8.45·10⁻³ = 0.00845 h) 6.225·10⁻² = 0.06225 i) 9·10⁻⁶ = 0.000009\nj) 7.9·10⁻⁴ = 0.00079 k) 3.3·10⁻⁵ = 0.000033 l) 6·10⁻⁴ = 0.0006\nm) 4·10⁻¹⁰ = 0.0000000004 n) 7.729·10⁻¹ = 0.7729 o) 6.1·10⁻⁷ = 0.00000061"
+            },
+            3: {
+                answers: {
+                    ex3_a: "10²⁵",
+                    ex3_b: "10¹⁵",
+                    ex3_c: "10²⁶",
+                    ex3_d: "10⁻⁷",
+                    ex3_e: "10⁻⁴",
+                    ex3_f: "10⁻⁴",
+                    ex3_g: "10⁹",
+                    ex3_h: "10⁴²",
+                    ex3_i: "10⁰",
+                    ex3_j: "10⁻²⁴",
+                    ex3_k: "10¹",
+                    ex3_l: "10⁻⁵"
+                },
+                solution: "Solutions:\na) 10⁸ · 10⁵ · 10¹² = 10²⁵ (8+5+12=25)\nb) 10⁻⁴ · 10⁸ · 10¹¹ = 10¹⁵ (-4+8+11=15)\nc) 10⁷ · 10⁴ · 10⁹ · 10⁶ = 10²⁶ (7+4+9+6=26)\nd) 10⁵ · 10⁻⁸ · 10⁻⁴ = 10⁻⁷ (5-8-4=-7)\ne) 10⁹ · 10⁻¹⁵ · 10⁴ · 10⁻² · 10⁰ = 10⁻⁴ (9-15+4-2+0=-4)\nf) 10² · 10¹ · 10⁻⁷ = 10⁻⁴ (2+1-7=-4)\ng) 10¹⁰ · 10⁻¹⁵ · 10¹⁴ = 10⁹ (10-15+14=9)\nh) 10⁵ · 10⁵⁵ · 10⁻¹⁸ = 10⁴² (5+55-18=42)\ni) 10⁻⁶ · 10⁶ · 10³ · 10⁻³ = 10⁰ = 1 (-6+6+3-3=0)\nj) 10⁻⁶ · 10⁻¹² · 10⁻⁵ · 10⁻¹ = 10⁻²⁴ (-6-12-5-1=-24)\nk) 10⁻¹⁶ · 10²⁴ · 10⁻⁷ · 10¹ · 10⁻¹ = 10¹ (-16+24-7+1-1=1)\nl) 10⁻³ · 10⁻⁹ · 10⁷ = 10⁻⁵ (-3-9+7=-5)"
+            },
+            4: {
+                answers: {
+                    ex4_a: "2·10⁸",
+                    ex4_b: "3·10⁻⁴",
+                    ex4_c: "5·10⁷", 
+                    ex4_d: "3·10¹⁰",
+                    ex4_e: "10·10⁻⁵",
+                    ex4_f: "4·10⁻⁶",
+                    ex4_g: "3·10¹²",
+                    ex4_h: "2.6·10⁻⁴",
+                    ex4_i: "6·10⁷⁵",
+                    ex4_j: "5·10¹⁶",
+                    ex4_k: "14·10⁵",
+                    ex4_l: "6·10⁻⁶"
+                },
+                solution: "Solutions:\na) 10⁸ + 10⁸ = 2·10⁸ b) 10⁻⁴ + 10⁻⁴ + 10⁻⁴ = 3·10⁻⁴ c) 2·10⁷ + 3·10⁷ = 5·10⁷\nd) 2·10¹⁰ + 10¹⁰ = 3·10¹⁰ e) 5·10⁻⁵ + 4·10⁻⁵ + 10⁻⁵ = 10·10⁻⁵ = 1·10⁻⁴\nf) 10⁻⁶ + 3·10⁻⁶ = 4·10⁻⁶ g) 8·10¹² − 5·10¹² = 3·10¹² h) 3.6·10⁻⁴ − 10⁻⁴ = 2.6·10⁻⁴\ni) 9·10⁷⁵ − 3·10⁷⁵ = 6·10⁷⁵ j) 8·10¹⁶ + 10¹⁶ − 4·10¹⁶ = 5·10¹⁶\nk) 18·10⁵ − 4·10⁵ = 14·10⁵ = 1.4·10⁶ l) 7·10⁻⁶ − 10⁻⁶ = 6·10⁻⁶"
+            },
+            5: {
+                answers: {
+                    ex5_a: "1.1·10³",
+                    ex5_b: "9·10³",
+                    ex5_c: "1.01·10⁴",
+                    ex5_d: "1.01·10⁶",
+                    ex5_e: "9.9·10⁴",
+                    ex5_f: "9·10¹",
+                    ex5_g: "9.9·10²",
+                    ex5_h: "1.001·10²⁰",
+                    ex5_i: "1.02·10⁸",
+                    ex5_j: "1.05·10³⁰",
+                    ex5_k: "2.1·10¹⁹",
+                    ex5_l: "0",
+                    ex5_m: "3.2·10³",
+                    ex5_n: "4.4·10⁴",
+                    ex5_o: "6.04·10⁴"
+                },
+                solution: "Solutions:\na) 10³ + 10² = 1000 + 100 = 1100 = 1.1·10³\nb) 10⁴ − 10³ = 10000 − 1000 = 9000 = 9·10³\nc) 10⁴ + 10² = 10000 + 100 = 10100 = 1.01·10⁴\nd) 10⁶ + 10⁴ = 1000000 + 10000 = 1010000 = 1.01·10⁶\ne) 10⁵ − 10³ = 100000 − 1000 = 99000 = 9.9·10⁴\nf) 10² − 10¹ = 100 − 10 = 90 = 9·10¹\ng) 10³ − 10¹ = 1000 − 10 = 990 = 9.9·10²\nh) 10²⁰ + 10¹⁷ = 10²⁰ + 0.001·10²⁰ = 1.001·10²⁰\ni) 10⁸ + 2·10⁶ = 10⁸ + 0.02·10⁸ = 1.02·10⁸\nj) 10³⁰ + 5·10²⁸ = 10³⁰ + 0.05·10³⁰ = 1.05·10³⁰\nk) 10¹⁸ + 2·10¹⁹ = 0.1·10¹⁹ + 2·10¹⁹ = 2.1·10¹⁹\nl) 3·10⁵ − 30·10⁴ = 3·10⁵ − 3·10⁵ = 0\nm) 3·10³ + 2·10² = 3·10³ + 0.2·10³ = 3.2·10³\nn) 5·10⁴ − 6·10³ = 5·10⁴ − 0.6·10⁴ = 4.4·10⁴\no) 4·10² + 6·10⁴ = 0.04·10⁴ + 6·10⁴ = 6.04·10⁴"
+            },
+            6: {
+                answers: {
+                    ex6_a: "2800000000",
+                    ex6_b: "0.0634",
+                    ex6_c: "16000000000",
+                    ex6_d: "500000000000",
+                    ex6_e: "680000000",
+                    ex6_f: "0.0045",
+                    ex6_g: "5380000",
+                    ex6_h: "899500000000",
+                    ex6_i: "2250",
+                    ex6_j: "500000",
+                    ex6_k: "400",
+                    ex6_l: "0.00001",
+                    ex6_m: "75000000",
+                    ex6_n: "0.00000442",
+                    ex6_o: "0.00000009"
+                },
+                solution: "Solutions:\na) 28·10⁸ = 2800000000 b) 634·10⁻⁴ = 0.0634 c) 1600·10⁷ = 16000000000\nd) 50·10¹⁰ = 500000000000 e) 6800·10⁵ = 680000000 f) 4500·10⁻⁶ = 0.0045\ng) 53.8·10⁵ = 5380000 h) 899.5·10⁹ = 899500000000 i) 22.5·10² = 2250\nj) 0.5·10⁶ = 500000 k) 0.004·10⁵ = 400 l) 0.01·10⁻³ = 0.00001\nm) 0.75·10⁸ = 75000000 n) 0.0442·10⁻⁴ = 0.00000442 o) 0.9·10⁻⁷ = 0.00000009"
+            },
+            7: {
+                answers: {
+                    ex7_a: "1300000",
+                    ex7_b: "11000000000000",
+                    ex7_c: "0.000000025",
+                    ex7_d: "225000",
+                    ex7_e: "6250000000000",
+                    ex7_f: "46800",
+                    ex7_g: "45.65",
+                    ex7_h: "0.000335",
+                    ex7_i: "4600",
+                    ex7_j: "0.0002",
+                    ex7_k: "7659",
+                    ex7_l: "0.000000000003",
+                    ex7_m: "0.0000145",
+                    ex7_n: "760",
+                    ex7_o: "0.00365"
+                },
+                solution: "Solutions:\na) 0.00013·10¹⁰ = 1.3·10⁶ = 1300000 b) 0.011·10¹⁵ = 1.1·10¹³ = 11000000000000\nc) 0.025·10⁻⁶ = 2.5·10⁻⁸ = 0.000000025 d) 22.5·10⁴ = 2.25·10⁵ = 225000\ne) 625·10¹⁰ = 6.25·10¹² = 6250000000000 f) 0.468·10⁵ = 4.68·10⁴ = 46800\ng) 456.5·10⁻¹ = 45.65 h) 0.335·10⁻³ = 3.35·10⁻⁴ = 0.000335 i) 0.0046·10⁶ = 4.6·10³ = 4600\nj) 0.02·10⁻² = 2·10⁻⁴ = 0.0002 k) 0.7659·10⁴ = 7.659·10³ = 7659\nl) 0.003·10⁻⁹ = 3·10⁻¹² = 0.000000000003 m) 1450·10⁻⁸ = 1.45·10⁻⁵ = 0.0000145\nn) 0.0076·10⁵ = 7.6·10² = 760 o) 36.5·10⁻⁴ = 3.65·10⁻³ = 0.00365"
+            },
+            8: {
+                answers: {
+                    ex8_a: "2·10⁸",
+                    ex8_b: "3·10⁻⁴",
+                    ex8_c: "5·10⁷",
+                    ex8_d: "3·10¹⁰",
+                    ex8_e: "10·10⁻⁵",
+                    ex8_f: "4·10⁻⁶",
+                    ex8_g: "3·10¹²",
+                    ex8_h: "2.6·10⁻⁴",
+                    ex8_i: "6·10⁷⁵",
+                    ex8_j: "5·10¹⁶",
+                    ex8_k: "14·10⁵",
+                    ex8_l: "6·10⁻⁶"
+                },
+                solution: "Solutions:\na) 10⁸ + 10⁸ = 2·10⁸ b) 10⁻⁴ + 10⁻⁴ + 10⁻⁴ = 3·10⁻⁴ c) 2·10⁷ + 3·10⁷ = 5·10⁷\nd) 2·10¹⁰ + 10¹⁰ = 3·10¹⁰ e) 5·10⁻⁵ + 4·10⁻⁵ + 10⁻⁵ = 10·10⁻⁵ = 1·10⁻⁴\nf) 10⁻⁶ + 3·10⁻⁶ = 4·10⁻⁶ g) 8·10¹² − 5·10¹² = 3·10¹² h) 3.6·10⁻⁴ − 10⁻⁴ = 2.6·10⁻⁴\ni) 9·10⁷⁵ − 3·10⁷⁵ = 6·10⁷⁵ j) 8·10¹⁶ + 10¹⁶ − 4·10¹⁶ = 5·10¹⁶\nk) 18·10⁵ − 4·10⁵ = 14·10⁵ = 1.4·10⁶ l) 7·10⁻⁶ − 10⁻⁶ = 6·10⁻⁶"
+            },
+            9: {
+                answers: {
+                    ex9_a: "1.1·10³",
+                    ex9_b: "9·10³",
+                    ex9_c: "1.01·10⁴",
+                    ex9_d: "1.01·10⁶",
+                    ex9_e: "9.9·10⁴",
+                    ex9_f: "9·10¹",
+                    ex9_g: "9.9·10²",
+                    ex9_h: "1.001·10²⁰",
+                    ex9_i: "1.02·10⁸",
+                    ex9_j: "1.05·10³⁰",
+                    ex9_k: "2.1·10¹⁹",
+                    ex9_l: "0",
+                    ex9_m: "3.2·10³",
+                    ex9_n: "4.4·10⁴",
+                    ex9_o: "6.04·10⁴"
+                },
+                solution: "Solutions:\na) 10³ + 10² = 1.1·10³ b) 10⁴ − 10³ = 9·10³ c) 10⁴ + 10² = 1.01·10⁴\nd) 10⁶ + 10⁴ = 1.01·10⁶ e) 10⁵ − 10³ = 9.9·10⁴ f) 10² − 10¹ = 9·10¹\ng) 10³ − 10¹ = 9.9·10² h) 10²⁰ + 10¹⁷ = 1.001·10²⁰ i) 10⁸ + 2·10⁶ = 1.02·10⁸\nj) 10³⁰ + 5·10²⁸ = 1.05·10³⁰ k) 10¹⁸ + 2·10¹⁹ = 2.1·10¹⁹ l) 3·10⁵ − 30·10⁴ = 0\nm) 3·10³ + 2·10² = 3.2·10³ n) 5·10⁴ − 6·10³ = 4.4·10⁴ o) 4·10² + 6·10⁴ = 6.04·10⁴"
+            },
+            10: {
+                answers: {
+                    ex10_a: "2800000000",
+                    ex10_b: "0.0634",
+                    ex10_c: "16000000000",
+                    ex10_d: "500000000000",
+                    ex10_e: "680000000",
+                    ex10_f: "0.0045",
+                    ex10_g: "5380000",
+                    ex10_h: "899500000000",
+                    ex10_i: "2250",
+                    ex10_j: "500000"
+                },
+                solution: "Solutions:\na) 28·10⁸ = 2800000000 b) 634·10⁻⁴ = 0.0634 c) 1600·10⁷ = 16000000000\nd) 50·10¹⁰ = 500000000000 e) 6800·10⁵ = 680000000 f) 4500·10⁻⁶ = 0.0045\ng) 53.8·10⁵ = 5380000 h) 899.5·10⁹ = 899500000000 i) 22.5·10² = 2250 j) 0.5·10⁶ = 500000"
+            },
+            11: {
+                answers: {
+                    ex11_a: "1300000",
+                    ex11_b: "11000000000000",
+                    ex11_c: "0.000000025",
+                    ex11_d: "225000",
+                    ex11_e: "6250000000000",
+                    ex11_f: "46800",
+                    ex11_g: "45.65",
+                    ex11_h: "0.000335",
+                    ex11_i: "4600",
+                    ex11_j: "0.0002",
+                    ex11_k: "7659",
+                    ex11_l: "0.000000000003",
+                    ex11_m: "0.0000145",
+                    ex11_n: "760",
+                    ex11_o: "0.00365"
+                },
+                solution: "Solutions:\na) 0.00013·10¹⁰ = 1300000 b) 0.011·10¹⁵ = 11000000000000 c) 0.025·10⁻⁶ = 0.000000025\nd) 22.5·10⁴ = 225000 e) 625·10¹⁰ = 6250000000000 f) 0.468·10⁵ = 46800\ng) 456.5·10⁻¹ = 45.65 h) 0.335·10⁻³ = 0.000335 i) 0.0046·10⁶ = 4600\nj) 0.02·10⁻² = 0.0002 k) 0.7659·10⁴ = 7659 l) 0.003·10⁻⁹ = 0.000000000003\nm) 1450·10⁻⁸ = 0.0000145 n) 0.0076·10⁵ = 760 o) 36.5·10⁻⁴ = 0.00365"
+            }
+        };
+
+        let completedExercises = 0;
+        let correctAnswers = 0;
+        const exerciseStates = new Map();
+
+        function normalizeAnswer(answer) {
+            return answer.toLowerCase()
+                .replace(/\s+/g, '')
+                .replace(/×/g, '*')
+                .replace(/÷/g, '/')
+                .replace(/−/g, '-')
+                .replace(/·/g, '*');
+        }
+
+        function checkExercise(exerciseId) {
+            const exercise = exercises[exerciseId];
+            if (!exercise) return;
+
+            let correctCount = 0;
+            let totalQuestions = Object.keys(exercise.answers).length;
+
+            for (const [questionId, correctAnswer] of Object.entries(exercise.answers)) {
+                const input = document.getElementById(questionId);
+                const userAnswer = input.value.trim();
+                
+                const isCorrect = normalizeAnswer(userAnswer) === normalizeAnswer(correctAnswer);
+                
+                input.classList.remove('correct', 'incorrect');
+                input.classList.add(isCorrect ? 'correct' : 'incorrect');
+                
+                if (isCorrect) correctCount++;
+            }
+
+            const isAllCorrect = correctCount === totalQuestions;
+            const feedback = `${correctCount}/${totalQuestions} réponses correctes`;
+            
+            showFeedback(exerciseId, feedback, isAllCorrect ? 'correct' : 'incorrect');
+            updateExerciseState(exerciseId, isAllCorrect);
+            updateStats();
+        }
+
+        function showSolution(exerciseId) {
+            const exercise = exercises[exerciseId];
+            if (exercise && exercise.solution) {
+                showFeedback(exerciseId, exercise.solution, 'solution');
+            }
+        }
+
+        function resetExercise(exerciseId) {
+            const exercise = exercises[exerciseId];
+            if (!exercise) return;
+
+            for (const questionId of Object.keys(exercise.answers)) {
+                const input = document.getElementById(questionId);
+                if (input) {
+                    input.value = '';
+                    input.classList.remove('correct', 'incorrect');
+                }
+            }
+            
+            const feedback = document.getElementById(`feedback${exerciseId}`);
+            if (feedback) {
+                feedback.style.display = 'none';
+            }
+        }
+
+        function showFeedback(exerciseId, message, type) {
+            const feedback = document.getElementById(`feedback${exerciseId}`);
+            if (feedback) {
+                feedback.textContent = message;
+                feedback.className = `feedback ${type}`;
+                feedback.style.display = 'block';
+            }
+        }
+
+        function updateExerciseState(exerciseId, isCorrect) {
+            const wasCompleted = exerciseStates.has(exerciseId);
+            const wasCorrect = exerciseStates.get(exerciseId);
+            
+            if (!wasCompleted) {
+                completedExercises++;
+                if (isCorrect) correctAnswers++;
+            } else if (wasCorrect !== isCorrect) {
+                correctAnswers += isCorrect ? 1 : -1;
+            }
+            
+            exerciseStates.set(exerciseId, isCorrect);
+        }
+
+        function updateStats() {
+            document.getElementById('completedExercises').textContent = completedExercises;
+            document.getElementById('correctAnswers').textContent = correctAnswers;
+        }
+    </script>
+</body>
+</html>
