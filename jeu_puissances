@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>100 Flashcards — Puissances de 10</title>
+<style>
+  :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;--bg:#f6f7fb;--card:#fff;--accent:#0b66ff;}
+  body{margin:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;padding:28px 12px;color:#111}
+  .container{max-width:900px;width:100%}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+  h1{font-size:1.2rem;margin:0}
+  .controls{display:flex;gap:8px;flex-wrap:wrap}
+  button{background:var(--accent);color:#fff;border:0;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+  button.secondary{background:#e6e9f8;color:#0b2b82}
+  .card{background:var(--card);padding:22px;border-radius:12px;box-shadow:0 8px 24px rgba(12,20,50,0.06);min-height:160px;display:flex;flex-direction:column;justify-content:space-between}
+  .q{font-size:1.1rem}
+  .a{margin-top:14px;padding:12px;background:#f3f6ff;border-radius:8px;display:none}
+  .meta{margin-top:12px;display:flex;justify-content:space-between;align-items:center;color:#444;font-size:0.95rem}
+  .nav{margin-top:12px;display:flex;gap:8px;justify-content:center}
+  .dice-area{margin-top:16px;display:flex;gap:12px;align-items:center}
+  .dice{width:56px;height:56px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 6px 16px rgba(12,20,50,0.06)}
+  footer{margin-top:18px;color:#666;font-size:0.9rem;text-align:center}
+  @media (max-width:480px){.q{font-size:1rem}}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Flashcards — Puissances de 10 (100 cartes)</h1>
+    <div class="controls">
+      <button id="prevBtn" class="secondary">Précédent</button>
+      <button id="showBtn">Montrer la réponse</button>
+      <button id="nextBtn" class="secondary">Suivant</button>
+      <button id="randBtn">Aléatoire</button>
+    </div>
+  </header>
+
+  <main class="card" id="card">
+    <div>
+      <div class="q" id="question">Chargement...</div>
+      <div class="a" id="answer"></div>
+    </div>
+    <div class="meta">
+      <div id="index">Carte 0 / 100</div>
+      <div id="hint"></div>
+    </div>
+  </main>
+
+  <div class="nav">
+    <button id="firstBtn" class="secondary">Début</button>
+    <button id="lastBtn" class="secondary">Fin</button>
+    <button id="shuffleAll">Mélanger toutes</button>
+  </div>
+
+  <div class="dice-area">
+    <div>
+      <button id="rollBtn">Lancer 2 dés</button>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div class="dice" id="die1">—</div>
+      <div class="dice" id="die2">—</div>
+      <div style="font-weight:700">Total: <span id="diceTotal">—</span></div>
+    </div>
+  </div>
+
+  <footer>
+    Astuce : cliquez sur la carte ou sur "Montrer la réponse" pour afficher la solution.
+  </footer>
+</div>
+
+<script>
+  // Liste de 100 flashcards (question / réponse). Les réponses utilisent × et 10<sup>n</sup> pour une transcription fidèle.
+  const cards = [
+{q:"1) Convertir en écriture décimale : 4.5 × 10<sup>3</sup>", a:"4 500"},
+{q:"2) Calculer : 0.0032 × 10<sup>4</sup>", a:"32"},
+{q:"3) Écrire en notation scientifique : 4 500 000", a:"4.5 × 10<sup>6</sup>"},
+{q:"4) Écrire en notation scientifique : 0.00047", a:"4.7 × 10<sup>-4</sup>"},
+{q:"5) Calculer : 7.2 × 10<sup>-2</sup>", a:"0.072"},
+{q:"6) Calculer : (3 × 10<sup>4</sup>) × (2 × 10<sup>3</sup>)", a:"6 × 10<sup>7</sup>"},
+{q:"7) Calculer : (6 × 10<sup>5</sup>) ÷ (2 × 10<sup>2</sup>)", a:"3 × 10<sup>3</sup>"},
+{q:"8) Simplifier : 10<sup>3</sup> × 10<sup>-5</sup>", a:"10<sup>-2</sup>"},
+{q:"9) Évaluer : 10<sup>0</sup>", a:"1"},
+{q:"10) Écrire comme puissance de 10 : 1 000", a:"10<sup>3</sup>"},
+{q:"11) Écrire comme puissance de 10 : 0.01", a:"10<sup>-2</sup>"},
+{q:"12) Convertir : 5.6 × 10<sup>2</sup>", a:"560"},
+{q:"13) Écrire en notation scientifique : 0.0009", a:"9 × 10<sup>-4</sup>"},
+{q:"14) Écrire en forme normalisée : 45 × 10<sup>3</sup>", a:"4.5 × 10<sup>4</sup>"},
+{q:"15) Écrire en notation scientifique : 123 000", a:"1.23 × 10<sup>5</sup>"},
+{q:"16) Écrire en notation scientifique : 0.0000034", a:"3.4 × 10<sup>-6</sup>"},
+{q:"17) Quel est le plus grand ? 3 × 10<sup>4</sup> ou 2.5 × 10<sup>5</sup> ?", a:"2.5 × 10<sup>5</sup>"},
+{q:"18) Convertir : 8.01 × 10<sup>-3</sup>", a:"0.00801"},
+{q:"19) Calculer : (4 × 10<sup>2</sup>) × (0.5 × 10<sup>3</sup>)", a:"2 × 10<sup>5</sup> → 200 000"},
+{q:"20) Calculer : (9 × 10<sup>6</sup>) ÷ (3 × 10<sup>2</sup>)", a:"3 × 10<sup>4</sup>"},
+{q:"21) Écrire en notation scientifique : 0.00012", a:"1.2 × 10<sup>-4</sup>"},
+{q:"22) Écrire 100 en puissance de 10", a:"1 × 10<sup>2</sup>"},
+{q:"23) Écrire 1 200 000 en notation scientifique", a:"1.2 × 10<sup>6</sup>"},
+{q:"24) Normaliser : 0.6 × 10<sup>3</sup>", a:"6 × 10<sup>2</sup> → 600"},
+{q:"25) Simplifier : 10<sup>4</sup> ÷ 10<sup>1</sup>", a:"10<sup>3</sup>"},
+{q:"26) Évaluer : 10<sup>-3</sup>", a:"0.001"},
+{q:"27) Addition : 3 × 10<sup>4</sup> + 2 × 10<sup>4</sup>", a:"5 × 10<sup>4</sup>"},
+{q:"28) Addition : 3 × 10<sup>5</sup> + 2 × 10<sup>4</sup>", a:"3.2 × 10<sup>5</sup>"},
+{q:"29) Soustraction : 5 × 10<sup>6</sup> − 2 × 10<sup>6</sup>", a:"3 × 10<sup>6</sup>"},
+{q:"30) Écrire en notation scientifique : 0.00000045", a:"4.5 × 10<sup>-7</sup>"},
+{q:"31) Calculer et normaliser : (2.5 × 10<sup>2</sup>) × (4 × 10<sup>-1</sup>)", a:"10 × 10<sup>1</sup> = 1 × 10<sup>2</sup> → 100"},
+{q:"32) Convertir : 6 700", a:"6.7 × 10<sup>3</sup>"},
+{q:"33) Écrire en notation scientifique : 0.00082", a:"8.2 × 10<sup>-4</sup>"},
+{q:"34) Calculer : (10<sup>2</sup>)<sup>3</sup>", a:"10<sup>6</sup>"},
+{q:"35) Calculer : 10<sup>5</sup> × 10<sup>-2</sup>", a:"10<sup>3</sup>"},
+{q:"36) Écrire en notation scientifique : 987 000 000", a:"9.87 × 10<sup>8</sup>"},
+{q:"37) Écrire en notation scientifique : 0.0000009", a:"9 × 10<sup>-7</sup>"},
+{q:"38) Calculer : 7 × 10<sup>3</sup> × 5 × 10<sup>2</sup>", a:"35 × 10<sup>5</sup> = 3.5 × 10<sup>6</sup>"},
+{q:"39) Calculer : 4.5 × 10<sup>4</sup> ÷ 1.5 × 10<sup>2</sup>", a:"3 × 10<sup>2</sup>"},
+{q:"40) Écrire en notation scientifique : 0.045", a:"4.5 × 10<sup>-2</sup>"},
+{q:"41) Écrire en notation scientifique : 450", a:"4.5 × 10<sup>2</sup>"},
+{q:"42) Calculer : 0.123 × 10<sup>3</sup>", a:"123"},
+{q:"43) Calculer : 12.3 × 10<sup>-1</sup>", a:"1.23"},
+{q:"44) Convertir : 3.003 × 10<sup>3</sup>", a:"3 003"},
+{q:"45) Arrondir à 2 chiffres significatifs : 3.456 × 10<sup>4</sup>", a:"3.5 × 10<sup>4</sup>"},
+{q:"46) Écrire en notation scientifique : 0.00015", a:"1.5 × 10<sup>-4</sup>"},
+{q:"47) Écrire 1 000 000 000 en notation scientifique", a:"1 × 10<sup>9</sup>"},
+{q:"48) Écrire 0.02 en puissance de 10 (notation scientifique)", a:"2 × 10<sup>-2</sup>"},
+{q:"49) Simplifier : 10<sup>-2</sup> × 10<sup>-3</sup>", a:"10<sup>-5</sup>"},
+{q:"50) Calculer : (5 × 10<sup>2</sup>) × (2 × 10<sup>-2</sup>)", a:"10 × 10<sup>0</sup> = 10"},
+{q:"51) Convertir : 25 000", a:"2.5 × 10<sup>4</sup>"},
+{q:"52) Écrire en notation scientifique : 0.0000000012", a:"1.2 × 10<sup>-9</sup>"},
+{q:"53) Calculer : 1000 × 100", a:"10<sup>5</sup> = 100 000"},
+{q:"54) Vérifier égalité : 4 × 10<sup>-3</sup> et 0.004", a:"Oui, ce sont égaux"},
+{q:"55) Convertir : 9 × 10<sup>1</sup>", a:"90"},
+{q:"56) Calculer : (6 × 10<sup>3</sup>) × (3 × 10<sup>3</sup>)", a:"18 × 10<sup>6</sup> = 1.8 × 10<sup>7</sup>"},
+{q:"57) Calculer et normaliser : (2 × 10<sup>0</sup>) ÷ (4 × 10<sup>-2</sup>)", a:"0.5 × 10<sup>2</sup> = 5 × 10<sup>1</sup> → 50"},
+{q:"58) Écrire : 0.00000072", a:"7.2 × 10<sup>-7</sup>"},
+{q:"59) Écrire : 42 en notation scientifique", a:"4.2 × 10<sup>1</sup>"},
+{q:"60) Écrire : 0.00035", a:"3.5 × 10<sup>-4</sup>"},
+{q:"61) Calculer : 0.25 × 10<sup>3</sup>", a:"2.5 × 10<sup>2</sup> → 250"},
+{q:"62) Calculer : 3.6 × 10<sup>5</sup> ÷ 1.2 × 10<sup>2</sup>", a:"3 × 10<sup>3</sup>"},
+{q:"63) Convertir : 123 456", a:"1.23456 × 10<sup>5</sup>"},
+{q:"64) Arrondir à 3 chiffres significatifs : 7.891 × 10<sup>3</sup>", a:"7.89 × 10<sup>3</sup>"},
+{q:"65) Simplifier : 10<sup>8</sup> ÷ 10<sup>3</sup>", a:"10<sup>5</sup>"},
+{q:"66) Calculer : 0.9 × 10<sup>-1</sup>", a:"9 × 10<sup>-2</sup> = 0.09"},
+{q:"67) Écrire 300 en notation scientifique", a:"3 × 10<sup>2</sup>"},
+{q:"68) Calculer et normaliser : 4.2 × 10<sup>2</sup> × 2.5", a:"10.5 × 10<sup>2</sup> = 1.05 × 10<sup>3</sup> → 1 050"},
+{q:"69) Écrire : 0.000000045", a:"4.5 × 10<sup>-8</sup>"},
+{q:"70) Calculer : 10<sup>-4</sup> × 10<sup>2</sup>", a:"10<sup>-2</sup>"},
+{q:"71) Écrire : 1 000 000", a:"10<sup>6</sup>"},
+{q:"72) Normaliser : 0.03 × 10<sup>4</sup>", a:"3 × 10<sup>2</sup> → 300"},
+{q:"73) Convertir : 5.4321 × 10<sup>1</sup>", a:"54.321"},
+{q:"74) Calculer : (8 × 10<sup>-2</sup>) × (5 × 10<sup>3</sup>)", a:"40 × 10<sup>1</sup> = 4 × 10<sup>2</sup> → 400"},
+{q:"75) Écrire : 0.000001", a:"1 × 10<sup>-6</sup>"},
+{q:"76) Calculer : 7.5 × 10<sup>4</sup> ÷ 2.5 × 10<sup>2</sup>", a:"3 × 10<sup>2</sup>"},
+{q:"77) Écrire : 0.00027", a:"2.7 × 10<sup>-4</sup>"},
+{q:"78) Addition : 2 × 10<sup>3</sup> + 3 × 10<sup>3</sup>", a:"5 × 10<sup>3</sup>"},
+{q:"79) Arrondir (au dix) : 3.47 × 10<sup>2</sup>", a:"3.5 × 10<sup>2</sup> → 350"},
+{q:"80) Écrire : 0.8 en notation scientifique", a:"8 × 10<sup>-1</sup>"},
+{q:"81) Calculer et normaliser : (0.4 × 10<sup>1</sup>) × (0.25 × 10<sup>2</sup>)", a:"0.1 × 10<sup>3</sup> = 1 × 10<sup>2</sup> → 100"},
+{q:"82) Convertir : 999 000", a:"9.99 × 10<sup>5</sup>"},
+{q:"83) Écrire : 0.00044", a:"4.4 × 10<sup>-4</sup>"},
+{q:"84) Calculer : 6 × 10<sup>1</sup> × 6 × 10<sup>1</sup>", a:"36 × 10<sup>2</sup> = 3.6 × 10<sup>3</sup>"},
+{q:"85) Calculer : 1 × 10<sup>5</sup> ÷ 2 × 10<sup>2</sup>", a:"0.5 × 10<sup>3</sup> = 5 × 10<sup>2</sup> → 500"},
+{q:"86) Écrire : 123 en notation scientifique", a:"1.23 × 10<sup>2</sup>"},
+{q:"87) Convertir : 2.34 × 10<sup>-3</sup>", a:"0.00234"},
+{q:"88) Calculer : 1.5 × 10<sup>2</sup> × 2 × 10<sup>-3</sup>", a:"3 × 10<sup>-1</sup> = 0.3"},
+{q:"89) Convertir : 45 000 000", a:"4.5 × 10<sup>7</sup>"},
+{q:"90) Écrire : 0.0000003", a:"3 × 10<sup>-7</sup>"},
+{q:"91) Simplifier : 10<sup>1</sup> × 10<sup>2</sup> × 10<sup>-4</sup>", a:"10<sup>-1</sup>"},
+{q:"92) Écrire : 0.0075", a:"7.5 × 10<sup>-3</sup>"},
+{q:"93) Calculer : (3 × 10<sup>2</sup>) × (4 × 10<sup>-2</sup>)", a:"12 × 10<sup>0</sup> = 1.2 × 10<sup>1</sup> → 12"},
+{q:"94) Convertir : 64 000", a:"6.4 × 10<sup>4</sup>"},
+{q:"95) Écrire : 0.00002", a:"2 × 10<sup>-5</sup>"},
+{q:"96) Calculer : 9 × 10<sup>9</sup> ÷ 3 × 10<sup>3</sup>", a:"3 × 10<sup>6</sup>"},
+{q:"97) Normaliser : 0.02 × 10<sup>2</sup>", a:"2 × 10<sup>0</sup> → 2"},
+{q:"98) Convertir : 5.5 × 10<sup>-2</sup>", a:"0.055"},
+{q:"99) Calculer : (2 × 10<sup>-1</sup>) × (5 × 10<sup>2</sup>)", a:"10 × 10<sup>1</sup> = 1 × 10<sup>2</sup> → 100"},
+{q:"100) Calculer et normaliser : (3.2 × 10<sup>4</sup>) + (8 × 10<sup>3</sup>)", a:"3.2 × 10<sup>4</sup> + 0.8 × 10<sup>4</sup> = 4.0 × 10<sup>4</sup>"}
+  ];
+
+  let idx = 0;
+  const total = cards.length;
+  const qEl = document.getElementById('question');
+  const aEl = document.getElementById('answer');
+  const idxEl = document.getElementById('index');
+  const hintEl = document.getElementById('hint');
+
+  function render(i){
+    const card = cards[i];
+    qEl.innerHTML = `<strong>${card.q}</strong>`;
+    aEl.innerHTML = card.a;
+    aEl.style.display = 'none';
+    idxEl.textContent = `Carte ${i+1} / ${total}`;
+    hintEl.textContent = '';
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', ()=>{ idx = (idx-1+total)%total; render(idx);});
+  document.getElementById('nextBtn').addEventListener('click', ()=>{ idx = (idx+1)%total; render(idx);});
+  document.getElementById('firstBtn').addEventListener('click', ()=>{ idx = 0; render(idx);});
+  document.getElementById('lastBtn').addEventListener('click', ()=>{ idx = total-1; render(idx);});
+  document.getElementById('randBtn').addEventListener('click', ()=>{ idx = Math.floor(Math.random()*total); render(idx);});
+  document.getElementById('shuffleAll').addEventListener('click', ()=>{ shuffleCards(); render(idx);});
+
+  // Montrer la réponse / cliquer sur la carte pour basculer
+  document.getElementById('showBtn').addEventListener('click', ()=>{ aEl.style.display = aEl.style.display === 'none' ? 'block' : 'none';});
+  document.getElementById('card').addEventListener('click', (ev)=>{ // éviter clics sur les boutons
+    if(ev.target.tagName.toLowerCase() === 'button') return;
+    aEl.style.display = aEl.style.display === 'none' ? 'block' : 'none';
+  });
+
+  // Dés
+  function rollDie() { return Math.floor(Math.random()*6)+1; }
+  document.getElementById('rollBtn').addEventListener('click', ()=>{
+    const d1 = rollDie(), d2 = rollDie(), sum = d1 + d2;
+    document.getElementById('die1').textContent = d1;
+    document.getElementById('die2').textContent = d2;
+    document.getElementById('diceTotal').textContent = sum;
+    hintEl.textContent = `Dé : ${d1} et ${d2} (total ${sum})`;
+  });
+
+  // Fonction de mélange Fisher-Yates (sur le tableau entier)
+  function shuffleCards(){
+    for(let i=cards.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [cards[i],cards[j]] = [cards[j],cards[i]];
+    }
+    idx = 0;
+  }
+
+  // Initialisation
+  render(idx);
+
+  // Optionnel : raccourcis clavier
+  document.addEventListener('keydown',(e)=>{
+    if(e.key === 'ArrowRight'){ idx=(idx+1)%total; render(idx); }
+    if(e.key === 'ArrowLeft'){ idx=(idx-1+total)%total; render(idx); }
+    if(e.key === ' ') { e.preventDefault(); aEl.style.display = aEl.style.display === 'none' ? 'block' : 'none'; }
+  });
+</script>
+</body>
+</html>
