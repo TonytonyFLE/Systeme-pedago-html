@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte d'Identité Interactive - Activité FLE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .mode-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .content-area {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            min-height: 500px;
+        }
+
+        .mode-content {
+            display: none;
+        }
+
+        .mode-content.active {
+            display: block;
+        }
+
+        /* Mode Création */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn-generate {
+            width: 100%;
+            padding: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .btn-generate:hover {
+            background: #5568d3;
+            transform: scale(1.02);
+        }
+
+        /* Carte d'identité */
+        .id-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .id-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+        }
+
+        .id-card-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .id-card-header h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .id-card-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .id-field {
+            padding: 10px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 8px;
+        }
+
+        .id-field strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .country-flag {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* Mode Entraînement */
+        .training-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            padding: 12px 25px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #5568d3;
+        }
+
+        .text-area-container {
+            margin-top: 20px;
+        }
+
+        .text-area-container textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            resize: vertical;
+        }
+
+        .helper-text {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .helper-text h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .helper-text ul {
+            margin-left: 20px;
+        }
+
+        .word-count {
+            text-align: right;
+            color: #666;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        /* Mode Jeu de rôle */
+        .roleplay-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .character-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+
+        .character-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .conversation-prompts {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .conversation-prompts h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .dialogue-area {
+            width: 100%;
+            min-height: 250px;
+            padding: 15px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-top: 20px;
+            resize: vertical;
+        }
+
+        /* Export buttons */
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .btn-export {
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-export:hover {
+            background: #218838;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .mode-selector,
+            .training-controls,
+            .btn-generate,
+            .btn-export,
+            .btn-secondary {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-row,
+            .id-card-content,
+            .roleplay-container {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Carte d'Identité Interactive</h1>
+        
+        <div class="mode-selector">
+            <button class="mode-btn active" onclick="changeMode('creation')">✏️ Création</button>
+            <button class="mode-btn" onclick="changeMode('training')">📝 Entraînement</button>
+            <button class="mode-btn" onclick="changeMode('roleplay')">🎭 Jeu de Rôle</button>
+        </div>
+
+        <div class="content-area">
+            <!-- MODE CRÉATION -->
+            <div id="mode-creation" class="mode-content active">
+                <h2 style="color: #667eea; margin-bottom: 20px;">Créez votre carte d'identité</h2>
+                
+                <form id="creation-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Prénom *</label>
+                            <input type="text" id="prenom" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Âge *</label>
+                            <input type="number" id="age" min="1" max="120" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Ville *</label>
+                            <input type="text" id="ville" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Pays *</label>
+                            <select id="pays" required>
+                                <option value="">Sélectionnez...</option>
+                                <option value="🇫🇷">France 🇫🇷</option>
+                                <option value="🇩🇪">Allemagne 🇩🇪</option>
+                                <option value="🇬🇧">Royaume-Uni 🇬🇧</option>
+                                <option value="🇪🇸">Espagne 🇪🇸</option>
+                                <option value="🇮🇹">Italie 🇮🇹</option>
+                                <option value="🇺🇸">États-Unis 🇺🇸</option>
+                                <option value="🇨🇦">Canada 🇨🇦</option>
+                                <option value="🇯🇵">Japon 🇯🇵</option>
+                                <option value="🇦🇺">Australie 🇦🇺</option>
+                                <option value="🇬🇷">Grèce 🇬🇷</option>
+                                <option value="🇦🇹">Autriche 🇦🇹</option>
+                                <option value="🇮🇪">Irlande 🇮🇪</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Numéro de téléphone</label>
+                        <input type="text" id="telephone" placeholder="+33 1 23 45 67 89">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre de sœurs</label>
+                            <input type="number" id="nb-soeurs" min="0" max="10" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Prénoms des sœurs</label>
+                            <input type="text" id="prenoms-soeurs" placeholder="Marie (12), Anne (15)">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre de frères</label>
+                            <input type="number" id="nb-freres" min="0" max="10" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Prénoms des frères</label>
+                            <input type="text" id="prenoms-freres" placeholder="Paul (10), Jean (8)">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Animaux de compagnie</label>
+                        <input type="text" id="animaux" placeholder="1 chat, 2 chiens">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Loisirs</label>
+                        <input type="text" id="loisirs" placeholder="football, lecture, musique">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Mère (prénom, âge, profession)</label>
+                            <input type="text" id="mere" placeholder="Sophie (42) - professeure">
+                        </div>
+                        <div class="form-group">
+                            <label>Père (prénom, âge, profession)</label>
+                            <input type="text" id="pere" placeholder="Marc (45) - médecin">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-generate">🎨 Générer ma carte</button>
+                </form>
+
+                <div id="generated-card" class="hidden"></div>
+            </div>
+
+            <!-- MODE ENTRAÎNEMENT -->
+            <div id="mode-training" class="mode-content">
+                <h2 style="color: #667eea; margin-bottom: 20px;">Entraînement : Rédigez une présentation</h2>
+                
+                <div class="training-controls">
+                    <button class="btn-secondary" onclick="loadRandomCard()">🎲 Nouvelle carte</button>
+                    <button class="btn-secondary" onclick="showHelp()">💡 Aide</button>
+                </div>
+
+                <div id="training-card"></div>
+
+                <div class="text-area-container">
+                    <label><strong>Rédigez votre texte de présentation :</strong></label>
+                    <textarea id="training-text" placeholder="Je m'appelle... J'ai ... ans. J'habite à..."></textarea>
+                    <div class="word-count" id="word-count">0 mots</div>
+                </div>
+
+                <div id="help-section" class="helper-text hidden">
+                    <h3>💡 Structures utiles :</h3>
+                    <ul>
+                        <li><strong>Présentation :</strong> Je m'appelle [prénom]. J'ai [âge] ans.</li>
+                        <li><strong>Localisation :</strong> J'habite à [ville], en [pays].</li>
+                        <li><strong>Famille :</strong> J'ai [nombre] frère(s) et [nombre] sœur(s).</li>
+                        <li><strong>Parents :</strong> Ma mère s'appelle [nom] et elle est [profession]. Mon père s'appelle [nom] et il est [profession].</li>
+                        <li><strong>Animaux :</strong> J'ai [nombre] [animal(aux)].</li>
+                        <li><strong>Loisirs :</strong> J'aime [activité]. Mon loisir préféré est [activité].</li>
+                    </ul>
+                </div>
+
+                <div class="export-buttons">
+                    <button class="btn-export" onclick="exportTrainingToPDF()">📄 Exporter en PDF</button>
+                    <button class="btn-export" onclick="exportTrainingToImage()">🖼️ Exporter en Image</button>
+                </div>
+            </div>
+
+            <!-- MODE JEU DE RÔLE -->
+            <div id="mode-roleplay" class="mode-content">
+                <h2 style="color: #667eea; margin-bottom: 20px;">Jeu de Rôle : Créez un dialogue</h2>
+                
+                <button class="btn-secondary" onclick="loadRoleplayCharacters()">🎭 Nouveaux personnages</button>
+
+                <div class="roleplay-container" id="roleplay-characters"></div>
+
+                <div class="conversation-prompts">
+                    <h3>💬 Idées de conversation :</h3>
+                    <ul>
+                        <li>Présentez-vous l'un à l'autre</li>
+                        <li>Parlez de vos familles respectives</li>
+                        <li>Discutez de vos loisirs communs ou différents</li>
+                        <li>Comparez vos villes et pays</li>
+                        <li>Parlez de vos animaux de compagnie</li>
+                        <li>Échangez vos numéros de téléphone</li>
+                    </ul>
+                </div>
+
+                <div class="text-area-container">
+                    <label><strong>Écrivez votre dialogue :</strong></label>
+                    <textarea id="dialogue-text" class="dialogue-area" placeholder="Personnage 1 : Bonjour ! Je m'appelle...&#10;Personnage 2 : Enchanté ! Moi, c'est..."></textarea>
+                </div>
+
+                <div class="export-buttons">
+                    <button class="btn-export" onclick="exportRoleplayToPDF()">📄 Exporter en PDF</button>
+                    <button class="btn-export" onclick="exportRoleplayToImage()">🖼️ Exporter en Image</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base de données des cartes
+        const cards = [
+            {prenom: "Alan", age: 5, tel: "+61 2 9211 1668", ville: "Sydney", pays: "🇦🇺", soeurs: 0, prenomsSoeurs: "/", freres: 2, prenomsFreres: "Jack (7), Ken (9)", animaux: "1 chat", loisirs: "vélo", mere: "Jenny (28) - agent de nettoyage", pere: "John (30) - vendeur"},
+            {prenom: "Bob", age: 15, tel: "+43 1 7133168", ville: "Vienne", pays: "🇦🇹", soeurs: 1, prenomsSoeurs: "Diana (17)", freres: 1, prenomsFreres: "Franck (11)", animaux: "1 tortue", loisirs: "lire", mere: "Susan (39) - dentiste", pere: "Peter (41) - professeur de Maths"},
+            {prenom: "Billy", age: 7, tel: "+1 514-522-5175", ville: "Vancouver", pays: "🇨🇦", soeurs: 2, prenomsSoeurs: "Helen (9), Kate (12)", freres: 0, prenomsFreres: "/", animaux: "2 chiens", loisirs: "regarder la TV", mere: "Betty (40) - coiffeuse", pere: "Fred (38) - vendeur"},
+            {prenom: "Marie-Marguerite", age: 21, tel: "+33 4 93 47 68 29", ville: "Paris", pays: "🇫🇷", soeurs: 1, prenomsSoeurs: "Géraldine (24)", freres: 1, prenomsFreres: "Jean-Jacques (16)", animaux: "2 tortues et 1 chat", loisirs: "théâtre", mere: "Brigitte (66) - professeure", pere: "Emmanuel (42) - président"},
+            {prenom: "Wolfgang", age: 6, tel: "+49 30 95598243", ville: "Berlin", pays: "🇩🇪", soeurs: 2, prenomsSoeurs: "Peggy (8), Wendy (13)", freres: 2, prenomsFreres: "Jack (7), Ted (15)", animaux: "2 chiens et 1 chat", loisirs: "écouter de la musique", mere: "Barbara (44) - sans-emploi", pere: "Ted (47) - pompier"},
+            {prenom: "Mike", age: 9, tel: "+30 231 088 9699", ville: "Thessalonique", pays: "🇬🇷", soeurs: 1, prenomsSoeurs: "Jane (12)", freres: 1, prenomsFreres: "David (10)", animaux: "1 hamster", loisirs: "courir", mere: "Kate (45) - infirmière", pere: "Ken (49) - policier"},
+            {prenom: "Jim", age: 10, tel: "+353 1 676 1494", ville: "Dublin", pays: "🇮🇪", soeurs: 0, prenomsSoeurs: "/", freres: 0, prenomsFreres: "/", animaux: "1 lapin et 1 chat", loisirs: "lire des BD", mere: "Molly (46) - fermière", pere: "Bill (48) - barman"},
+            {prenom: "Federico", age: 11, tel: "+39 06 4890 7344", ville: "Milan", pays: "🇮🇹", soeurs: 0, prenomsSoeurs: "/", freres: 1, prenomsFreres: "Tim (14)", animaux: "2 tortues", loisirs: "nager", mere: "Jill (37) - vendeuse", pere: "Franck (38) - directeur de magasin"},
+            {prenom: "Takumi", age: 12, tel: "+81 3-3461-0546", ville: "Kyoto", pays: "🇯🇵", soeurs: 1, prenomsSoeurs: "Carol (14)", freres: 1, prenomsFreres: "Alan (15)", animaux: "2 chiens", loisirs: "tennis", mere: "Nancy (41) - infirmière", pere: "Ken (44) - sans-emploi"},
+            {prenom: "Bernardo", age: 13, tel: "+34 915 27 83 40", ville: "Madrid", pays: "🇪🇸", soeurs: 2, prenomsSoeurs: "Carol (11), Magdalena (9)", freres: 1, prenomsFreres: "Jorge", animaux: "3 chats", loisirs: "rugby", mere: "Doris (42) - femme au foyer", pere: "Fred (45) - coiffeur"},
+            {prenom: "Tom", age: 17, tel: "+44 161 860 0498", ville: "Manchester", pays: "🇬🇧", soeurs: 1, prenomsSoeurs: "Molly (19)", freres: 1, prenomsFreres: "Dave (21)", animaux: "0", loisirs: "nager", mere: "Brenda (50) - caissière", pere: "Tom (52) - pompier"},
+            {prenom: "Charles", age: 14, tel: "+44 165 940 0427", ville: "Liverpool", pays: "🇬🇧", soeurs: 3, prenomsSoeurs: "Jill (17), Mary (17), Betty (19)", freres: 0, prenomsFreres: "/", animaux: "2 chats et 1 hamster", loisirs: "ski et snowboard", mere: "Sally (42) - cuisinière", pere: "Bob (44) - professeur de Physique"},
+            {prenom: "Jane", age: 16, tel: "217 669", ville: "Rome", pays: "🇮🇹", soeurs: 2, prenomsSoeurs: "Nancy (22), Ann (19)", freres: 1, prenomsFreres: "Jim (12)", animaux: "2 chats", loisirs: "écouter de la musique", mere: "Peggy (52) - coiffeuse", pere: "Joe (48) - cuisinier"}
+        ];
+
+        let currentTrainingCard = null;
+        let currentRoleplayCards = [];
+
+        // Changement de mode
+        function changeMode(mode) {
+            document.querySelectorAll('.mode-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.mode-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('mode-' + mode).classList.add('active');
+            event.target.classList.add('active');
+
+            if (mode === 'training' && !currentTrainingCard) {
+                loadRandomCard();
+            }
+            if (mode === 'roleplay' && currentRoleplayCards.length === 0) {
+                loadRoleplayCharacters();
+            }
+        }
+
+        // Génération de carte HTML
+        function generateCardHTML(card, showInContainer = false) {
+            const html = `
+                <div class="id-card">
+                    <div class="country-flag">${card.pays}</div>
+                    <div class="id-card-header">
+                        <h2>CARTE D'IDENTITÉ</h2>
+                    </div>
+                    <div class="id-card-content">
+                        <div class="id-field">
+                            <strong>Prénom :</strong>
+                            <span>${card.prenom}</span>
+                        </div>
+                        <div class="id-field">
+                            <strong>Âge :</strong>
+                            <span>${card.age} ans</span>
+                        </div>
+                        <div class="id-field">
+                            <strong>Téléphone :</strong>
+                            <span>${card.tel}</span>
+                        </div>
+                        <div class="id-field">
+                            <strong>Ville :</strong>
+                            <span>${card.ville}</span>
+                        </div>
+                        <div class="id-field">
+                            <strong>Sœur(s) :</strong>
+                            <span>${card.soeurs}</span>
+                        </div>
+                        <div class="id-field">
+                            <strong>Prénoms :</strong>
+                            <span>${card.prenomsSoeurs}</span>
+                        </div>
+                        <div class="id-field">
+                            <strong>Frère(s) :</strong>
+                            <span>${card.freres}</span>
+                        </div>
+                        <div class="id-field">
+                            <strong>Prénoms :</strong>
+                            <span>${card.prenomsFreres}</span>
+                        </div>
+                        <div class="id-field">
+                            <strong>Animal(aux) :</strong>
+                            <span>${card.animaux}</span>
+                        </div>
+                        <div class="id-field">
+                            <strong>Loisir(s) :</strong>
+                            <span>${card.loisirs}</span>
+                        </div>
+                        <div class="id-field">
+                            <strong>Mère :</strong>
+                            <span>${card.mere}</span>
+                        </div>
+                        <div class="id-field">
+                            <strong>Père :</strong>
+                            <span>${card.pere}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return html;
+        }
+
+        // Mode Création - Soumission du formulaire
+        document.getElementById('creation-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const card = {
+                prenom: document.getElementById('prenom').value,
+                age: document.getElementById('age').value,
+                tel: document.getElementById('telephone').value || 'Non renseigné',
+                ville: document.getElementById('ville').value,
+                pays: document.getElementById('pays').value,
+                soeurs: document.getElementById('nb-soeurs').value,
+                prenomsSoeurs: document.getElementById('prenoms-soeurs').value || '/',
+                freres: document.getElementById('nb-freres').value,
+                prenomsFreres: document.getElementById('prenoms-freres').value || '/',
+                animaux: document.getElementById('animaux').value || '0',
+                loisirs: document.getElementById('loisirs').value || 'Non renseigné',
+                mere: document.getElementById('mere').value || 'Non renseigné',
+                pere: document.getElementById('pere').value || 'Non renseigné'
+            };
+
+            const cardContainer = document.getElementById('generated-card');
+            cardContainer.innerHTML = generateCardHTML(card);
+            cardContainer.classList.remove('hidden');
+            cardContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Mode Entraînement - Charger une carte aléatoire
+        function loadRandomCard() {
+            currentTrainingCard = cards[Math.floor(Math.random() * cards.length)];
+            document.getElementById('training-card').innerHTML = generateCardHTML(currentTrainingCard);
+            document.getElementById('training-text').value = '';
+            updateWordCount();
+        }
+
+        // Compteur de mots
+        document.getElementById('training-text')?.addEventListener('input', updateWordCount);
+
+        function updateWordCount() {
+            const text = document.getElementById('training-text').value.trim();
+            const words = text ? text.split(/\s+/).length : 0;
+            document.getElementById('word-count').textContent = words + ' mot' + (words > 1 ? 's' : '');
+        }
+
+        // Afficher l'aide
+        function showHelp() {
+            const helpSection = document.getElementById('help-section');
+            helpSection.classList.toggle('hidden');
+        }
+
+        // Mode Jeu de Rôle - Charger deux personnages
+        function loadRoleplayCharacters() {
+            const shuffled = [...cards].sort(() => 0.5 - Math.random());
+            currentRoleplayCards = shuffled.slice(0, 2);
+            
+            const container = document.getElementById('roleplay-characters');
+            container.innerHTML = `
+                <div class="character-card">
+                    <h3>Personnage 1</h3>
+                    ${generateCardHTML(currentRoleplayCards[0])}
+                </div>
+                <div class="character-card">
+                    <h3>Personnage 2</h3>
+                    ${generateCardHTML(currentRoleplayCards[1])}
+                </div>
+            `;
+            document.getElementById('dialogue-text').value = '';
+        }
+
+        // Exports en PDF
+        function exportTrainingToPDF() {
+            window.print();
+        }
+
+        function exportRoleplayToPDF() {
+            window.print();
+        }
+
+        // Exports en Image (via canvas)
+        function exportTrainingToImage() {
+            const cardElement = document.getElementById('training-card');
+            const textElement = document.getElementById('training-text');
+            
+            if (!currentTrainingCard) {
+                alert('Veuillez d\'abord charger une carte !');
+                return;
+            }
+
+            const content = `
+                <div style="font-family: Arial; padding: 20px; background: white; width: 800px;">
+                    ${cardElement.innerHTML}
+                    <div style="margin-top: 30px; padding: 20px; border: 2px solid #667eea; border-radius: 10px;">
+                        <h3 style="color: #667eea;">Ma présentation :</h3>
+                        <p style="white-space: pre-wrap; line-height: 1.6;">${textElement.value}</p>
+                    </div>
+                </div>
+            `;
+            
+            downloadAsImage(content, 'entrainement-carte-identite.png');
+        }
+
+        function exportRoleplayToImage() {
+            const charactersElement = document.getElementById('roleplay-characters');
+            const dialogueElement = document.getElementById('dialogue-text');
+            
+            if (currentRoleplayCards.length === 0) {
+                alert('Veuillez d\'abord charger des personnages !');
+                return;
+            }
+
+            const content = `
+                <div style="font-family: Arial; padding: 20px; background: white; width: 1000px;">
+                    <h2 style="color: #667eea; text-align: center;">Jeu de Rôle</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                        <div>${generateCardHTML(currentRoleplayCards[0])}</div>
+                        <div>${generateCardHTML(currentRoleplayCards[1])}</div>
+                    </div>
+                    <div style="margin-top: 30px; padding: 20px; border: 2px solid #667eea; border-radius: 10px;">
+                        <h3 style="color: #667eea;">Notre dialogue :</h3>
+                        <p style="white-space: pre-wrap; line-height: 1.6;">${dialogueElement.value}</p>
+                    </div>
+                </div>
+            `;
+            
+            downloadAsImage(content, 'jeu-de-role-carte-identite.png');
+        }
+
+        // Fonction utilitaire pour convertir HTML en image
+        function downloadAsImage(htmlContent, filename) {
+            // Créer un conteneur temporaire
+            const container = document.createElement('div');
+            container.innerHTML = htmlContent;
+            container.style.position = 'absolute';
+            container.style.left = '-9999px';
+            document.body.appendChild(container);
+
+            // Utiliser html2canvas si disponible (chargé dynamiquement)
+            if (typeof html2canvas === 'undefined') {
+                // Fallback : télécharger en HTML
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename.replace('.png', '.html');
+                a.click();
+                URL.revokeObjectURL(url);
+                document.body.removeChild(container);
+                alert('Export réalisé en HTML. Pour un export en image PNG, veuillez utiliser la fonction d\'impression (PDF) de votre navigateur.');
+            } else {
+                html2canvas(container).then(canvas => {
+                    canvas.toBlob(blob => {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = filename;
+                        a.click();
+                        URL.revokeObjectURL(url);
+                        document.body.removeChild(container);
+                    });
+                });
+            }
+        }
+
+        // Charger html2canvas dynamiquement pour l'export image
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        script.async = true;
+        document.head.appendChild(script);
+
+        // Initialisation
+        window.addEventListener('load', function() {
+            console.log('Application chargée avec succès!');
+        });
+    </script>
+</body>
+</html>
